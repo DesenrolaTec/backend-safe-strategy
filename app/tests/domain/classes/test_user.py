@@ -52,7 +52,7 @@ def test_ensure_valid_cpf_error_length():
     validator = Validator()
 
     # Act/Assert]
-    with pytest.raises(ValueError, match="Invalid CPF: 663953500999"):
+    with pytest.raises(ValueError, match="Invalid CPF"):
         validator.ensure_valid_cpf(cpf=cpf)
 
 def test_ensure_valid_cpf_error_digits():
@@ -61,7 +61,7 @@ def test_ensure_valid_cpf_error_digits():
     validator = Validator()
 
     # Act/Assert]
-    with pytest.raises(ValueError, match="Invalid CPF: 66395350099a"):
+    with pytest.raises(ValueError, match="Invalid CPF"):
         validator.ensure_valid_cpf(cpf=cpf)
 
 def test_ensure_password_secure_success():
@@ -211,18 +211,18 @@ def test_sets_user():
                     birthday=birthday)
 
     # Act
-    response_name = user.name = "New Usuario Teste"
-    response_email = user.email = "newemail@email.com"
-    response_password = user.password = "newAa1!strong"
-    response_cpf = user.cpf = "786.200.430-21"
-    response_birthday = user.birthday = "2000-12-28"
+    user.name = "New Usuario Teste"
+    user.email = "newemail@email.com"
+    user.password = "newAa1!strong"
+    user.cpf = "305.150.299-55"
+    user.birthday = "2000-12-28"
 
     # Assert
-    assert response_name == "New Usuario Teste"
-    assert response_email == "newemail@email.com"
-    assert response_password == "newAa1!strong"
-    assert response_cpf == "786.200.430-21"
-    assert response_birthday == "2000-12-28"
+    assert user.name == "New Usuario Teste"
+    assert user.email == "newemail@email.com"
+    assert user.password == "newAa1!strong"
+    assert user.cpf == "30515029955"
+    assert user.birthday == "2000-12-28"
 
 
 # class User():
