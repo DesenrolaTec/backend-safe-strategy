@@ -1,7 +1,7 @@
 import pytest
 from datetime import datetime
-from app.domain.classes.user import Validator, User
-from app.application.exceptions.user_exceptions import (InvalidBirthdayError,
+from app.src.domain.classes.user import Validator, User
+from app.src.application.exceptions.user_exceptions import (InvalidBirthdayError,
                                                         InvalidCPFError,
                                                         InvalidEmailError,
                                                         WeakPasswordError)

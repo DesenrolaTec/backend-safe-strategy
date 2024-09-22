@@ -1,7 +1,7 @@
 import re
 from typing import Final
 from datetime import datetime
-from app.application.exceptions.user_exceptions import (InvalidBirthdayError,
+from app.src.application.exceptions.user_exceptions import (InvalidBirthdayError,
                                                         InvalidCPFError,
                                                         InvalidEmailError,
                                                         WeakPasswordError)
