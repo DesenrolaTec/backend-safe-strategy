@@ -1,5 +1,6 @@
 # User exceptions 
 
-class InvalidBirthdayError(Exception):
-    """Exceção para datas de aniversário inválidas."""
-    pass
+class InvalidBirthdayError(Exception):pass
+class InvalidEmailError(Exception): pass
+class InvalidCPFError(Exception): pass
+class WeakPasswordError(Exception): pass

@@ -1,7 +1,10 @@
 import pytest
 from datetime import datetime
 from app.domain.classes.user import Validator, User
-from app.application.exceptions.user_exceptions import InvalidBirthdayError
+from app.application.exceptions.user_exceptions import (InvalidBirthdayError,
+                                                        InvalidCPFError,
+                                                        InvalidEmailError,
+                                                        WeakPasswordError)
 
 def test_ensure_valid_email_success():
     # Arrange
@@ -23,7 +26,7 @@ def test_ensure_valid_email_error_email_long():
     validator = Validator()
 
     # Act/Assert
-    with pytest.raises(ValueError, match="Email is too long"):
+    with pytest.raises(InvalidEmailError, match="Email is too long"):
         validator.ensure_valid_email(email=email)
 
 def test_ensure_valid_email_error_pattern():
@@ -32,7 +35,7 @@ def test_ensure_valid_email_error_pattern():
     validator = Validator()
 
     # Act/Assert
-    with pytest.raises(ValueError, match="Email is not valid"):
+    with pytest.raises(InvalidEmailError, match="Email is not valid"):
         validator.ensure_valid_email(email=email)
 
 def test_ensure_valid_cpf_success():
@@ -52,7 +55,7 @@ def test_ensure_valid_cpf_error_length():
     validator = Validator()
 
     # Act/Assert]
-    with pytest.raises(ValueError, match="Invalid CPF"):
+    with pytest.raises(InvalidCPFError, match="Invalid CPF"):
         validator.ensure_valid_cpf(cpf=cpf)
 
 def test_ensure_valid_cpf_error_digits():
@@ -61,7 +64,7 @@ def test_ensure_valid_cpf_error_digits():
     validator = Validator()
 
     # Act/Assert]
-    with pytest.raises(ValueError, match="Invalid CPF"):
+    with pytest.raises(InvalidCPFError, match="Invalid CPF"):
         validator.ensure_valid_cpf(cpf=cpf)
 
 def test_ensure_password_secure_success():
@@ -81,7 +84,7 @@ def test_ensure_password_secure_error_length():
     validator = Validator()
 
     # Act/Assert
-    with pytest.raises(ValueError, match="Password must be at least 8 characters long."):
+    with pytest.raises(WeakPasswordError, match="Password must be at least 8 characters long."):
         validator.ensure_password_secure(password=password)
 
 def test_ensure_password_secure_error_regex_uppercase():
@@ -90,7 +93,7 @@ def test_ensure_password_secure_error_regex_uppercase():
     validator = Validator()
 
     # Act/Assert
-    with pytest.raises(ValueError, match="Password must contain at least one uppercase letter."):
+    with pytest.raises(WeakPasswordError, match="Password must contain at least one uppercase letter."):
         validator.ensure_password_secure(password=password)
 
 def test_ensure_password_secure_error_regex_lowercase():
@@ -99,7 +102,7 @@ def test_ensure_password_secure_error_regex_lowercase():
     validator = Validator()
 
     # Act/Assert
-    with pytest.raises(ValueError, match="Password must contain at least one lowercase letter."):
+    with pytest.raises(WeakPasswordError, match="Password must contain at least one lowercase letter."):
         validator.ensure_password_secure(password=password)
 
 def test_ensure_password_secure_error_regex_onedigit():
@@ -108,7 +111,7 @@ def test_ensure_password_secure_error_regex_onedigit():
     validator = Validator()
 
     # Act/Assert
-    with pytest.raises(ValueError, match="Password must contain at least one digit."):
+    with pytest.raises(WeakPasswordError, match="Password must contain at least one digit."):
         validator.ensure_password_secure(password=password)
 
 def test_ensure_password_secure_error_regex_one_special_caractere():
@@ -117,7 +120,7 @@ def test_ensure_password_secure_error_regex_one_special_caractere():
     validator = Validator()
 
     # Act/Assert
-    with pytest.raises(ValueError, match="Password must contain at least one special character."):
+    with pytest.raises(WeakPasswordError, match="Password must contain at least one special character."):
         validator.ensure_password_secure(password=password)
 
 def test_ensure_valid_birthday_success():
@@ -137,7 +140,7 @@ def test_ensure_valid_birthday_error_format():
     validator = Validator()
 
     # Act/Assert
-    with pytest.raises(ValueError, match="Birthday format must be YYYY-MM-DD"):
+    with pytest.raises(InvalidBirthdayError, match="Birthday format must be YYYY-MM-DD"):
         validator.ensure_valid_birthday(birthday=birthday)
 
 
@@ -223,57 +226,3 @@ def test_sets_user():
     assert user.password == "newAa1!strong"
     assert user.cpf == "30515029955"
     assert user.birthday == "2000-12-28"
-
-
-# class User():
-#     def __init__(self, name: str, email: str, password: str, cpf: str, birthday: str)->None:
-#         self.__name = name
-#         self.__email = Validator.__ensure_valid_email(email=email)
-#         self.__password = Validator.__ensure_password_secure(password=password)
-#         self.__cpf = Validator.__ensure_valid_cpf(cpf=cpf)
-#         self.__birthday = Validator.__ensure_valid_birthday(birthday=birthday)
-
-#     @property
-#     def name(self) -> str:
-#         return self.__name
-
-#     @name.setter
-#     def name(self, value: str) -> Optional[str]:
-#         self.__name = value
-#         return self.__email
-
-#     @property
-#     def email(self) -> str:
-#         return self.__email
-
-#     @email.setter
-#     def email(self, value: str) -> Optional[str]:
-#         self.__email = self.__ensure_valid_email(value)
-#         return self.__email
-    
-#     @property
-#     def password(self) -> str:
-#         return self.__password
-
-#     @password.setter
-#     def password(self, value: str) -> Optional[str]:
-#         self.__password = Validator.__ensure_password_secure(password=value)
-#         return self.__password
-    
-#     @property
-#     def cpf(self) -> str:
-#         return self.__cpf
-
-#     @cpf.setter
-#     def cpf(self, value: str) -> Optional[str]:
-#         self.__cpf = Validator.__ensure_valid_cpf(cpf=value)
-#         return self.__cpf
-    
-#     @property
-#     def birthday(self) -> str:
-#         return self.__birthday
-
-#     @birthday.setter
-#     def birthday(self, value: str) -> Optional[str]:
-#         self.__birthday = Validator.__ensure_valid_birthday(birthday=value)
-#         return self.__birthday
