@@ -217,12 +217,8 @@ def test_sets_user():
     user.name = "New Usuario Teste"
     user.email = "newemail@email.com"
     user.password = "newAa1!strong"
-    user.cpf = "305.150.299-55"
-    user.birthday = "2000-12-28"
 
     # Assert
     assert user.name == "New Usuario Teste"
     assert user.email == "newemail@email.com"
     assert user.password == "newAa1!strong"
-    assert user.cpf == "30515029955"
-    assert user.birthday == "2000-12-28"

@@ -1,4 +1,5 @@
 import re
+from typing import Final
 from datetime import datetime
 from app.application.exceptions.user_exceptions import (InvalidBirthdayError,
                                                         InvalidCPFError,
@@ -86,8 +87,8 @@ class User:
         self.__name: str = name
         self.__email: str = Validator.ensure_valid_email(email=email)
         self.__password: str = Validator.ensure_password_secure(password=password)
-        self.__cpf: str = Validator.ensure_valid_cpf(cpf=cpf)
-        self.__birthday: str = Validator.ensure_valid_birthday(birthday=birthday)
+        self.__cpf: Final[str] = Validator.ensure_valid_cpf(cpf=cpf)
+        self.__birthday: Final[str] = Validator.ensure_valid_birthday(birthday=birthday)
 
     @property
     def name(self) -> str:
@@ -116,15 +117,7 @@ class User:
     @property
     def cpf(self) -> str:
         return self.__cpf
-
-    @cpf.setter
-    def cpf(self, value: str) -> None:
-        self.__cpf = Validator.ensure_valid_cpf(cpf=value)
     
     @property
     def birthday(self) -> str:
         return self.__birthday
-
-    @birthday.setter
-    def birthday(self, value: str) -> None:
-        self.__birthday = Validator.ensure_valid_birthday(birthday=value)
