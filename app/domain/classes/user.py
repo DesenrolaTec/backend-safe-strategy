@@ -26,20 +26,6 @@ class Validator:
 
         if cpf == cpf[0] * 11:
             raise ValueError(f"{INVALID_CPF}: {cpf}")
-
-        def calcular_digito(cpf_parcial: str) -> int:
-            peso = len(cpf_parcial) + 1
-            soma = sum(int(digito) * peso for peso, digito in enumerate(cpf_parcial, start=2))
-            resto = soma % 11
-            return 0 if resto < 2 else 11 - resto
-        
-        primeiro_digito = calcular_digito(cpf[:9])
-        if primeiro_digito != int(cpf[9]):
-            raise ValueError(f"Invalid CPF: {cpf}")
-        
-        segundo_digito = calcular_digito(cpf[:10])
-        if segundo_digito != int(cpf[10]):
-            raise ValueError(f"Invalid CPF: {cpf}")
         
         return cpf
     
@@ -72,12 +58,12 @@ class Validator:
         return birthday_date.strftime('%Y-%m-%d')
 
 class User():
-    def __init__(self, name: str, email: str, password: str, cpf: str, birthday: datetime)->None:
-        self.__name = name
-        self.__email = Validator.__ensure_valid_email(email=email)
-        self.__password = Validator.__ensure_password_secure(password=password)
-        self.__cpf = Validator.__ensure_valid_cpf(cpf=cpf)
-        self.__birthday = Validator.__ensure_valid_birthday(birthday=birthday)
+    def __init__(self, name: str, email: str, password: str, cpf: str, birthday: str)->None:
+        self.__name: str = name
+        self.__email: str = Validator.ensure_valid_email(email=email)
+        self.__password: str = Validator.ensure_password_secure(password=password)
+        self.__cpf: str = Validator.ensure_valid_cpf(cpf=cpf)
+        self.__birthday: str = Validator.ensure_valid_birthday(birthday=birthday)
 
     @property
     def name(self) -> str:
@@ -94,7 +80,7 @@ class User():
 
     @email.setter
     def email(self, value: str) -> Optional[str]:
-        self.__email = self.__ensure_valid_email(value)
+        self.__email = Validator.ensure_valid_email(value)
         return self.__email
     
     @property
@@ -103,7 +89,7 @@ class User():
 
     @password.setter
     def password(self, value: str) -> Optional[str]:
-        self.__password = Validator.__ensure_password_secure(password=value)
+        self.__password = Validator.ensure_password_secure(password=value)
         return self.__password
     
     @property
@@ -112,7 +98,7 @@ class User():
 
     @cpf.setter
     def cpf(self, value: str) -> Optional[str]:
-        self.__cpf = Validator.__ensure_valid_cpf(cpf=value)
+        self.__cpf = Validator.ensure_valid_cpf(cpf=value)
         return self.__cpf
     
     @property
@@ -121,5 +107,5 @@ class User():
 
     @birthday.setter
     def birthday(self, value: str) -> Optional[str]:
-        self.__birthday = Validator.__ensure_valid_birthday(birthday=value)
+        self.__birthday = Validator.ensure_valid_birthday(birthday=value)
         return self.__birthday

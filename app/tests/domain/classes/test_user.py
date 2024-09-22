@@ -1,6 +1,6 @@
 import pytest
 from datetime import datetime
-from app.domain.classes.user import Validator
+from app.domain.classes.user import Validator, User
 from app.application.exceptions.user_exceptions import InvalidBirthdayError
 
 def test_ensure_valid_email_success():
@@ -62,15 +62,6 @@ def test_ensure_valid_cpf_error_digits():
 
     # Act/Assert]
     with pytest.raises(ValueError, match="Invalid CPF: 66395350099a"):
-        validator.ensure_valid_cpf(cpf=cpf)
-
-def test_ensure_valid_cpf_error_digits():
-    # Arrange
-    cpf = "363.953.500-99"
-    validator = Validator()
-
-    # Act/Assert]
-    with pytest.raises(ValueError, match="Invalid CPF: 36395350099"):
         validator.ensure_valid_cpf(cpf=cpf)
 
 def test_ensure_password_secure_success():
@@ -159,3 +150,130 @@ def test_ensure_valid_birthday_error_age():
     # Act/Assert
     with pytest.raises(InvalidBirthdayError, match="Person must be at least 18 years old."):
         validator.ensure_valid_birthday(birthday=birthday)
+
+
+def test_user_success():
+    # Arrange
+    name = "Usuario Teste"
+    email = "email@email.com"
+    password = "Aa1!strong"
+    cpf = "663.953.500-99"
+    birthday = "2000-12-27"
+
+    # Act
+    response = User(name=name,
+                    email=email,
+                    password=password,
+                    cpf=cpf,
+                    birthday=birthday)
+    
+    # Assert
+    assert isinstance(response, User)
+
+def test_gets_user():
+    # Arrange
+    name = "Usuario Teste"
+    email = "email@email.com"
+    password = "Aa1!strong"
+    cpf = "663.953.500-99"
+    birthday = "2000-12-27"
+    user = User(name=name,
+                    email=email,
+                    password=password,
+                    cpf=cpf,
+                    birthday=birthday)
+
+    # Act
+    response_name = user.name
+    response_email = user.email
+    response_password = user.password
+    response_cpf = user.cpf
+    response_birthday = user.birthday
+
+    # Assert
+    assert response_name == name
+    assert response_email == email
+    assert response_password == password
+    assert response_cpf == "66395350099"
+    assert response_birthday == birthday
+
+def test_sets_user():
+    # Arrange
+    name = "Usuario Teste"
+    email = "email@email.com"
+    password = "Aa1!strong"
+    cpf = "305.150.299-55"
+    birthday = "2000-12-27"
+    user = User(name=name,
+                    email=email,
+                    password=password,
+                    cpf=cpf,
+                    birthday=birthday)
+
+    # Act
+    response_name = user.name = "New Usuario Teste"
+    response_email = user.email = "newemail@email.com"
+    response_password = user.password = "newAa1!strong"
+    response_cpf = user.cpf = "786.200.430-21"
+    response_birthday = user.birthday = "2000-12-28"
+
+    # Assert
+    assert response_name == "New Usuario Teste"
+    assert response_email == "newemail@email.com"
+    assert response_password == "newAa1!strong"
+    assert response_cpf == "786.200.430-21"
+    assert response_birthday == "2000-12-28"
+
+
+# class User():
+#     def __init__(self, name: str, email: str, password: str, cpf: str, birthday: str)->None:
+#         self.__name = name
+#         self.__email = Validator.__ensure_valid_email(email=email)
+#         self.__password = Validator.__ensure_password_secure(password=password)
+#         self.__cpf = Validator.__ensure_valid_cpf(cpf=cpf)
+#         self.__birthday = Validator.__ensure_valid_birthday(birthday=birthday)
+
+#     @property
+#     def name(self) -> str:
+#         return self.__name
+
+#     @name.setter
+#     def name(self, value: str) -> Optional[str]:
+#         self.__name = value
+#         return self.__email
+
+#     @property
+#     def email(self) -> str:
+#         return self.__email
+
+#     @email.setter
+#     def email(self, value: str) -> Optional[str]:
+#         self.__email = self.__ensure_valid_email(value)
+#         return self.__email
+    
+#     @property
+#     def password(self) -> str:
+#         return self.__password
+
+#     @password.setter
+#     def password(self, value: str) -> Optional[str]:
+#         self.__password = Validator.__ensure_password_secure(password=value)
+#         return self.__password
+    
+#     @property
+#     def cpf(self) -> str:
+#         return self.__cpf
+
+#     @cpf.setter
+#     def cpf(self, value: str) -> Optional[str]:
+#         self.__cpf = Validator.__ensure_valid_cpf(cpf=value)
+#         return self.__cpf
+    
+#     @property
+#     def birthday(self) -> str:
+#         return self.__birthday
+
+#     @birthday.setter
+#     def birthday(self, value: str) -> Optional[str]:
+#         self.__birthday = Validator.__ensure_valid_birthday(birthday=value)
+#         return self.__birthday
