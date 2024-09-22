@@ -1,25 +1,31 @@
 import re
+from typing import Optional
 from datetime import datetime
-from application.exceptions.user_exceptions import InvalidBirthdayError
+from app.application.exceptions.user_exceptions import InvalidBirthdayError
 
-class User():
-    def __ensure_valid_email(self, email: str)->str:
+EMAIL_IS_NOT_VALID = "Email is not valid"
+EMAIL_TOO_LONG = "Email is too long"
+INVALID_CPF = "Invalid CPF"
+
+class Validator:
+    @staticmethod
+    def ensure_valid_email(email: str) -> str:
         pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
         if len(email) > 254:
-            raise ValueError("Email is too long")
-        if re.match(pattern, email):
-            return email
-        else:
-            raise ValueError("Email is not valid")
+            raise ValueError(EMAIL_TOO_LONG)
+        if not re.match(pattern, email):
+            raise ValueError(EMAIL_IS_NOT_VALID)
+        return email
 
-    def __ensure_valid_cpf(self, cpf: str) -> str:
+    @staticmethod
+    def ensure_valid_cpf(cpf: str) -> str:
         cpf = cpf.replace(".", "").replace("-", "")
         
         if not (cpf.isdigit() and len(cpf) == 11):
-            raise ValueError(f"Invalid CPF: {cpf}")
+            raise ValueError(f"{INVALID_CPF}: {cpf}")
 
         if cpf == cpf[0] * 11:
-            raise ValueError(f"Invalid CPF: {cpf}")
+            raise ValueError(f"{INVALID_CPF}: {cpf}")
 
         def calcular_digito(cpf_parcial: str) -> int:
             peso = len(cpf_parcial) + 1
@@ -37,7 +43,8 @@ class User():
         
         return cpf
     
-    def __ensure_password_secure(self, password: str):
+    @staticmethod
+    def ensure_password_secure(password: str):
         if len(password) < 8:
             raise ValueError("Password must be at least 8 characters long.")
         if not re.search(r'[A-Z]', password):
@@ -51,18 +58,68 @@ class User():
 
         return password
 
-    def __ensure_valid_birthday(self, birthday: str):
-        birthday = datetime.strptime(birthday, '%Y-%m-%d')
+    @staticmethod
+    def ensure_valid_birthday(birthday: str):
+        try:
+            birthday_date = datetime.strptime(birthday, '%Y-%m-%d')
+        except ValueError:
+            raise ValueError("Birthday format must be YYYY-MM-DD")
+
         today = datetime.today()
-        age = today.year - birthday.year - ((today.month, today.day) < (birthday.month, birthday.day))
+        age = today.year - birthday_date.year - ((today.month, today.day) < (birthday_date.month, birthday_date.day))
         if age < 18:
             raise InvalidBirthdayError("Person must be at least 18 years old.")
-        return birthday.strftime('%Y-%m-%d')
+        return birthday_date.strftime('%Y-%m-%d')
 
+class User():
     def __init__(self, name: str, email: str, password: str, cpf: str, birthday: datetime)->None:
         self.__name = name
-        self.__email = self.__ensure_valid_email(email=email)
-        self.__password = self.__ensure_password_secure(password=password)
-        self.__cpf = self.__ensure_valid_cpf(cpf=cpf)
-        self.__birthday = self.__ensure_valid_birthday(birthday=birthday)
-        
+        self.__email = Validator.__ensure_valid_email(email=email)
+        self.__password = Validator.__ensure_password_secure(password=password)
+        self.__cpf = Validator.__ensure_valid_cpf(cpf=cpf)
+        self.__birthday = Validator.__ensure_valid_birthday(birthday=birthday)
+
+    @property
+    def name(self) -> str:
+        return self.__name
+
+    @name.setter
+    def name(self, value: str) -> Optional[str]:
+        self.__name = value
+        return self.__email
+
+    @property
+    def email(self) -> str:
+        return self.__email
+
+    @email.setter
+    def email(self, value: str) -> Optional[str]:
+        self.__email = self.__ensure_valid_email(value)
+        return self.__email
+    
+    @property
+    def password(self) -> str:
+        return self.__password
+
+    @password.setter
+    def password(self, value: str) -> Optional[str]:
+        self.__password = Validator.__ensure_password_secure(password=value)
+        return self.__password
+    
+    @property
+    def cpf(self) -> str:
+        return self.__cpf
+
+    @cpf.setter
+    def cpf(self, value: str) -> Optional[str]:
+        self.__cpf = Validator.__ensure_valid_cpf(cpf=value)
+        return self.__cpf
+    
+    @property
+    def birthday(self) -> str:
+        return self.__birthday
+
+    @birthday.setter
+    def birthday(self, value: str) -> Optional[str]:
+        self.__birthday = Validator.__ensure_valid_birthday(birthday=value)
+        return self.__birthday
