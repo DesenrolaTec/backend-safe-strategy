@@ -121,3 +121,6 @@ class User:
     @property
     def birthday(self) -> str:
         return self.__birthday
+    
+    def is_password_correct(self, password: str)->bool:
+        return password == self.__password
