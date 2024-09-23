@@ -41,9 +41,8 @@ class UserRoutes:
         except Exception as e:
             return jsonify({'error': 'Erro ao criar usuário.'}), 500  # 500 Internal Server Error
     
-    def __get_user_by_cpf(self, ):
-        data = request.json
-        user_cpf = data.get('cpf').replace(".", "").replace("-", "")
+    def __get_user_by_cpf(self, cpf: str):
+        user_cpf = cpf.replace("-", "")
 
         if user_cpf is None:
             return jsonify({'error': 'User CPF is required'}), 400
@@ -52,12 +51,54 @@ class UserRoutes:
         if user:
             return jsonify(user.to_dict()), 200  # Supondo que você tenha um método to_dict
         return jsonify({'error': 'User not found'}), 404
+    
+    def __delete_user(self, cpf: str):
+        try:
+            result = self.__repository.delete(user_cpf = cpf.replace("-", ""))
+            
+            if result:  # Se a deleção foi bem-sucedida
+                return jsonify({'message': 'User deleted successfully.'}), 204  # 204 No Content
+            else:
+                return jsonify({'error': 'User not found.'}), 404  # 404 Not Found
+
+        except Exception as e:
+            return jsonify({'error': 'Error deleting user.'}), 500  # 500 Internal Server Error
+        
+    def __update_user(self, cpf: str):
+        try:
+            # Obter dados do JSON enviado pelo cliente
+            data = request.get_json()
+
+            # Validação básica (dependendo dos campos que você precisa atualizar)
+            if not data:
+                raise BadRequest('Nenhum dado fornecido para atualização.')
+
+            # Chamar o repositório para atualizar o usuário
+            result = self.__repository.update(cpf, data)
+            
+            if result:
+                return jsonify({'message': 'Usuário atualizado com sucesso.'}), 200  # 200 OK
+            else:
+                return jsonify({'error': 'Usuário não encontrado.'}), 404  # 404 Not Found
+
+        except BadRequest as e:
+            return jsonify({'error': str(e)}), 400  # 400 Bad Request
+        except Exception as e:
+            return jsonify({'error': 'Erro ao atualizar usuário.'}), 500  # 500 Internal Server Error
         
     def register_routes(self, app: Flask) -> None:
         @app.route('/api/users', methods=['POST'])
         def create_user():
             return self.__create_user()
         
-        @app.route('/api/users/get', methods=['GET'])
-        def get_user():
-            return self.__get_user_by_cpf()        
+        @app.route('/api/users/<string:user_cpf>', methods=['GET'])
+        def get_user(user_cpf):
+            return self.__get_user_by_cpf(cpf=user_cpf)   
+
+        @app.route('/api/users/<string:user_cpf>', methods=['DELETE'])
+        def delete_user(user_cpf):
+            return self.__delete_user(cpf=user_cpf)
+        
+        @app.route('/api/users/<int:user_cpf>', methods=['PATCH'])
+        def update_user(user_cpf):
+            return self.__update_user(cpf=user_cpf)

@@ -11,15 +11,15 @@ class UserRepositoryInterface(ABC):
         """Método para ler dados do banco de dados"""
         raise NotImplementedError("O método 'get_by_id' precisa ser implementado.")
 
-    # @abstractmethod
-    # def update(self) -> None:
-    #     """Método para atualizar dados no banco de dados"""
-    #     raise NotImplementedError("O método 'update' precisa ser implementado.")
+    @abstractmethod
+    def update(self) -> None:
+        """Método para atualizar dados no banco de dados"""
+        raise NotImplementedError("O método 'update' precisa ser implementado.")
 
-    # @abstractmethod
-    # def delete(self) -> None:
-    #     """Método para deletar dados do banco de dados"""
-    #     raise NotImplementedError("O método 'delete' precisa ser implementado.")
+    @abstractmethod
+    def delete(self) -> dict:
+        """Método para deletar dados do banco de dados"""
+        raise NotImplementedError("O método 'delete' precisa ser implementado.")
 
     # @abstractmethod
     # def close(self) -> None:
