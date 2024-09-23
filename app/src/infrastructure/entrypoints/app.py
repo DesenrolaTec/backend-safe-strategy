@@ -1,7 +1,7 @@
 from flask import Flask
 from app.src.application.config.config import Config
 from app.src.infrastructure.adapters.sql_alchemy_adapter import db
-from app.src.infrastructure.routes.user_routes import setup_user_routes
+from app.src.infrastructure.routes.user_routes import UserRoutes
 
 
 class App:
@@ -24,7 +24,7 @@ class App:
     def __setup_app(self):
         app = self.app
         db.init_app(app)
-        setup_user_routes(app)
+        UserRoutes(app=app)
         return app
 
     def run(self):

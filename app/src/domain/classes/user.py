@@ -76,17 +76,18 @@ class Validator:
         return password
 
     @staticmethod
-    def ensure_valid_birthday(birthday: str) -> str:
+    def ensure_valid_birthday(birthday: str) -> datetime:
         try:
-            birthday_date = datetime.strptime(birthday, '%Y-%m-%d')
+            if not type(birthday) == datetime:
+                birthday = datetime.strptime(birthday, '%Y-%m-%d')            
         except ValueError:
             raise InvalidBirthdayError(BIRTHDAY_FORMAT_INVALID)
 
         today = datetime.today()
-        age = today.year - birthday_date.year - ((today.month, today.day) < (birthday_date.month, birthday_date.day))
+        age = today.year - birthday.year - ((today.month, today.day) < (birthday.month, birthday.day))
         if age < 18:
             raise InvalidBirthdayError(UNDERAGE_ERROR)
-        return birthday_date.strftime('%Y-%m-%d')
+        return birthday.strftime('%Y-%m-%d')
 
 
 class User:
@@ -131,3 +132,15 @@ class User:
     
     def is_password_correct(self, password: str)->bool:
         return password == self.__password
+    
+    def to_dict(self, include_password: bool = False) -> dict:
+        user_dict = {
+            'name': self.name,
+            'email': self.email,
+            'cpf': self.cpf,
+            'birthday': self.birthday
+        }
+        if include_password:
+            user_dict['password'] = self.password
+        
+        return user_dict

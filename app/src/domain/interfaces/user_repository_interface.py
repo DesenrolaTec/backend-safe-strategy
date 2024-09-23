@@ -1,15 +1,15 @@
 from abc import ABC, abstractmethod
 
-class DatabaseInterface(ABC):
+class UserRepositoryInterface(ABC):
     @abstractmethod
     def create(self) -> None:
         """Método para inserir dados no banco de dados"""
         raise NotImplementedError("O método 'create' precisa ser implementado.")
 
     @abstractmethod
-    def read(self) -> dict:
+    def get_by_id(self) -> dict:
         """Método para ler dados do banco de dados"""
-        raise NotImplementedError("O método 'read' precisa ser implementado.")
+        raise NotImplementedError("O método 'get_by_id' precisa ser implementado.")
 
     # @abstractmethod
     # def update(self) -> None:

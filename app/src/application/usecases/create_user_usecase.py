@@ -1,7 +1,7 @@
 from typing import Final
 from dataclasses import dataclass
 from app.src.domain.classes.user import User
-from app.src.domain.interfaces.database_interface import DatabaseInterface
+from app.src.domain.interfaces.user_repository_interface import UserRepositoryInterface
 from app.src.domain.interfaces.usecase_interface import UsecaseInterface
 
 @dataclass()
@@ -13,7 +13,7 @@ class InputDto:
     birthday: Final[str]
 
 class CreateUserUsecase(UsecaseInterface):
-    def __init__(self, databaseRepository: DatabaseInterface):
+    def __init__(self, databaseRepository: UserRepositoryInterface):
         self.__db_repository = databaseRepository
 
     def execute(self, input_dto: InputDto)->InputDto:

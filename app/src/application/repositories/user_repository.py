@@ -1,9 +1,9 @@
 from sqlalchemy.orm import Session
 from app.src.domain.classes.user import User
 from app.src.infrastructure.models.user_model import UserModel
-from app.src.domain.interfaces.database_interface import DatabaseInterface
+from app.src.domain.interfaces.user_repository_interface import UserRepositoryInterface
 
-class UserRepository(DatabaseInterface):
+class UserRepository(UserRepositoryInterface):
     def __init__(self, session: Session)->None:
         self.session = session
 
@@ -16,7 +16,7 @@ class UserRepository(DatabaseInterface):
         self.session.add(user_model)
         self.session.commit()
 
-    def read(self, user_cpf: str)->User:
+    def get_by_id(self, user_cpf: str)->User:
         user_model = self.session.query(UserModel).filter_by(cpf=user_cpf).first()
         if user_model:
             return User(name = user_model.name,
