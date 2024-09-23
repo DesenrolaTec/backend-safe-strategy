@@ -33,7 +33,7 @@ class App:
 
     def run(self):
         app = self.__setup_app()
-        context = ('app/certs/cert.pem', 'app/certs/key.pem')
+        context = ('app/certs/server.key', 'app/certs/server.crt')
         app.run(host=self.__config.get("APP_HOST"), 
                 port=self.__config.get("APP_PORT"), 
                 debug=self.__config.get("FLASK_DEBUG_MODE"),

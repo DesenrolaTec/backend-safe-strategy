@@ -1,3 +1,7 @@
-from main import app
+from app.src.infrastructure.entrypoints.app import App
 
-app.run()
+try:
+    app = App()
+    app.run()
+except Exception as e:
+    print(e)
