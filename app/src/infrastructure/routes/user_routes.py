@@ -1,5 +1,5 @@
 from flask import jsonify, request
-from sqlalchemy.orm import Session
+from app.src.infrastructure.adapters.sql_alchemy_adapter import db
 from werkzeug.exceptions import BadRequest
 from app.src.application.repositories.user_repository import UserRepository
 from app.src.application.usecases.create_user_usecase import CreateUserUsecase, InputDto
@@ -22,8 +22,7 @@ def setup_user_routes(app):
                                  cpf=data.get("cpf"),
                                  birthday=data.get("birthday"))
             
-            session = Session()
-            repository = UserRepository(session)
+            repository = UserRepository(db.session)
             usecase = CreateUserUsecase(repository)
             output_dto = usecase.execute(input_dto=input_dto)
 

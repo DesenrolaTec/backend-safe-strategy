@@ -1,9 +1,7 @@
-from sqlalchemy.orm import declarative_base
 from sqlalchemy import Column, Integer, String
+from app.src.infrastructure.adapters.sql_alchemy_adapter import db
 
-Base = declarative_base()
-
-class UserModel(Base):
+class UserModel(db.Model):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String, nullable=True, default=None)

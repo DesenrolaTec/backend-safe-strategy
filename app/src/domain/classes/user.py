@@ -30,7 +30,14 @@ class Validator:
     
     @staticmethod
     def calcular_digito_verificador(cpf_parcial: str) -> int:
-        soma = sum(int(digito) * peso for peso, digito in enumerate(cpf_parcial, start=2))
+        if len(cpf_parcial) == 9:
+            multiplicadores = list(range(10, 1, -1))
+        elif len(cpf_parcial) == 10:
+            multiplicadores = list(range(11, 1, -1))
+        else:
+            raise ValueError("CPF parcial inválido. Deve conter 9 ou 10 dígitos.")
+
+        soma = sum(int(digito) * multiplicador for digito, multiplicador in zip(cpf_parcial, multiplicadores))
         resto = soma % 11
         return 0 if resto < 2 else 11 - resto
 
