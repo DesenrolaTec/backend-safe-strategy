@@ -9,3 +9,9 @@ class UserModel(db.Model):
     password = Column(String, nullable=True, default=None)
     cpf = Column(String, nullable=True, default=None)
     birthday = Column(String, nullable=True, default=None)
+
+    def __str__(self):
+        return self.email
+
+    def get_user_id(self):
+        return self.id

@@ -1,7 +1,9 @@
 from flask import Flask
 from app.src.application.config.config import Config
-from app.src.infrastructure.adapters.sql_alchemy_adapter import db
 from app.src.infrastructure.routes.user_routes import UserRoutes
+from app.src.infrastructure.routes.oauth_routes import OauthRoutes
+from app.src.infrastructure.adapters.sql_alchemy_adapter import db
+from app.src.application.repositories.oauth_repository import config_oauth
 
 
 class App:
@@ -24,12 +26,16 @@ class App:
     def __setup_app(self):
         app = self.app
         db.init_app(app)
+        config_oauth(app)
+        OauthRoutes(app=app)
         UserRoutes(app=app)
         return app
 
     def run(self):
         app = self.__setup_app()
+        context = ('app/certs/cert.pem', 'app/certs/key.pem')
         app.run(host=self.__config.get("APP_HOST"), 
                 port=self.__config.get("APP_PORT"), 
-                debug=self.__config.get("FLASK_DEBUG_MODE"))
+                debug=self.__config.get("FLASK_DEBUG_MODE"),
+                ssl_context=context)
         return app
