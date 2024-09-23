@@ -27,7 +27,6 @@ class Config:
             self.APP_HOST = os.getenv('APP_HOST')
             self.APP_PORT = os.getenv('APP_PORT')
             self.FLASK_DEBUG_MODE = eval(os.getenv('FLASK_DEBUG_MODE'))
-
             self._initialized = True
 
     def get(self, key: str):
