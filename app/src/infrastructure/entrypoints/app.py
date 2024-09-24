@@ -26,10 +26,15 @@ class App:
         config_oauth(self.app)
         OauthRoutes(app=self.app)
         UserRoutes(app=self.app)
-
+    
     def run(self):
         app = self.__setup_app()
+        context = (
+            '/etc/letsencrypt/live/api.desenrolatec.com.br/privkey.pem', 
+            '/etc/letsencrypt/live/api.desenrolatec.com.br/fullchain.pem'
+        )
         app.run(host=self.__config.get("APP_HOST"), 
                 port=self.__config.get("APP_PORT"), 
-                debug=self.__config.get("FLASK_DEBUG_MODE"))
+                debug=self.__config.get("FLASK_DEBUG_MODE"),
+                ssl_context=context)
         return app
