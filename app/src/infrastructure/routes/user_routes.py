@@ -1,6 +1,7 @@
 from flask import jsonify, request
-from app.src.infrastructure.adapters.sql_alchemy_adapter import db
 from werkzeug.exceptions import BadRequest
+from app.src.infrastructure.adapters.sql_alchemy_adapter import db
+from app.src.application.repositories.oauth_repository import require_oauth
 from app.src.application.repositories.user_repository import UserRepository
 from app.src.application.usecases.create_user_usecase import CreateUserUsecase, InputDto
 
@@ -88,17 +89,21 @@ class UserRoutes:
         
     def register_routes(self, app: Flask) -> None:
         @app.route('/api/users', methods=['POST'])
+        @require_oauth('profile')
         def create_user():
             return self.__create_user()
         
         @app.route('/api/users/<string:user_cpf>', methods=['GET'])
+        @require_oauth('profile')
         def get_user(user_cpf):
             return self.__get_user_by_cpf(cpf=user_cpf)   
 
         @app.route('/api/users/<string:user_cpf>', methods=['DELETE'])
+        @require_oauth('profile')
         def delete_user(user_cpf):
             return self.__delete_user(cpf=user_cpf)
         
         @app.route('/api/users/<int:user_cpf>', methods=['PATCH'])
+        @require_oauth('profile')
         def update_user(user_cpf):
             return self.__update_user(cpf=user_cpf)
