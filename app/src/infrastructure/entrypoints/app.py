@@ -30,8 +30,8 @@ class App:
     def run(self):
         app = self.app
         context = (
-            '/etc/letsencrypt/live/api.desenrolatec.com.br/privkey.pem', 
-            '/etc/letsencrypt/live/api.desenrolatec.com.br/fullchain.pem'
+            '/etc/letsencrypt/archive/api.desenrolatec.com.br/privkey1.pem', 
+            '/etc/letsencrypt/archive/api.desenrolatec.com.br/fullchain1.pem'
         )
         app.run(host=self.__config.get("APP_HOST"), 
                 port=self.__config.get("APP_PORT"), 
