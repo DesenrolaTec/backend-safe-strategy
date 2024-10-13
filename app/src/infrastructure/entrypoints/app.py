@@ -28,7 +28,7 @@ class App:
         UserRoutes(app=self.app)
     
     def run(self):
-        app = self.__setup_app()
+        app = self.app
         context = (
             '/etc/letsencrypt/live/api.desenrolatec.com.br/privkey.pem', 
             '/etc/letsencrypt/live/api.desenrolatec.com.br/fullchain.pem'
