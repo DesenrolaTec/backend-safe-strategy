@@ -34,6 +34,21 @@ class UserRepository(UserRepositoryInterface):
                 birthday=user.birthday
             )
         return None
+    
+    def __find_user_by_email(self, user_email: str) -> UserModel:
+        return self.__session.query(UserModel).filter_by(email=user_email).first()
+    
+    def get_by_email(self, user_email: str) -> User:
+        user = self.__find_user_by_email(user_email)
+        if user:
+            return User(
+                name=user.name,
+                email=user.email,
+                password=user.password,
+                cpf=user.cpf,
+                birthday=user.birthday
+            )
+        return None
 
     def update(self, user_cpf: str, data: dict) -> dict:
         user = self.__find_user_by_cpf(user_cpf)
