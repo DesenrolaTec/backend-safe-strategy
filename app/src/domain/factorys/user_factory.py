@@ -7,11 +7,11 @@ from app.src.domain.classes.validator import Validator
 @dataclass
 class UserDto:
     id: Optional[int] = None 
-    name: Optional[str] = None 
-    email: Optional[str] = None 
-    password: Optional[str] = None 
-    cpf: Optional[str] = None 
-    birthday: Optional[str] = None
+    name: Optional[str] = "" 
+    email: str
+    password: Optional[str] = "" 
+    cpf: Optional[str] = ""
+    birthday: Optional[str] = ""
     created_at: Optional[str] = None
     updated_at: Optional[str] = None
 
