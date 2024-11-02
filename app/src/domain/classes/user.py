@@ -1,4 +1,6 @@
 import re
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
 from typing import Final
 from datetime import datetime
 from app.src.application.exceptions.user_exceptions import (InvalidBirthdayError,
@@ -89,58 +91,53 @@ class Validator:
             raise InvalidBirthdayError(UNDERAGE_ERROR)
         return birthday.strftime('%Y-%m-%d')
 
-
 class User:
-    def __init__(self, name: str, email: str, password: str, cpf: str, birthday: str) -> None:
-        self.__name: str = name
-        self.__email: str = Validator.ensure_valid_email(email=email)
-        self.__password: str = Validator.ensure_password_secure(password=password)
-        self.__cpf: Final[str] = Validator.ensure_valid_cpf(cpf=cpf)
-        self.__birthday: Final[str] = Validator.ensure_valid_birthday(birthday=birthday)
+    def __init__(self, email: str, name: str, password: str, cpf: str, birthday: str)->None:
+        self.email = email
+        self.name = name
+        self.password = password
+        self.cpf = cpf
+        self.birthday = birthday
 
-    @property
-    def name(self) -> str:
-        return self.__name
-
-    @name.setter
-    def name(self, value: str) -> None:
-        self.__name = value
-
-    @property
-    def email(self) -> str:
-        return self.__email
-
-    @email.setter
-    def email(self, value: str) -> None:
-        self.__email = Validator.ensure_valid_email(value)
-    
-    @property
-    def password(self) -> str:
-        return self.__password
-
-    @password.setter
-    def password(self, value: str) -> None:
-        self.__password = Validator.ensure_password_secure(password=value)
-    
-    @property
-    def cpf(self) -> str:
-        return self.__cpf
-    
-    @property
-    def birthday(self) -> str:
-        return self.__birthday
-    
-    def is_password_correct(self, password: str)->bool:
-        return password == self.__password
-    
-    def to_dict(self, include_password: bool = False) -> dict:
-        user_dict = {
-            'name': self.name,
-            'email': self.email,
-            'cpf': self.cpf,
-            'birthday': self.birthday
+    def __dict__(self):
+        return {
+            "name": self.name,
+            "email": self.email,
+            "password": self.password,
+            "cpf": self.cpf,
+            "birthday": self.birthday
         }
-        if include_password:
-            user_dict['password'] = self.password
-        
-        return user_dict
+
+@dataclass
+class UserDto:
+    email: str
+    name: str=""
+    password: str=""
+    cpf: str=""
+    birthday: str=""
+
+class UserFactory:
+    @abstractmethod
+    def create_user(self)->User:
+        pass
+
+class MinimalUserFactory(UserFactory):
+    def create_user(self, email: str, name: str="", password: str="", cpf: str="", birthday: str="") -> User:
+        return User(email=email, name=name, password=password, cpf=cpf, birthday=birthday)
+    
+class FullUserFactory(UserFactory):
+    def create_user(self, email: str, name: str, password: str, cpf: str, birthday: str) -> User:
+        self.name = name 
+        self.email = Validator.ensure_valid_email(email=email) 
+        self.password = Validator.ensure_password_secure(password=password)
+        self.cpf = Validator.ensure_valid_cpf(cpf=cpf)
+        self.birthday = Validator.ensure_valid_birthday(birthday=birthday)
+        return User(name=self.name, email= self.email, password= self.password, cpf=self.cpf, birthday=self.birthday)
+
+def user_client(factory: UserFactory, user_dto: UserDto):
+    user = factory.create_user(email=user_dto.email, 
+                               name=user_dto.name, 
+                               password=user_dto.password, 
+                               cpf=user_dto.cpf, 
+                               birthday=user_dto.birthday)
+    return user

@@ -1,3 +1,4 @@
+from typing import Optional
 from typing import Final
 from dataclasses import dataclass
 from app.src.domain.classes.user import User
@@ -6,11 +7,11 @@ from app.src.domain.interfaces.usecase_interface import UsecaseInterface
 
 @dataclass()
 class InputDto:
-    name: str
+    name: Optional[str]
     email: str
-    password: str
-    cpf: Final[str]
-    birthday: Final[str]
+    password: Optional[str]
+    cpf: Optional[str]
+    birthday: Optional[str]
 
 class CreateUserUsecase(UsecaseInterface):
     def __init__(self, databaseRepository: UserRepositoryInterface):

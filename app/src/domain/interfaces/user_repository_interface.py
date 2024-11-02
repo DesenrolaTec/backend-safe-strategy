@@ -10,6 +10,11 @@ class UserRepositoryInterface(ABC):
     def get_by_id(self) -> dict:
         """Método para ler dados do banco de dados"""
         raise NotImplementedError("O método 'get_by_id' precisa ser implementado.")
+    
+    @abstractmethod
+    def get_by_email(self) -> dict:
+        """Método para ler dados do banco de dados"""
+        raise NotImplementedError("O método 'get_by_email' precisa ser implementado.")
 
     @abstractmethod
     def update(self) -> None:
