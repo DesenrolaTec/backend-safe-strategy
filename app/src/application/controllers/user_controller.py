@@ -1,8 +1,10 @@
-from app.src.application.usecases.create_user import CreateUser, InputDto as CreateUserInputDto
+from app.src.application.usecases.user.create_user import CreateUserUsecase, InputDto as CreateUserInputDto
+from app.src.application.usecases.user.get_user import ReadUserUsecase, InputDto as ReadUserInputDto
 
 class UserController:
-    def __init__(self, create_user: CreateUser):
+    def __init__(self, create_user: CreateUserUsecase, get_user: ReadUserUsecase) -> None:
         self._create_user = create_user
+        self._get_user = get_user
 
     def _map_user_data(self, user_data: dict) -> CreateUserInputDto:
         return CreateUserInputDto(
@@ -16,4 +18,12 @@ class UserController:
     def create_user(self, user_data: dict):
         user_dto = self._map_user_data(user_data)
         output_dto = self._create_user.execute(user_dto)
+        return output_dto.to_dict()
+    
+    def _map_user_cpf(self, user_cpf: str)->ReadUserInputDto:
+        return ReadUserInputDto(cpf=user_cpf)
+
+    def get_user(self, user_cpf: str):
+        user_dto = self._map_user_cpf(user_cpf)
+        output_dto = self._get_user.execute(user_dto)
         return output_dto.to_dict()
