@@ -15,5 +15,5 @@ class UserControllerInterface(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def update_user(self, user_data: dict):
+    def update_user(self,cpf:str, user_data: dict):
         raise NotImplementedError

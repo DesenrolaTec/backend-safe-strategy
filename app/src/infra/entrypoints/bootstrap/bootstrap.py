@@ -20,4 +20,4 @@ class Bootstrap:
         read_user = ReadUserUsecase(user_repository)
         update_user = UpdateUserUsecase(user_repository)
         delete_user = DeleteUserUsecase(user_repository)
-        self.user_controller = UserController(create_user, read_user, update_user, delete_user)
+        self.user_controller = UserController(create_user=create_user, get_user=read_user, update_user=update_user, delete_user=delete_user)

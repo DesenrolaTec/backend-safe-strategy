@@ -40,16 +40,16 @@ class UserController:
         output_dto = self._delete_user.execute(user_dto)
         return output_dto.to_dict()
     
-    def _map_user_updated_data(self, user_data: dict) -> UpdateUserInputDto:
+    def _map_user_updated_data(self, cpf:str, user_data: dict) -> UpdateUserInputDto:
         return UpdateUserInputDto(
             name=user_data.get('name'),
             email=user_data.get('email'),
-            cpf=user_data.get('cpf'),
+            cpf=cpf,
             password=user_data.get('password'),
             birthday=user_data.get('birthday'),
         )
 
-    def update_user(self, user_data: dict):
-        user_dto = self._map_user_data(user_data)
+    def update_user(self, cpf:str, user_data: dict):
+        user_dto = self._map_user_updated_data(cpf, user_data)
         output_dto = self._update_user.execute(user_dto)
-        return output_dto.to_dict()
+        return output_dto.user.to_dict()

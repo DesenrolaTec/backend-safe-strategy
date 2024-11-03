@@ -46,7 +46,7 @@ class UserRoutes:
             data = request.get_json()
             if not data:
                 raise BadRequest('Nenhum dado fornecido para atualização.')
-            result = self._controller.update_user(cpf, data)
+            result = self._controller.update_user(cpf=cpf, user_data=data)
             if result:
                 return jsonify({'message': 'Usuário atualizado com sucesso.'}), 200
             else:
