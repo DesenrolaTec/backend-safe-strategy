@@ -46,31 +46,32 @@ class UserRepository(UserRepositoryInterface):
             return user
         return None
 
-    def update(self, user_cpf: str, data: dict) -> dict:
-        user = self.__find_user_by_cpf(user_cpf)
+    def update(self, user_cpf: str, user: UserDto) -> User|dict:
+        user = self.get_by_cpf(user_cpf)
         if user:
+            user = user_client(self._minimal_user_factory, user)
             try:
-                user.name = data.get("name", user.name)
-                user.email = data.get("email", user.email)
-                user.password = data.get("password", user.password)
-                user.birthday = data.get("birthday", user.birthday)
+                user.name = user.name
+                user.email = user.email
+                user.password = user.password
+                user.birthday = user.birthday
                 self.__session.commit()
-                return {'message': 'User updated successfully.'}, 200
+                return user
             except Exception as e:
-                self.__session.rollback()  # Rollback em caso de erro
-                return {'error': f'Error updating user: {str(e)}'}, 500
+                self.__session.rollback()  
+                return {'error': f'Error updating user: {str(e)}'}
         else:
-            return {'error': 'User not found.'}, 404
+            return {'error': 'User not found.'}
 
-    def delete(self, user_cpf: str) -> dict:
+    def delete(self, user_cpf: str) -> str:
         user = self.__find_user_by_cpf(user_cpf)
         if user:
             try:
                 self.__session.delete(user)
                 self.__session.commit()
-                return {'message': 'User deleted successfully.'}, 204
+                return 'User deleted successfully.'
             except Exception as e:
                 self.__session.rollback()  # Rollback em caso de erro
-                return {'error': f'Error deleting user: {str(e)}'}, 500
+                return f'Error deleting user: {str(e)}'
         else:
-            return {'error': 'User not found.'}, 404
+            return 'User not found.'
