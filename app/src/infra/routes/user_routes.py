@@ -32,9 +32,9 @@ class UserRoutes:
     
     def _delete_user(self, cpf: str):
         try:
-            result = self._controller.delete_user(cpf)
-            if result:
-                return jsonify({'message': 'User deleted successfully.'}), 204
+            user = self._controller.delete_user(cpf)
+            if user:
+                return jsonify(user), 204
             else:
                 return jsonify({'error': 'User not found.'}), 404
 

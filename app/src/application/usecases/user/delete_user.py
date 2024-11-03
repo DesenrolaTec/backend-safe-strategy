@@ -18,7 +18,7 @@ class DeleteUserUsecase(UseCaseInterface):
 
     def execute(self, input_dto: InputDto)->OutputDto:
         try:
-            response = self._db_repository.delete(input_dto.cpf)
-            return OutputDto(status = response)
+            user = self._db_repository.delete(input_dto.cpf)
+            return OutputDto(user=user, status = "Sucess")
         except Exception as e:
             return OutputDto(user_id = 0, status = str(e))

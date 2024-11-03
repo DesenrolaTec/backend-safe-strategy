@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from app.src.domain.interfaces.user_repository_interface import UserRepositoryInterface
 from app.src.domain.interfaces.usecase_interface import UseCaseInterface
 from app.src.domain.factorys.user_factory import UserDto
+from app.src.domain.classes.user import User
 
 @dataclass
 class InputDto:
@@ -13,7 +14,7 @@ class InputDto:
 
 @dataclass
 class OutputDto:
-    user_id: int
+    user: User
     status: str
 
 class CreateUserUsecase(UseCaseInterface):
@@ -27,6 +28,6 @@ class CreateUserUsecase(UseCaseInterface):
         try:
             user_dto = self._map_input_dto_to_user_dto(input_dto)
             user = self._db_repository.create(user = user_dto)
-            return OutputDto(user_id = user.id, status = "User created successfully")
+            return OutputDto(user = user, status = "User created successfully")
         except Exception as e:
-            return OutputDto(user_id = 0, status = str(e))
+            return OutputDto(user_id = None, status = str(e))

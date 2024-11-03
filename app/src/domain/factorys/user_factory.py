@@ -30,7 +30,7 @@ class FullUserFactory(UserFactory):
         password = Validator.ensure_password_secure(user_dto.password)
         cpf = Validator.ensure_valid_cpf(user_dto.cpf)
         birthday = Validator.ensure_valid_birthday(user_dto.birthday)
-        return User(name=user_dto.name, email=email, password=password, cpf=cpf, birthday=birthday, created_at=user_dto.created_at, updated_at=user_dto.updated_at, id=user_dto.id)
+        return User(name=user_dto.name, email=email, password=password, cpf=cpf, birthday=birthday)
 
 def user_client(factory: UserFactory, user_dto: UserDto):
     user = factory.create_user(user_dto)

@@ -19,8 +19,8 @@ class User:
         self._cpf = Validator.ensure_valid_cpf(cpf) if cpf else None
         self._birthday = Validator.ensure_valid_birthday(birthday) if birthday else None
         self._birthday = self._birthday if type(self._birthday) == str else datetime.strftime(self._birthday, '%Y-%m-%d')
-        self._created_at = created_at if type(created_at) == str else datetime.strftime(created_at, '%Y-%m-%d')
-        self._updated_at = updated_at if type(updated_at) == str else datetime.strftime(updated_at, '%Y-%m-%d')        
+        self._created_at = created_at if type(created_at) == str or created_at is None else datetime.strftime(created_at, '%Y-%m-%d')
+        self._updated_at = updated_at if type(updated_at) == str or updated_at is None else datetime.strftime(updated_at, '%Y-%m-%d')        
 
     @property
     def id(self) -> Optional[int]:

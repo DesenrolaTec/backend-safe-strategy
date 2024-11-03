@@ -22,7 +22,7 @@ class UserController:
     def create_user(self, user_data: dict):
         user_dto = self._map_user_data(user_data)
         output_dto = self._create_user.execute(user_dto)
-        return output_dto.to_dict()
+        return output_dto.user.to_dict()
     
     def _map_user_cpf_read(self, user_cpf: str)->UserCpfInputDto:
         return UserCpfInputDto(cpf=user_cpf)

@@ -3,6 +3,7 @@ from app.src.domain.classes.user import User
 from app.src.domain.factorys.user_factory import UserDto, user_client
 from app.src.domain.factorys.user_factory import user_client, FullUserFactory, MinimalUserFactory
 from app.src.infra.models.user_model import UserModel
+from app.src.infra.models.token_model import OAuth2Token
 from app.src.domain.interfaces.user_repository_interface import UserRepositoryInterface
 
 class UserRepository(UserRepositoryInterface):
@@ -27,6 +28,7 @@ class UserRepository(UserRepositoryInterface):
         try:
             self.__session.add(user_model)
             self.__session.commit()
+            user = self.get_by_cpf(user.cpf)
             return user
         except Exception as e:
             self.__session.rollback()
@@ -64,12 +66,14 @@ class UserRepository(UserRepositoryInterface):
             return {'error': 'User not found.'}
 
     def delete(self, user_cpf: str) -> str:
-        user = self.__find_user_by_cpf(user_cpf)
+        user = self.__session.query(UserModel).filter_by(cpf=user_cpf).first()
         if user:
             try:
+                self.__session.query(OAuth2Token).filter_by(user_id=user.id).delete()
+                self.__session.commit()
                 self.__session.delete(user)
                 self.__session.commit()
-                return 'User deleted successfully.'
+                return user
             except Exception as e:
                 self.__session.rollback()  # Rollback em caso de erro
                 return f'Error deleting user: {str(e)}'
