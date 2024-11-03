@@ -77,14 +77,16 @@ class Validator:
         return password
 
     @staticmethod
-    def ensure_valid_birthday(birthday: str) -> str:
+    def ensure_valid_birthday(birthday: Optional[str]) -> str:
         try:
-            birth_date = datetime.strptime(birthday, '%Y-%m-%d')
+            if type(birthday) is str:
+                birthday = datetime.strptime(birthday, '%Y-%m-%d')
+                
         except ValueError:
             raise InvalidBirthdayError(BIRTHDAY_FORMAT_INVALID)
 
         today = datetime.today()
-        age = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
+        age = today.year - birthday.year - ((today.month, today.day) < (birthday.month, birthday.day))
         if age < 18:
             raise InvalidBirthdayError(UNDERAGE_ERROR)
         return birthday

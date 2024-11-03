@@ -30,7 +30,7 @@ class UserController:
     def get_user(self, user_cpf: str):
         user_dto = self._map_user_cpf_read(user_cpf)
         output_dto = self._get_user.execute(user_dto)
-        return output_dto.to_dict()
+        return output_dto.user.to_dict()
     
     def _map_user_cpf_delete(self, user_cpf: str)->DeleteUserInputDto:
         return DeleteUserInputDto(cpf=user_cpf)

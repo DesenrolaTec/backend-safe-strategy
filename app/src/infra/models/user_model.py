@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String
-from app.src.infrastructure.adapters.sql_alchemy_adapter import db
+from app.src.infra.adapters.sql_alchemy_adapter import db
 
 class UserModel(db.Model):
     __tablename__ = 'users'
@@ -9,6 +9,8 @@ class UserModel(db.Model):
     password = Column(String, nullable=True, default=None)
     cpf = Column(String, nullable=True, default=None)
     birthday = Column(String, nullable=True, default=None)
+    created_at = Column(String, nullable=True, default=None)
+    updated_at = Column(String, nullable=True, default=None)
 
     def __str__(self):
         return self.email

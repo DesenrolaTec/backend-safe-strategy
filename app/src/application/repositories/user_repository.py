@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 from app.src.domain.classes.user import User
-from app.src.domain.factorys.user_factory import UserDto
+from app.src.domain.factorys.user_factory import UserDto, user_client
 from app.src.domain.factorys.user_factory import user_client, FullUserFactory, MinimalUserFactory
-from app.src.infra.models.user_model import UserModel, user_client
+from app.src.infra.models.user_model import UserModel
 from app.src.domain.interfaces.user_repository_interface import UserRepositoryInterface
 
 class UserRepository(UserRepositoryInterface):

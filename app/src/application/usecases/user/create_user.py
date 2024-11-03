@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from app.src.domain.interfaces.user_repository_interface import UserRepositoryInterface
-from app.src.domain.interfaces.usecase_interface import UsecaseInterface
+from app.src.domain.interfaces.usecase_interface import UseCaseInterface
 from app.src.domain.factorys.user_factory import UserDto
 
 @dataclass
@@ -16,7 +16,7 @@ class OutputDto:
     user_id: int
     status: str
 
-class CreateUserUsecase(UsecaseInterface):
+class CreateUserUsecase(UseCaseInterface):
     def __init__(self, databaseRepository: UserRepositoryInterface):
         self._db_repository = databaseRepository
 

@@ -1,5 +1,6 @@
 from typing import Optional
-from validator import Validator
+from datetime import datetime
+from app.src.domain.classes.validator import Validator
 
 class User:
     def __init__(self, 
@@ -17,8 +18,9 @@ class User:
         self._password = Validator.ensure_password_secure(password) if password else None
         self._cpf = Validator.ensure_valid_cpf(cpf) if cpf else None
         self._birthday = Validator.ensure_valid_birthday(birthday) if birthday else None
-        self._created_at = created_at
-        self._updated_at = updated_at
+        self._birthday = self._birthday if type(self._birthday) == str else datetime.strftime(self._birthday, '%Y-%m-%d')
+        self._created_at = created_at if type(created_at) == str else datetime.strftime(created_at, '%Y-%m-%d')
+        self._updated_at = updated_at if type(updated_at) == str else datetime.strftime(updated_at, '%Y-%m-%d')        
 
     @property
     def id(self) -> Optional[int]:
