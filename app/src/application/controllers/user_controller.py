@@ -38,7 +38,7 @@ class UserController:
     def delete_user(self, user_cpf: str):
         user_dto = self._map_user_cpf_delete(user_cpf)
         output_dto = self._delete_user.execute(user_dto)
-        return output_dto.to_dict()
+        return output_dto.user.to_dict()
     
     def _map_user_updated_data(self, cpf:str, user_data: dict) -> UpdateUserInputDto:
         return UpdateUserInputDto(

@@ -73,6 +73,7 @@ class UserRepository(UserRepositoryInterface):
                 self.__session.commit()
                 self.__session.delete(user)
                 self.__session.commit()
+                user = user_client(self._minimal_user_factory, user)
                 return user
             except Exception as e:
                 self.__session.rollback()  # Rollback em caso de erro
