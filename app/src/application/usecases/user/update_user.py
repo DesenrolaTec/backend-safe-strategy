@@ -27,7 +27,7 @@ class UpdateUserUsecase(UseCaseInterface):
     def execute(self, input_dto: InputDto)->OutputDto:
         try:
             user_dto = self._map_input_dto_to_user_dto(input_dto)
-            user = self._db_repository.update(input_dto.cpf, user_dto)
+            user = self._db_repository.update(user_dto)
             return OutputDto(user=user, status = "Sucess")
         except Exception as e:
             return OutputDto(user_id = 0, status = str(e))

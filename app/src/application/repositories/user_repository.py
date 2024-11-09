@@ -28,7 +28,7 @@ class UserRepository(UserRepositoryInterface):
         try:
             self.__session.add(user_model)
             self.__session.commit()
-            user = self.get_by_cpf(user.cpf)
+            user = self.get_by_email(user.email)
             return user
         except Exception as e:
             self.__session.rollback()
@@ -36,34 +36,33 @@ class UserRepository(UserRepositoryInterface):
 
     def get_by_cpf(self, user_cpf: str) -> User:
         db_user = self.__session.query(UserModel).filter_by(cpf=user_cpf).first()
-        user = user_client(self._minimal_user_factory, db_user)
-        if user.cpf:
-            return user
-        return None
+        if not db_user:
+            return None
+        return db_user
     
     def get_by_email(self, user_email: str) -> User:
         db_user = self.__session.query(UserModel).filter_by(email=user_email).first()
-        user = user_client(self._minimal_user_factory, db_user)
-        if user.cpf:
-            return user
-        return None
+        if not db_user:
+            return None
+        return db_user
 
-    def update(self, user_cpf: str, user: UserDto) -> User|dict:
-        user = self.get_by_cpf(user_cpf)
-        if user:
-            user = user_client(self._minimal_user_factory, user)
+    def update(self, user_dto: UserDto) -> User|dict:
+        db_user = self.get_by_cpf(user_dto.cpf)
+        db_user = self.get_by_email(user_dto.email)
+        if db_user:
+            user = user_client(self._full_user_factory, user_dto)
             try:
-                user.name = user.name
-                user.email = user.email
-                user.password = user.password
-                user.birthday = user.birthday
+                db_user.name = user.name
+                db_user.email = user.email
+                db_user.cpf = user.cpf
+                db_user.password = user.password
+                db_user.birthday = user.birthday
                 self.__session.commit()
                 return user
             except Exception as e:
                 self.__session.rollback()  
-                return {'error': f'Error updating user: {str(e)}'}
-        else:
-            return {'error': 'User not found.'}
+                return {'error': f'Error updating user: {str(e)}'}            
+        return {'error': 'Usuario não encontrado.'}
 
     def delete(self, user_cpf: str) -> str:
         user = self.__session.query(UserModel).filter_by(cpf=user_cpf).first()

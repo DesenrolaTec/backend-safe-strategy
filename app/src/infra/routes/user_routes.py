@@ -1,7 +1,6 @@
 from flask import jsonify, request
 from werkzeug.exceptions import BadRequest
 from app.src.application.repositories.oauth_repository import require_oauth
-from app.src.application.controllers.user_controller import UserController
 from app.src.domain.interfaces.user_controller_interface import UserControllerInterface
 
 from flask import Flask, request, jsonify
@@ -41,12 +40,12 @@ class UserRoutes:
         except Exception as e:
             return jsonify({'error': 'Error deleting user.'}), 500
         
-    def _update_user(self, cpf: str):
+    def _update_user(self,):
         try:
             data = request.get_json()
             if not data:
                 raise BadRequest('Nenhum dado fornecido para atualização.')
-            result = self._controller.update_user(cpf=cpf, user_data=data)
+            result = self._controller.update_user(user_data=data)
             if result:
                 return jsonify({'message': 'Usuário atualizado com sucesso.'}), 200
             else:
@@ -72,7 +71,7 @@ class UserRoutes:
         def delete_user(user_cpf):
             return self._delete_user(cpf=user_cpf)
         
-        @app.route('/api/users/<int:user_cpf>', methods=['PATCH'])
+        @app.route('/api/users', methods=['PATCH'])
         # @require_oauth('profile')
-        def update_user(user_cpf):
-            return self._update_user(cpf=user_cpf)
+        def update_user():
+            return self._update_user()
