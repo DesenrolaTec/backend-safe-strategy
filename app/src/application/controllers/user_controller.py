@@ -1,3 +1,4 @@
+from typing import Optional
 from app.src.application.usecases.user.create_user import CreateUserUsecase, InputDto as CreateUserInputDto
 from app.src.application.usecases.user.get_user import ReadUserUsecase, InputDto as UserCpfInputDto
 from app.src.application.usecases.user.delete_user import DeleteUserUsecase, InputDto as DeleteUserInputDto
@@ -24,11 +25,11 @@ class UserController:
         output_dto = self._create_user.execute(user_dto)
         return output_dto.user.to_dict()
     
-    def _map_user_cpf_read(self, user_cpf: str)->UserCpfInputDto:
-        return UserCpfInputDto(cpf=user_cpf)
+    def _map_user_cpf_read(self, user_cpf: Optional[str], user_email: Optional[str])->UserCpfInputDto:
+        return UserCpfInputDto(cpf=user_cpf, email=user_email)
 
-    def get_user(self, user_cpf: str):
-        user_dto = self._map_user_cpf_read(user_cpf)
+    def get_user(self, user_cpf: Optional[str] = None, user_email: Optional[str] = None):
+        user_dto = self._map_user_cpf_read(user_cpf, user_email)
         output_dto = self._get_user.execute(user_dto)
         return output_dto.user.to_dict()
     

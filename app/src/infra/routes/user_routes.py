@@ -1,6 +1,7 @@
 from flask import jsonify, request
 from werkzeug.exceptions import BadRequest
 from app.src.application.repositories.oauth_repository import require_oauth
+from authlib.integrations.flask_oauth2 import current_token
 from app.src.domain.interfaces.user_controller_interface import UserControllerInterface
 
 from flask import Flask, request, jsonify
@@ -24,7 +25,7 @@ class UserRoutes:
     def _get_user_by_cpf(self, cpf: str):
         if cpf is None:
             return jsonify({'error': 'User CPF is required'}), 400
-        user = self._controller.get_user(cpf)
+        user = self._controller.get_user(user_cpf=cpf)
         if user:
             return jsonify(user), 200
         return jsonify({'error': 'User not found'}), 404
@@ -55,6 +56,25 @@ class UserRoutes:
         except Exception as e:
             return jsonify({'error': 'Erro ao atualizar usuário.'}), 500
         
+    def _update_password(self,):
+        try:
+            data = request.get_json()
+            if not data:
+                raise BadRequest('Nenhum dado fornecido para atualização.')
+            user_email = current_token.user.email
+            user = self._controller.get_user(user_email=user_email)
+            if user.password != data['old_password']:
+                return jsonify({'error': 'Senha antiga incorreta.'}), 400
+            result = self._controller.update_user(user_data=data)
+            if result:
+                return jsonify({'message': 'Usuário atualizado com sucesso.'}), 200
+            else:
+                return jsonify({'error': 'Usuário não encontrado.'}), 404
+        except BadRequest as e:
+            return jsonify({'error': str(e)}), 400
+        except Exception as e:
+            return jsonify({'error': 'Erro ao atualizar usuário.'}), 500
+        
     def register_routes(self, app: Flask) -> None:
         @app.route('/api/users', methods=['POST'])
         # @require_oauth('profile')
@@ -75,3 +95,8 @@ class UserRoutes:
         # @require_oauth('profile')
         def update_user():
             return self._update_user()
+        
+        @app.route('/api/users', methods=['PUT'])
+        # @require_oauth('profile')
+        def update_password():
+            return self._update_password()
