@@ -9,6 +9,7 @@ from app.src.infra.entrypoints.bootstrap.bootstrap import Bootstrap
 
 class App:
     def __init__(self, environment: str = "prod"):
+        self._environment = environment
         self.__config = Config(environment)
         self.__bootstrap = Bootstrap()
         self.app = Flask(__name__)
@@ -35,10 +36,11 @@ class App:
         app = self.app
         context = ('/etc/letsencrypt/archive/api.safestrategy.com.br/privkey1.pem', 
                    '/etc/letsencrypt/archive/api.safestrategy.com.br/fullchain1.pem')
-        app.run(host=self.__config.get("APP_HOST"), 
-                port=self.__config.get("APP_PORT"), 
-                debug=self.__config.get("FLASK_DEBUG_MODE"),
-                ssl_context=context)
+        if self._environment != "prod":
+            app.run(host=self.__config.get("APP_HOST"),
+                    port=self.__config.get("APP_PORT"),
+                    debug=self.__config.get("FLASK_DEBUG_MODE"),
+                    ssl_context=context)
         return app
     
 # ssl_context=context
