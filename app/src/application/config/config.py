@@ -23,10 +23,11 @@ class Config:
             self.SQLALCHEMY_DATABASE_IP = os.getenv('SQLALCHEMY_DATABASE_IP')
             self.SQLALCHEMY_DATABASE_PASSWORD = os.getenv('SQLALCHEMY_DATABASE_PASSWORD')
             self.SQLALCHEMY_DATABASE_URI = f"mariadb+pymysql://root:{self.SQLALCHEMY_DATABASE_PASSWORD}@{self.SQLALCHEMY_DATABASE_IP}/safe_strategy"
+            print(self.SQLALCHEMY_DATABASE_URI)
             self.OAUTHLIB_INSECURE_TRANSPORT = False
             self.APP_HOST = os.getenv('APP_HOST')
             self.APP_PORT = os.getenv('APP_PORT')
-            self.FLASK_DEBUG_MODE = False
+            self.FLASK_DEBUG_MODE = True
             self._initialized = True
 
     def get(self, key: str):
