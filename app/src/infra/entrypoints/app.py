@@ -33,7 +33,8 @@ class App:
     
     def run(self):
         app = self.app
-        context = ('app/certs/server.key', 'app/certs/server.crt')
+        context = ('/etc/letsencrypt/archive/api.safestrategy.com.br/privkey1.pem', 
+                   '/etc/letsencrypt/archive/api.safestrategy.com.br/fullchain1.pem')
         app.run(host=self.__config.get("APP_HOST"), 
                 port=self.__config.get("APP_PORT"), 
                 debug=self.__config.get("FLASK_DEBUG_MODE"),
