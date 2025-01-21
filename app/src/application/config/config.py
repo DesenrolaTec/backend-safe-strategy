@@ -18,15 +18,15 @@ class Config:
                 load_dotenv(dotenv_path="app/infra/dev/.env")
             
             self.SECRET_KEY = os.getenv('SECRET_KEY')
-            self.OAUTH2_REFRESH_TOKEN_GENERATOR = os.getenv('OAUTH2_REFRESH_TOKEN_GENERATOR')
-            self.SQLALCHEMY_TRACK_MODIFICATIONS = os.getenv('SQLALCHEMY_TRACK_MODIFICATIONS')
+            self.OAUTH2_REFRESH_TOKEN_GENERATOR = True
+            self.SQLALCHEMY_TRACK_MODIFICATIONS = False
             self.SQLALCHEMY_DATABASE_IP = os.getenv('SQLALCHEMY_DATABASE_IP')
             self.SQLALCHEMY_DATABASE_PASSWORD = os.getenv('SQLALCHEMY_DATABASE_PASSWORD')
             self.SQLALCHEMY_DATABASE_URI = f"mariadb+pymysql://root:{self.SQLALCHEMY_DATABASE_PASSWORD}@{self.SQLALCHEMY_DATABASE_IP}/safe_strategy"
-            self.OAUTHLIB_INSECURE_TRANSPORT = os.getenv('OAUTHLIB_INSECURE_TRANSPORT')
+            self.OAUTHLIB_INSECURE_TRANSPORT = eval(os.getenv('OAUTHLIB_INSECURE_TRANSPORT'))
             self.APP_HOST = os.getenv('APP_HOST')
             self.APP_PORT = os.getenv('APP_PORT')
-            self.FLASK_DEBUG_MODE = os.getenv('FLASK_DEBUG_MODE')
+            self.FLASK_DEBUG_MODE = False
             self._initialized = True
 
     def get(self, key: str):
