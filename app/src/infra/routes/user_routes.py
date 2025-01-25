@@ -81,7 +81,7 @@ class UserRoutes:
         def create_user():
             return self._create_user()
         
-        @app.route('/api/users/<string:user_cpf>', methods=['GET'])
+        @app.route('/api/users/me/<string:user_cpf>', methods=['GET'])
         # @require_oauth('profile')
         def get_user(user_cpf):
             return self._get_user_by_cpf(cpf=user_cpf)   
@@ -96,7 +96,7 @@ class UserRoutes:
         def update_user():
             return self._update_user()
         
-        @app.route('/api/users', methods=['PUT'])
+        @app.route('/api/users/me', methods=['PATCH'])
         # @require_oauth('profile')
         def update_password():
             return self._update_password()
