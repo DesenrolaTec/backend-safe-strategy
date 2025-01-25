@@ -20,6 +20,6 @@ class ConnectionRoutes:
 
     def register_routes(self, app: Flask) -> None:
         @app.route('/connections', methods=['POST'])
-        # @require_oauth('profile')
+        @require_oauth('profile')
         def create_connection():
             return self._create_connection()
