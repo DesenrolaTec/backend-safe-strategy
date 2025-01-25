@@ -1,15 +1,29 @@
-name: Auto Open Pull Request
+name: Create PR for feature branches
 
 on:
   push:
     branches:
-      - 'feature/*'
+      - feature/*
 
 jobs:
   open-pr:
     runs-on: ubuntu-latest
 
     steps:
-      # Verifica o código do repositório
-      - name: Checkout code
-        uses: actions/checkout@v3      
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Create PR
+      env:
+        GITHUB_TOKEN: ${{ secrets.TOKEN }}
+      run: |
+        curl -X POST \
+          -H "Authorization: Bearer $GITHUB_TOKEN" \
+          -H "Accept: application/vnd.github+json" \
+          https://api.github.com/repos/${{ github.repository }}/pulls \
+          -d '{
+            "title": "Auto PR - '${{ github.ref_name }}' -> develop",
+            "body": "Esta PR foi aberta automaticamente.",
+            "head": "'${{ github.ref_name }}'",
+            "base": "develop"
+          }'
