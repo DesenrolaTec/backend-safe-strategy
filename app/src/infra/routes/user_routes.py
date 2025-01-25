@@ -72,7 +72,7 @@ class UserRoutes:
         except BadRequest as e:
             return jsonify({'error': str(e)}), 400
         except Exception as e:
-            return jsonify({'error': 'Erro ao atualizar usuário.'}), 500
+            return jsonify({'error': f'Erro ao atualizar usuário {e}'}), 500
         
     def register_routes(self, app: Flask) -> None:
         @app.route('/api/users', methods=['POST'])
