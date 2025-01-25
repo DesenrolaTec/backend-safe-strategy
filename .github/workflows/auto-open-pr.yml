@@ -23,10 +23,10 @@ jobs:
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v5
       with:
-        source-branch: ${{ github.ref_name }}
-        target-branch: develop
+        base: develop # Define a branch de destino
+        branch: ${{ github.ref_name }} # Define a branch de origem (atual)
         title: "Auto PR - ${{ github.ref_name }} -> develop"
         body: |
-          Esta PR foi aberta automaticamente a partir de um commit na branch `feature/${{ github.ref_name }}`.
-        branch: auto-pr/${{ github.ref_name }}
-        always-create: true
+          Esta PR foi aberta automaticamente a partir de um commit na branch `${{ github.ref_name }}`.
+        branch-suffix: timestamp # Define um sufixo único para a branch da PR
+        always-create: true # Garante que a PR seja criada mesmo sem alterações
