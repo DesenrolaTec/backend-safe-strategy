@@ -6,7 +6,7 @@ on:
       - feature/*
 
 jobs:
-  force-pr:
+  open-pr:
     runs-on: ubuntu-latest
 
     steps:
