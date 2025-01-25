@@ -8,10 +8,12 @@ on:
 
 jobs:
   block-direct-commit:
+    if: ${{ github.event.head_commit.author.name != 'GitHub' }} # Ignora merges automáticos
     runs-on: ubuntu-latest
 
     steps:
-    - name: Block direct commits
+    - name: Check for direct commit
       run: |
         echo "Commits diretos na branch '${{ github.ref_name }}' não são permitidos."
         exit 1
+
