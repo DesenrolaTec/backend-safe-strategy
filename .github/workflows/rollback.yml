@@ -1,0 +1,61 @@
+name: Rollback
+
+on:
+  workflow_dispatch: # Permite iniciar manualmente para rollback
+    inputs:
+      version:
+        description: 'Tag para realizar rollback'
+        required: true
+        default: 'v1.0.0'
+
+jobs:
+  rollback:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout do repositório
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2. Rollback para uma versão tagueada
+      - name: Rollback to Tagged Version
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+        run: |
+          ROLLBACK_TAG=${{ github.event.inputs.version }}
+          echo "Iniciando rollback para a versão: $ROLLBACK_TAG"
+
+          # Busca e checkout para a tag especificada
+          git fetch --tags
+          git checkout $ROLLBACK_TAG
+          echo "Código revertido para a tag: $ROLLBACK_TAG"    
+          
+      # 2. Enviar a pasta './' para o servidor via SCP
+      - name: Copy './' folder to remote server via scp
+        uses: appleboy/scp-action@master
+        with:
+            host: ${{ secrets.HOST }}
+            username: ${{ secrets.USERNAME }}
+            port: ${{ secrets.PORT }}
+            key: ${{ secrets.SSHKEY }}
+            passphrase: ''
+            source: './'
+            target: ${{ secrets.TARGET }}
+            debug: true
+            timeout: 120s # Increase timeout to 120 seconds
+
+      # 4. Executar comandos no servidor remoto 
+      - name: Executing remote command via ssh
+        uses: appleboy/ssh-action@master
+        with:
+            host: ${{ secrets.HOST }}
+            username: ${{ secrets.USERNAME }}
+            port: ${{ secrets.PORT }}
+            passphrase: ${{ secrets.PASSPHRASE }}
+            key: ${{ secrets.SSHKEY }}
+            script: |
+                cd ${{ secrets.TARGET }}
+                # Adicione aqui comandos necessários após o envio
+                pip install -r app/requirements.txt
+                python3 -m compileall *
+                ${{ secrets.SH_CONFIG }}

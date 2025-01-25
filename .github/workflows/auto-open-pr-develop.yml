@@ -12,6 +12,47 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
+      
+    # 3. Gerar a próxima tag semântica
+    - name: Generate Next Semantic Version Tag
+      id: get_tag
+      env:
+        GITHUB_TOKEN: ${{ secrets.TOKEN }}
+      run: |
+        # Busca todas as tags do repositório remoto
+        git fetch --tags
+
+        # Obtém a tag mais recente do repositório remoto
+        LAST_TAG=$(git tag --list | sort -V | tail -n 1)
+        echo "Última tag encontrada: $LAST_TAG"
+
+        # Se não houver tags anteriores, começa com v1.0.0
+        if [ -z "$LAST_TAG" ]; then
+          NEW_TAG="v1.0.0"
+        else
+          # Incrementa a versão (patch) com base na última tag
+          VERSION=$(echo $LAST_TAG | sed 's/^v//') # Remove o prefixo 'v'
+          MAJOR=$(echo $VERSION | cut -d. -f1)
+          MINOR=$(echo $VERSION | cut -d. -f2)
+          PATCH=$(echo $VERSION | cut -d. -f3)
+          PATCH=$((PATCH + 1)) # Incrementa o patch
+          NEW_TAG="v$MAJOR.$MINOR.$PATCH"
+        fi
+
+        echo "Nova tag gerada: $NEW_TAG"
+        echo "tag=$NEW_TAG" >> $GITHUB_ENV
+
+    # 4. Criar a tag no repositório remoto
+    - name: Tag Production Version
+      env:
+        GITHUB_TOKEN: ${{ secrets.TOKEN }}
+      run: |
+        echo "Criando tag ${{ env.tag }} para o deploy em produção."
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git tag -a ${{ env.tag }} -m "Deploy em produção: ${{ env.tag }}"
+        git push origin ${{ env.tag }}
+        echo "Tag criada com sucesso: ${{ env.tag }}"
 
     - name: Create PR
       env:
