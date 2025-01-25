@@ -1,0 +1,17 @@
+name: Block Direct Commits to Develop
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+
+jobs:
+  block-direct-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Block direct commits
+      run: |
+        echo "Commits diretos na branch '${{ github.ref_name }}' não são permitidos."
+        exit 1
