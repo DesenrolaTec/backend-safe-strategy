@@ -12,19 +12,20 @@ from app.src.application.repositories.connection_repository import ConnectionRep
 
 from app.src.infra.adapters.sql_alchemy_adapter import db
 
+
 class Bootstrap:
     def __init__(self):
         self.load_dependencies()
 
     def load_dependencies(self):
         session = db.session
+        conn_repository = ConnectionRepository(session)
         user_repository = UserRepository(session)
         create_user = CreateUserUsecase(user_repository)
-        read_user = ReadUserUsecase(user_repository)
+        read_user = ReadUserUsecase(user_repository, conn_repository)
         update_user = UpdateUserUsecase(user_repository)
         delete_user = DeleteUserUsecase(user_repository)
         self.user_controller = UserController(create_user=create_user, get_user=read_user, update_user=update_user, delete_user=delete_user)
 
-        conn_repository = ConnectionRepository(session)
         conn_usecase = CreateConnectionUsecase(conn_repository, user_repository)
         self.connection_controller = ConnectionController(conn_usecase)

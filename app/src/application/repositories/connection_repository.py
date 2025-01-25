@@ -12,8 +12,12 @@ class ConnectionRepository(ConnectionRepositoryInterface):
         self.__session.commit()
         return profile
 
-    def read(self,):
-        pass
+    def get_connection_by_user_id(self, user_id: int):
+        profile = self.__session.query(Profile).filter_by(user_id=user_id).first()
+        if not profile:
+            return None
+        profile = Profile(user_id=profile.user_id, organization_id=profile.organization_id, role=profile.role, enable=True)
+        return profile
 
     def update(self,):
         pass
