@@ -6,23 +6,10 @@ on:
       - 'feature/*'
 
 jobs:
-  createPullRequest:
+  open-pr:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Make changes to pull request
-        run: date +%s > report.txt
-
-      - name: Create Pull Request
-        id: cpr
-        uses: peter-evans/create-pull-request@v4
-        with:
-          token: ${{ secrets.TOKEN }}
-          commit-message: Update report          
-          signoff: false
-          branch:  ${{ github.ref_name }}
-          base: develop
-          delete-branch: false
-          title: 'AUTO PR'
-          body: 'AUTO PR'   
+      # Verifica o código do repositório
+      - name: Checkout code
+        uses: actions/checkout@v3      
