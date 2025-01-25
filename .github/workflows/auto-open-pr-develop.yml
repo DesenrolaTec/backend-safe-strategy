@@ -1,0 +1,29 @@
+name: Create PR develop to main
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  open-pr:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Create PR
+      env:
+        GITHUB_TOKEN: ${{ secrets.TOKEN }}
+      run: |
+        curl -X POST \
+          -H "Authorization: Bearer $GITHUB_TOKEN" \
+          -H "Accept: application/vnd.github+json" \
+          https://api.github.com/repos/${{ github.repository }}/pulls \
+          -d '{
+            "title": "Auto PR - '${{ github.ref_name }}' -> main",
+            "body": "Esta PR foi aberta automaticamente. ATENÇÃO: O merge desta PR irá estimular o deploy.",
+            "head": "'${{ github.ref_name }}'",
+            "base": "main"
+          }'
