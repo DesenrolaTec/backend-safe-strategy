@@ -1,4 +1,4 @@
-name: Create PR for feature branches
+name: Create PR feature to develop
 
 on:
   push:
