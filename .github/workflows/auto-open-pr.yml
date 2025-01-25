@@ -1,4 +1,4 @@
-name: Auto PR for feature branches
+name: Force PR for feature branches
 
 on:
   push:
@@ -6,27 +6,24 @@ on:
       - feature/*
 
 jobs:
-  create-pr:
+  force-pr:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
-      with:
-        fetch-depth: 0 # Garante que o histórico completo do repositório seja baixado
 
-    - name: Set up Git user
+    - name: Create PR via API
+      env:
+        GITHUB_TOKEN: ${{ secrets.TOKEN }}
       run: |
-        git config user.name "github-actions[bot]"
-        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-    - name: Create Pull Request
-      uses: peter-evans/create-pull-request@v5
-      with:
-        base: develop # Branch de destino
-        branch: ${{ github.ref_name }} # Branch de origem
-        title: "Auto PR - ${{ github.ref_name }} -> develop"
-        body: |
-          Esta PR foi aberta automaticamente a partir de um commit na branch `${{ github.ref_name }}`.
-        branch-suffix: timestamp # Adiciona um sufixo único para evitar conflitos
-        draft: false # A PR será criada diretamente como pronta para revisão
+        curl -X POST \
+          -H "Authorization: Bearer $GITHUB_TOKEN" \
+          -H "Accept: application/vnd.github+json" \
+          https://api.github.com/repos/${{ github.repository }}/pulls \
+          -d '{
+            "title": "Auto PR - '${{ github.ref_name }}' -> develop",
+            "body": "Esta PR foi aberta automaticamente.",
+            "head": "'${{ github.ref_name }}'",
+            "base": "develop"
+          }'
