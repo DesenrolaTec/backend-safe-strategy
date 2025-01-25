@@ -1,5 +1,4 @@
-from flask import jsonify, request
-from werkzeug.exceptions import BadRequest
+from authlib.integrations.flask_oauth2 import current_token
 from app.src.application.repositories.oauth_repository import require_oauth
 from authlib.integrations.flask_oauth2 import current_token
 from app.src.domain.interfaces.user_controller_interface import UserControllerInterface
@@ -81,9 +80,11 @@ class UserRoutes:
         def create_user():
             return self._create_user()
         
-        @app.route('/api/users/me/<string:user_cpf>', methods=['GET'])
+        @app.route('/api/users/me', methods=['GET'])
         @require_oauth('profile')
-        def get_user(user_cpf):
+        def get_user():
+            user = current_token.user
+            user_cpf = user.cpf
             return self._get_user_by_cpf(cpf=user_cpf)   
 
         @app.route('/api/users/<string:user_cpf>', methods=['DELETE'])
