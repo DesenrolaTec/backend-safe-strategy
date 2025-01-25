@@ -1,13 +1,23 @@
 from sqlalchemy.orm import Session
 from app.src.domain.classes.user import User
-from app.src.infrastructure.models.user_model import UserModel
+from app.src.domain.factorys.user_factory import UserDto, user_client
+from app.src.domain.factorys.user_factory import user_client, FullUserFactory, MinimalUserFactory
+from app.src.infra.models.user_model import UserModel
+from app.src.infra.models.token_model import OAuth2Token
 from app.src.domain.interfaces.user_repository_interface import UserRepositoryInterface
 
 class UserRepository(UserRepositoryInterface):
     def __init__(self, session: Session) -> None:
         self.__session = session
+        self._minimal_user_factory = MinimalUserFactory()
+        self._full_user_factory = FullUserFactory()
 
-    def create(self, user: User) -> User:
+    def create(self, user: UserDto) -> User:
+        if user.cpf == "":            
+            user = user_client(self._minimal_user_factory, user)
+        else:
+            user = user_client(self._full_user_factory, user)
+
         user_model = UserModel(
             name=user.name,
             email=user.email,
@@ -18,66 +28,54 @@ class UserRepository(UserRepositoryInterface):
         try:
             self.__session.add(user_model)
             self.__session.commit()
-            return user  # Retorna o objeto criado
+            user = self.get_by_email(user.email)
+            return user
         except Exception as e:
-            self.__session.rollback()  # Rollback em caso de erro
+            self.__session.rollback()
             raise Exception(f"Erro ao criar usuário: {str(e)}")
 
-    def get_by_id(self, user_cpf: str) -> User:
-        user = self.__find_user_by_cpf(user_cpf)
-        if user:
-            return User(
-                name=user.name,
-                email=user.email,
-                password=user.password,
-                cpf=user.cpf,
-                birthday=user.birthday
-            )
-        return None
-    
-    def __find_user_by_email(self, user_email: str) -> UserModel:
-        return self.__session.query(UserModel).filter_by(email=user_email).first()
+    def get_by_cpf(self, user_cpf: str) -> User:
+        db_user = self.__session.query(UserModel).filter_by(cpf=user_cpf).first()
+        if not db_user:
+            return None
+        return db_user
     
     def get_by_email(self, user_email: str) -> User:
-        user = self.__find_user_by_email(user_email)
-        if user:
-            return User(
-                name=user.name,
-                email=user.email,
-                password=user.password,
-                cpf=user.cpf,
-                birthday=user.birthday
-            )
-        return None
+        db_user = self.__session.query(UserModel).filter_by(email=user_email).first()
+        if not db_user:
+            return None
+        return db_user
 
-    def update(self, user_cpf: str, data: dict) -> dict:
-        user = self.__find_user_by_cpf(user_cpf)
-        if user:
+    def update(self, user_dto: UserDto) -> User|dict:
+        db_user = self.get_by_cpf(user_dto.cpf)
+        db_user = self.get_by_email(user_dto.email)
+        if db_user:
+            user = user_client(self._full_user_factory, user_dto)
             try:
-                user.name = data.get("name", user.name)
-                user.email = data.get("email", user.email)
-                user.password = data.get("password", user.password)
-                user.birthday = data.get("birthday", user.birthday)
+                db_user.name = user.name
+                db_user.email = user.email
+                db_user.cpf = user.cpf
+                db_user.password = user.password
+                db_user.birthday = user.birthday
                 self.__session.commit()
-                return {'message': 'User updated successfully.'}, 200
+                return user
             except Exception as e:
-                self.__session.rollback()  # Rollback em caso de erro
-                return {'error': f'Error updating user: {str(e)}'}, 500
-        else:
-            return {'error': 'User not found.'}, 404
+                self.__session.rollback()  
+                return {'error': f'Error updating user: {str(e)}'}            
+        return {'error': 'Usuario não encontrado.'}
 
-    def delete(self, user_cpf: str) -> dict:
-        user = self.__find_user_by_cpf(user_cpf)
+    def delete(self, user_cpf: str) -> str:
+        user = self.__session.query(UserModel).filter_by(cpf=user_cpf).first()
         if user:
             try:
+                self.__session.query(OAuth2Token).filter_by(user_id=user.id).delete()
+                self.__session.commit()
                 self.__session.delete(user)
                 self.__session.commit()
-                return {'message': 'User deleted successfully.'}, 204
+                user = user_client(self._minimal_user_factory, user)
+                return user
             except Exception as e:
                 self.__session.rollback()  # Rollback em caso de erro
-                return {'error': f'Error deleting user: {str(e)}'}, 500
+                return f'Error deleting user: {str(e)}'
         else:
-            return {'error': 'User not found.'}, 404
-
-    def __find_user_by_cpf(self, user_cpf: str) -> UserModel:
-        return self.__session.query(UserModel).filter_by(cpf=user_cpf).first()
+            return 'User not found.'
