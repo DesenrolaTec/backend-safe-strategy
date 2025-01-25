@@ -13,7 +13,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
       with:
-        fetch-depth: 0
+        fetch-depth: 0 # Garante que o histórico completo do repositório seja baixado
 
     - name: Set up Git user
       run: |
@@ -23,10 +23,10 @@ jobs:
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v5
       with:
-        base: develop # Define a branch de destino
-        branch: ${{ github.ref_name }} # Define a branch de origem (atual)
+        base: develop # Branch de destino
+        branch: ${{ github.ref_name }} # Branch de origem
         title: "Auto PR - ${{ github.ref_name }} -> develop"
         body: |
           Esta PR foi aberta automaticamente a partir de um commit na branch `${{ github.ref_name }}`.
-        branch-suffix: timestamp # Define um sufixo único para a branch da PR
-        always-create: true # Garante que a PR seja criada mesmo sem alterações
+        branch-suffix: timestamp # Adiciona um sufixo único para evitar conflitos
+        draft: false # A PR será criada diretamente como pronta para revisão
