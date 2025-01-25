@@ -48,7 +48,6 @@ class UserRepository(UserRepositoryInterface):
 
     def update(self, user_dto: UserDto) -> User|dict:
         db_user = self.get_by_cpf(user_dto.cpf)
-        db_user = self.get_by_email(user_dto.email)
         if db_user:
             user = user_client(self._full_user_factory, user_dto)
             try:
