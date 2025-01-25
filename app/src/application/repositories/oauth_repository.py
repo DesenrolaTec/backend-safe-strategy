@@ -1,10 +1,10 @@
 from authlib.oauth2.rfc6749 import grants
 from app.src.domain.classes.user import User
-from app.src.infrastructure.models.user_model import UserModel
-from app.src.infrastructure.adapters.sql_alchemy_adapter import db
-from app.src.infrastructure.models.token_model import OAuth2Token, OAuth2TokenMixin
-from app.src.infrastructure.models.client_model import OAuth2Client, OAuth2ClientMixin
-from app.src.infrastructure.models.authcode_model import OAuth2AuthorizationCode, OAuth2AuthorizationCodeMixin
+from app.src.infra.models.user_model import UserModel
+from app.src.infra.adapters.sql_alchemy_adapter import db
+from app.src.infra.models.token_model import OAuth2Token, OAuth2TokenMixin
+from app.src.infra.models.client_model import OAuth2Client, OAuth2ClientMixin
+from app.src.infra.models.authcode_model import OAuth2AuthorizationCode, OAuth2AuthorizationCodeMixin
 from authlib.integrations.sqla_oauth2 import (
     create_query_client_func,
     create_save_token_func,

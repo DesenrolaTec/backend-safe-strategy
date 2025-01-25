@@ -1,2 +1,0 @@
-
-class SqlConnectionFailed(Exception):pass
