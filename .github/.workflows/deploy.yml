@@ -27,7 +27,7 @@ jobs:
           debug: true
           timeout: 120s # Increase timeout to 120 seconds
 
-      # 4. Executar comandos no servidor remoto 
+      # 3. Executar comandos no servidor remoto 
       - name: Executing remote command via ssh
         uses: appleboy/ssh-action@master
         with:
