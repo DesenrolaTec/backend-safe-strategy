@@ -1,3 +1,5 @@
+import json
+
 from flask import Flask, request, jsonify
 from app.src.application.repositories.oauth_repository import OauthRepository, authorization, require_oauth
 from authlib.integrations.flask_oauth2 import current_token
@@ -17,7 +19,11 @@ class OauthRoutes:
     def register_routes(self, app: Flask) -> None:
         @app.route('/oauth/token', methods=['POST'])
         def issue_token():
-            return self.__issue_token()
+            try:
+                return self.__issue_token()
+            except Exception as e:
+                return json.dumps({"statusCode": 401,
+                                   "message": f"ERRO: {e}"})
         
         @app.route('/oauth/revoke', methods=['POST'])
         def revoke_token():
