@@ -53,7 +53,7 @@ class UserRoutes:
         except BadRequest as e:
             return jsonify({'error': str(e)}), 400
         except Exception as e:
-            return jsonify({'error': 'Erro ao atualizar usuário.'}), 500
+            return jsonify({'error': f'Erro ao atualizar usuário {e}'}), 500
         
     def _update_password(self,):
         try:
