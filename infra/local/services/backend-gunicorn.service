@@ -1,0 +1,15 @@
+[Unit]
+Description=Servico para iniciar o backend
+Before=nginx.service
+After=network.target
+
+[Service]
+WorkingDirectory=/var/www/backend
+ExecStart=/usr/bin/gunicorn3 --name=backend --pythonpath=/var/www/backend/app --bind unix:/var/www/backend/gunicorn.socket --config /etc/gunicorn.d/gunicorn.py --certfile=/etc/letsencrypt/live/api-local.safestrategy.com.br/fullchain.pem --keyfile=/etc/letsencrypt/live/api-local.safestrategy.com.br/privkey.pem -b 0.0.0.0:8081 wsgi:app
+Restart=always
+SyslogIdentifier=gunicorn
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target
