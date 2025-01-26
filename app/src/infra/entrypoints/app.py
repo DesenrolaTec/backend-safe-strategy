@@ -37,11 +37,9 @@ class App:
         context = ('/etc/letsencrypt/archive/api.safestrategy.com.br/privkey1.pem',
                    '/etc/letsencrypt/archive/api.safestrategy.com.br/fullchain1.pem')
         if self._environment != "prod":
-            context = ('app/certs/server.crt',
-                       'app/certs/server.csr',
-                       'app/certs/server.key')
             app.run(host=self.__config.get("APP_HOST"),
                     port=self.__config.get("APP_PORT"),
-                    debug=self.__config.get("FLASK_DEBUG_MODE"),
-                    ssl_context = context)
+                    debug=True,
+                    use_reloader=False,
+                    ssl_context=None)
         return app

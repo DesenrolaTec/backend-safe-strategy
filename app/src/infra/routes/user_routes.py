@@ -62,7 +62,7 @@ class UserRoutes:
                 raise BadRequest('Nenhum dado fornecido para atualização.')
             user_cpf = current_token.user.cpf
             user = self._controller.get_user(user_cpf=user_cpf)
-            if user.password != data['old_password']:
+            if user.get("password") != data['old_password']:
                 return jsonify({'error': 'Senha antiga incorreta.'}), 400
             result = self._controller.update_user(user_data=data)
             if result:
