@@ -27,6 +27,9 @@ COPY /infra/local/scripts/domain.sh /usr/local/bin/domain.sh
 RUN chmod +x /usr/local/bin/domain.sh
 RUN /usr/local/bin/domain.sh
 
+COPY /infra/local/scripts/start.sh /usr/local/bin/start.sh
+RUN chmod +x /usr/local/bin/start.sh
+
 # Configurar o diretório de trabalho
 WORKDIR /
 
@@ -37,14 +40,20 @@ RUN mkdir -p /var/www/backend /var/www/backend/static
 COPY . /var/www/backend
 RUN pip3 install --no-cache-dir -r /var/www/backend/app/requirements.txt
 
+COPY ./infra/local/services/options-ssl-nginx.conf /etc/letsencrypt/options-ssl-nginx.conf
+COPY ./infra/local/services/ssl-dhparams.pem /etc/letsencrypt/ssl-dhparams.pem
+
 # Copiar arquivos de configuração do Nginx
 COPY ./infra/local/nginx/backend /etc/nginx/sites-available/backend
+RUN ln -s /etc/nginx/sites-available/backend /etc/nginx/sites-enabled/backend
+
 
 # Copiar arquivo de configuração do Gunicorn
 COPY ./infra/local/services/gunicorn.py /etc/gunicorn.d/gunicorn.py
+
 
 # Expor as portas necessárias
 EXPOSE 80 443
 
 # Configurar o CMD para iniciar Nginx e Gunicorn
-CMD ["/bin/bash"]
+CMD ["/bin/bash","-C","/usr/local/bin/start.sh"]
