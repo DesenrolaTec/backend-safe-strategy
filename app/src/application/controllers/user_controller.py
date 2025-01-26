@@ -49,7 +49,7 @@ class UserController:
             name=user_data.get('name'),
             email=user_data.get('email'),
             cpf=user_data.get('cpf'),
-            password=user_data.get("password", None),
+            password=user_data.get("password"),
             birthday=user_data.get('birthday')
         )
 
