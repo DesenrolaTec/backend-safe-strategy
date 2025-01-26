@@ -45,7 +45,7 @@ docker build -t apisafestrategycom:latest .
 Para iniciar o contêiner e mapear as portas **80** e **443**, execute o comando abaixo:
 
 ```bash
-docker run -p 80:80 -p 443:443 apisafestrategycom:latest
+docker run -p 80:80 -p 443:443 -v .:/var/www/backend apisafestrategycom:latest
 ```
 
 ---
