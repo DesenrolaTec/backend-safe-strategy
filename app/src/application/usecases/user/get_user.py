@@ -30,8 +30,6 @@ class ReadUserUsecase(UseCaseInterface):
 
     def execute(self, input_dto: InputDto)->OutputDto:
         try:
-            if input_dto.email:
-                db_user = self._db_repository.get_by_email(input_dto.email)
             if input_dto.cpf:
                 db_user = self._db_repository.get_by_cpf(input_dto.cpf)
             if not db_user:

@@ -28,6 +28,6 @@ class UpdateUserUsecase(UseCaseInterface):
         try:
             user_dto = self._map_input_dto_to_user_dto(input_dto)
             user = self._db_repository.update(user_dto)
-            return OutputDto(user=user, status = "Sucess")
+            return OutputDto(user=user, status = "Success")
         except Exception as e:
             return OutputDto(user_id = 0, status = str(e))
