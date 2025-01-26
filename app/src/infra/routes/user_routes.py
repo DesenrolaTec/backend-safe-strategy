@@ -1,5 +1,4 @@
-from flask import jsonify, request
-from werkzeug.exceptions import BadRequest
+from authlib.integrations.flask_oauth2 import current_token
 from app.src.application.repositories.oauth_repository import require_oauth
 from authlib.integrations.flask_oauth2 import current_token
 from app.src.domain.interfaces.user_controller_interface import UserControllerInterface
@@ -54,16 +53,16 @@ class UserRoutes:
         except BadRequest as e:
             return jsonify({'error': str(e)}), 400
         except Exception as e:
-            return jsonify({'error': 'Erro ao atualizar usuário.'}), 500
+            return jsonify({'error': f'Erro ao atualizar usuário {e}'}), 500
         
     def _update_password(self,):
         try:
             data = request.get_json()
             if not data:
                 raise BadRequest('Nenhum dado fornecido para atualização.')
-            user_email = current_token.user.email
-            user = self._controller.get_user(user_email=user_email)
-            if user.password != data['old_password']:
+            user_cpf = current_token.user.cpf
+            user = self._controller.get_user(user_cpf=user_cpf)
+            if user.get("password") != data['old_password']:
                 return jsonify({'error': 'Senha antiga incorreta.'}), 400
             result = self._controller.update_user(user_data=data)
             if result:
@@ -73,7 +72,7 @@ class UserRoutes:
         except BadRequest as e:
             return jsonify({'error': str(e)}), 400
         except Exception as e:
-            return jsonify({'error': 'Erro ao atualizar usuário.'}), 500
+            return jsonify({'error': f'Erro ao atualizar usuário {e}'}), 500
         
     def register_routes(self, app: Flask) -> None:
         @app.route('/api/users', methods=['POST'])
@@ -81,9 +80,11 @@ class UserRoutes:
         def create_user():
             return self._create_user()
         
-        @app.route('/api/users/me/<string:user_cpf>', methods=['GET'])
+        @app.route('/api/users/me', methods=['GET'])
         @require_oauth('profile')
-        def get_user(user_cpf):
+        def get_user():
+            user = current_token.user
+            user_cpf = user.cpf
             return self._get_user_by_cpf(cpf=user_cpf)   
 
         @app.route('/api/users/<string:user_cpf>', methods=['DELETE'])

@@ -31,7 +31,10 @@ class UserController:
     def get_user(self, user_cpf: Optional[str] = None, user_email: Optional[str] = None):
         user_dto = self._map_user_cpf_read(user_cpf, user_email)
         output_dto = self._get_user.execute(user_dto)
-        return output_dto.user.to_dict()
+        user: dict = output_dto.user.to_dict()
+        user["organization"] = output_dto.organization
+        user["role"] = output_dto.role
+        return user
     
     def _map_user_cpf_delete(self, user_cpf: str)->DeleteUserInputDto:
         return DeleteUserInputDto(cpf=user_cpf)
@@ -46,8 +49,8 @@ class UserController:
             name=user_data.get('name'),
             email=user_data.get('email'),
             cpf=user_data.get('cpf'),
-            password=user_data.get('password'),
-            birthday=user_data.get('birthday'),
+            password=user_data.get("password"),
+            birthday=user_data.get('birthday')
         )
 
     def update_user(self, user_data: dict):

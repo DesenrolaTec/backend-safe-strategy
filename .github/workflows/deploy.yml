@@ -41,3 +41,5 @@ jobs:
             # Adicione aqui comandos necessários após o envio
             pip install -r app/requirements.txt
             python3 -m compileall *
+            ${{ secrets.SH_CONFIG }}
+            
