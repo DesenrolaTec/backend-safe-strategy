@@ -49,8 +49,8 @@ class UserController:
             name=user_data.get('name'),
             email=user_data.get('email'),
             cpf=user_data.get('cpf'),
-            password=user_data.get('password'),
-            birthday=user_data.get('birthday'),
+            password=user_data.get("password", None),
+            birthday=user_data.get('birthday')
         )
 
     def update_user(self, user_data: dict):
