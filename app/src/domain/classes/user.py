@@ -3,15 +3,26 @@ from datetime import datetime
 from app.src.domain.classes.validator import Validator
 
 class User:
-    def __init__(self, 
-                 id: Optional[int] = None, 
-                 name: Optional[str] = None, 
-                 email: Optional[str] = None, 
-                 password: Optional[str] = None, 
-                 cpf: Optional[str] = None, 
-                 birthday: Optional[str] = None,
-                 created_at: Optional[str] = None,
-                 updated_at: Optional[str] = None):
+    def __init__(self):
+        self._id = None
+        self._name = None
+        self._email = None
+        self._password = None
+        self._cpf = None
+        self._birthday = None
+        self._created_at = None
+        self._updated_at = None
+
+    def user_factory(self,
+                     id: Optional[int] = None,
+                     name: Optional[str] = None,
+                     email: Optional[str] = None,
+                     password: Optional[str] = None,
+                     cpf: Optional[str] = None,
+                     birthday: Optional[str] = None,
+                     created_at: Optional[str] = None,
+                     updated_at: Optional[str] = None
+                     ):
         self._id = id
         self._name = name
         self._email = Validator.ensure_valid_email(email) if email else None
@@ -19,9 +30,13 @@ class User:
         self._cpf = Validator.ensure_valid_cpf(cpf) if cpf else None
         self._birthday = Validator.ensure_valid_birthday(birthday) if birthday else None
         if self._birthday:
-            self._birthday = self._birthday if type(self._birthday) == str else datetime.strftime(self._birthday, '%Y-%m-%d')
-        self._created_at = created_at if type(created_at) == str or created_at is None else datetime.strftime(created_at, '%Y-%m-%d')
-        self._updated_at = updated_at if type(updated_at) == str or updated_at is None else datetime.strftime(updated_at, '%Y-%m-%d')        
+            self._birthday = self._birthday if type(self._birthday) == str else datetime.strftime(self._birthday,
+                                                                                                  '%Y-%m-%d')
+        self._created_at = created_at if type(created_at) == str or created_at is None else datetime.strftime(
+            created_at, '%Y-%m-%d')
+        self._updated_at = updated_at if type(updated_at) == str or updated_at is None else datetime.strftime(
+            updated_at, '%Y-%m-%d')
+
 
     @property
     def id(self) -> Optional[int]:

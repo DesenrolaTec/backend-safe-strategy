@@ -34,7 +34,7 @@ class ReadUserUsecase(UseCaseInterface):
                 db_user = self._db_repository.get_by_cpf(input_dto.cpf)
             if not db_user:
                 raise Exception('User not found')
-            user = User(
+            user = User.user_factory(
                     id = db_user.id,
                     name = db_user.name,
                     email = db_user.email,
