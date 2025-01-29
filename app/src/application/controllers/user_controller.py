@@ -32,6 +32,7 @@ class UserController:
         user_dto = self._map_user_cpf_read(user_cpf, user_email)
         output_dto = self._get_user.execute(user_dto)
         user: dict = output_dto.user.to_dict()
+        user.pop('password')
         user["organization"] = output_dto.organization
         user["role"] = output_dto.role
         return user

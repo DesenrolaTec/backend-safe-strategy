@@ -1,0 +1,73 @@
+upstream backend {
+    server unix:/var/www/backend/gunicorn.socket fail_timeout=0;
+}
+
+server {
+
+    client_max_body_size 4G;
+    server_name api-local.safestrategy.com.br; # managed by Certbot
+
+    keepalive_timeout 5;
+
+    location /static/ {
+        alias /var/www/backend/static/;  # Caminho para a pasta de arquivos estáticos
+        expires 30d;  # Opcional: define o cache para 30 dias
+    }
+
+
+    location / {
+
+	 # Forçar cabeçalhos de CORS
+        proxy_hide_header Access-Control-Allow-Origin;
+        proxy_hide_header Access-Control-Allow-Methods;
+        proxy_hide_header Access-Control-Allow-Headers;
+        proxy_hide_header Access-Control-Allow-Credentials;
+
+        set $cors_origin "";
+
+        # Verificar se o domínio está na lista permitida
+        if ($http_origin ~* (http://localhost:5173|https://app.safestrategy.com.br)) {
+            set $cors_origin $http_origin;
+        }
+
+        # Adicionar cabeçalhos CORS
+        add_header 'Access-Control-Allow-Origin' "$cors_origin" always;
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS, DELETE, PUT' always;
+        add_header 'Access-Control-Allow-Headers' 'Content-Type, Authorization, X-Requested-With' always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+	
+	# Tratar requisições OPTIONS
+        if ($request_method = 'OPTIONS') {
+            add_header 'Access-Control-Allow-Origin'  "$cors_origin" always;
+            add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS, DELETE, PUT' always;
+            add_header 'Access-Control-Allow-Headers' 'Content-Type, Authorization, X-Requested-With' always;
+            add_header 'Access-Control-Allow-Credentials' 'true' always;
+            return 204;
+        }
+
+
+        proxy_pass https://127.0.0.1:8081;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    listen [::]:443 ssl; # managed by Certbot
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/api-local.safestrategy.com.br/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/api-local.safestrategy.com.br/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+}
+
+server {
+    if ($host = api-local.safestrategy.com.br) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+    listen 80 ;
+    listen [::]:80  ;
+    server_name api-local.safestrategy.com.br;
+    return 404; # managed by Certbot
+}
