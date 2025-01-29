@@ -5,6 +5,7 @@ from app.src.domain.interfaces.usecase_interface import UseCaseInterface
 from app.src.domain.classes.user import User
 from app.src.domain.interfaces.connection_repository_interface import ConnectionRepositoryInterface
 from app.src.domain.interfaces.organization_repository_interface import OrganizationRepositoryInterface
+from app.src.domain.factorys.user_factory import user_client, UserDto, MinimalUserFactory
 
 
 @dataclass
@@ -27,6 +28,7 @@ class ReadUserUsecase(UseCaseInterface):
         self._db_repository = databaseRepository
         self.__conn_repository = conn_repository
         self.__org_repository = organization_repository
+        self._minimal_user_factory = MinimalUserFactory()
 
     def execute(self, input_dto: InputDto)->OutputDto:
         try:
@@ -34,14 +36,13 @@ class ReadUserUsecase(UseCaseInterface):
                 db_user = self._db_repository.get_by_cpf(input_dto.cpf)
             if not db_user:
                 raise Exception('User not found')
-            user = User.user_factory(
-                    id = db_user.id,
-                    name = db_user.name,
-                    email = db_user.email,
-                    cpf = db_user.cpf,
-                    password = db_user.password,
-                    birthday = db_user.birthday
-                )
+            user_dto = UserDto(id = db_user.id, 
+                                name = db_user.name, 
+                                email = db_user.email, 
+                                cpf = db_user.cpf, 
+                                password = db_user.password, 
+                                birthday = db_user.birthday)
+            user = user_client(self._minimal_user_factory, user_dto)
             profile = self.__conn_repository.get_connection_by_user_id(user_id=user.id)
             organization = self.__org_repository.get_organization_by_organization_id(org_id=profile.organization_id)
             return OutputDto(user = user, organization=organization.name, role=profile.role, status = "Success")
