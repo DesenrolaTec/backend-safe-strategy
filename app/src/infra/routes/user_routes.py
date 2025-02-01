@@ -19,7 +19,7 @@ class UserRoutes:
         except BadRequest as e:
             return jsonify({'error': str(e)}), 400
         except Exception as e:
-            return jsonify({'error': 'Erro ao criar usuário.'}), 500
+            return jsonify({'error': f'Erro ao criar usuário: {e}'}), 500
     
     def _get_user_by_cpf(self, cpf: str):
         if cpf is None:

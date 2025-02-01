@@ -28,7 +28,7 @@ class UserRepository(UserRepositoryInterface):
         try:
             self.__session.add(user_model)
             self.__session.commit()
-            user = self.get_by_email(user.email)
+            db_user = self.get_by_email(user.email)
             return user
         except Exception as e:
             self.__session.rollback()
