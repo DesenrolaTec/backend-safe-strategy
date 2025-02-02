@@ -42,7 +42,11 @@ class CreateConnectionUsecase(UseCaseInterface):
                                cpf=db_user.cpf,
                                password=db_user.password)
             user = user_client(self._minimal_user_factory, user_dto)
-            db_profile = self._conn_repository.create(user_id=user.id, role="trader", organization_id=1, enable= input_dto.user_enable)
+            db_profile = self._conn_repository.create(user_id=user.id, 
+                                                      role="trader", 
+                                                      organization_id=1, 
+                                                      enable= input_dto.user_enable,
+                                                      client_code=input_dto.user_client_code)
             groups = input_dto.user_groups_ids
             for group in groups:
                 self._groups_has_users_repository.insert(groups_id=group, users_id=db_user.id)
