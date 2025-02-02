@@ -10,6 +10,7 @@ from app.src.application.usecases.connections.create_connection_usecase import C
 from app.src.application.repositories.user_repository import UserRepository
 from app.src.application.repositories.connection_repository import ConnectionRepository
 from app.src.application.repositories.organizations_repository import OrganizationRepository
+from app.src.application.repositories.groups_has_users_repository import GroupsHasUsersRepository
 
 from app.src.infra.adapters.sql_alchemy_adapter import db
 
@@ -23,11 +24,12 @@ class Bootstrap:
         org_repo = OrganizationRepository(session=session)
         conn_repository = ConnectionRepository(session=session)
         user_repository = UserRepository(session=session)
+        groups_has_users = GroupsHasUsersRepository(session=session)
         create_user = CreateUserUsecase(user_repository)
         read_user = ReadUserUsecase(user_repository, conn_repository, organization_repository=org_repo)
         update_user = UpdateUserUsecase(user_repository)
         delete_user = DeleteUserUsecase(user_repository)
         self.user_controller = UserController(create_user=create_user, get_user=read_user, update_user=update_user, delete_user=delete_user)
 
-        conn_usecase = CreateConnectionUsecase(conn_repository, user_repository)
+        conn_usecase = CreateConnectionUsecase(conn_repository, user_repository, groups_has_users)
         self.connection_controller = ConnectionController(conn_usecase)

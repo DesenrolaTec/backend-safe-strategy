@@ -11,7 +11,7 @@ class UserDto:
     name: Optional[str] = "" 
     password: Optional[str] = "" 
     cpf: Optional[str] = ""
-    birthday: Optional[str] = ""
+    birthday: Optional[str] = None
     created_at: Optional[str] = None
     updated_at: Optional[str] = None
 

@@ -6,7 +6,12 @@ class ConnectionController(ConnectionControllerInterface):
         self._create_connection = create_connection
 
     def _map_connection_data_create(self, connection_data: dict)->any:
-        return CreateConnectionInputDto(email = connection_data['user_email'], organization_id = connection_data['organization_id'], role = connection_data['role'])
+        return CreateConnectionInputDto(user_name= connection_data.get("user_name"),
+                                        user_email= connection_data.get("user_email"),
+                                        user_cpf= connection_data.get("user_cpf"),
+                                        user_client_code= connection_data.get("user_client_code"),
+                                        user_enable= connection_data.get("user_enable"),
+                                        user_groups_ids= connection_data.get("user_groups_ids"))
 
     def create_connection(self, conn_data: dict):
         conn_dto = self._map_connection_data_create(conn_data)
