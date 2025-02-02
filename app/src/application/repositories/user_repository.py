@@ -28,8 +28,8 @@ class UserRepository(UserRepositoryInterface):
         try:
             self.__session.add(user_model)
             self.__session.commit()
-            db_user = self.get_by_email(user.email)
-            return user
+            db_user = self.get_by_cpf(user_model.cpf)
+            return db_user
         except Exception as e:
             self.__session.rollback()
             raise Exception(f"Erro ao criar usuário: {str(e)}")

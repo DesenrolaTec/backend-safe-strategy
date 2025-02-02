@@ -9,6 +9,17 @@ class ConnectionRoutes:
         self.register_routes(app)
         
     def _create_connection(self) -> jsonify:
+        """
+            {
+            "user_name": "",
+            "user_email": "",
+            "user_cpf": "",
+            "user_client_id": "",
+            "user_enable": 1,
+            "user_groups": []
+        }
+        :return:
+        """
         try:
             data = request.get_json()
             response = self._controller.create_connection(data)

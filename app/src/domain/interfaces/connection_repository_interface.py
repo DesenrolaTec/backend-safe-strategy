@@ -3,7 +3,7 @@ from app.src.infra.models.profiles_model import Profile
 
 class ConnectionRepositoryInterface(ABC):
     @abstractmethod
-    def create(self, user_id: int, organization_id: int, role: str) -> Profile:
+    def create(self, user_id: int, organization_id: int, role: str, enable: int) -> Profile:
         raise NotImplementedError("O método 'create' precisa ser implementado.")
 
     @abstractmethod
