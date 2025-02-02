@@ -7,13 +7,17 @@ class ConnectionRepository(ConnectionRepositoryInterface):
         self.__session = session
 
     def create(self, user_id: int, organization_id: int, role: str, enable: int, client_code: str):
-        profile = Profile(user_id=user_id,
-                          organization_id=organization_id,
-                          role=role, enable=enable,
-                          client_code=client_code)
-        self.__session.add(profile)
-        self.__session.commit()
-        return profile
+        try:
+            profile = Profile(user_id=user_id,
+                              organization_id=organization_id,
+                              role=role, enable=enable,
+                              client_code=client_code)
+            self.__session.add(profile)
+            self.__session.commit()
+            return profile
+        except Exception as e:
+            self.__session.rollback()
+            raise RuntimeError (f"Erro ao criar connection: {e}")
 
     def get_connection_by_user_id(self, user_id: int):
         profile = self.__session.query(Profile).filter_by(user_id=user_id).first()

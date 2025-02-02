@@ -16,7 +16,7 @@ class ConnectionRoutes:
             "user_cpf": "",
             "user_client_id": "",
             "user_enable": 1,
-            "user_groups": []
+            "user_groups_ids": []
         }
         :return:
         """

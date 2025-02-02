@@ -11,7 +11,7 @@ class ConnectionController(ConnectionControllerInterface):
                                         user_cpf= connection_data.get("user_cpf"),
                                         user_client_code= connection_data.get("user_client_code"),
                                         user_enable= connection_data.get("user_enable"),
-                                        user_groups= connection_data.get("user_groups"))
+                                        user_groups_ids= connection_data.get("user_groups_ids"))
 
     def create_connection(self, conn_data: dict):
         conn_dto = self._map_connection_data_create(conn_data)

@@ -11,6 +11,3 @@ class Profile(db.Model):
     enable = Column(Integer, nullable=True, default=None)
     created_at = Column(String, nullable=True, default=None)
     updated_at = Column(String, nullable=True, default=None)
-
-    def __str__(self):
-        return self.email
