@@ -21,7 +21,7 @@ class OutputDto:
     conn_id: int 
     status: str
 
-def map_input_dto_to_user_dto(self, input_dto: InputDto)->UserDto:
+def map_input_dto_to_user_dto(input_dto: InputDto)->UserDto:
     return UserDto(name = input_dto.user_name, email = input_dto.user_email, password = "a!vq3jrM-K", cpf = input_dto.user_cpf)
 
 class CreateConnectionUsecase(UseCaseInterface):
