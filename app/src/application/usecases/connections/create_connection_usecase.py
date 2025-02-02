@@ -32,7 +32,7 @@ class CreateConnectionUsecase(UseCaseInterface):
 
     def execute(self, input_dto: InputDto)->OutputDto:
         try:
-            user_dto = self.map_input_dto_to_user_dto(input_dto)
+            user_dto = map_input_dto_to_user_dto(input_dto)
             db_user = self._user_repository.create(user=user_dto)
             user_dto = UserDto(id=db_user.id,
                                name=db_user.name,
