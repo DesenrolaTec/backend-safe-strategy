@@ -1,7 +1,4 @@
 from dataclasses import dataclass
-from gc import enable
-
-from app.src.domain.factorys.user_factory import UserDto
 from app.src.domain.interfaces.usecase_interface import UseCaseInterface
 from app.src.domain.interfaces.user_repository_interface import UserRepositoryInterface
 from app.src.domain.interfaces.connection_repository_interface import ConnectionRepositoryInterface
@@ -12,7 +9,7 @@ class InputDto:
     user_name: str
     user_email: str
     user_cpf: str
-    user_client_id: str
+    user_client_code: str
     user_enable: int
     user_groups: list
 

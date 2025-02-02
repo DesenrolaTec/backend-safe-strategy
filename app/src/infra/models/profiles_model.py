@@ -7,6 +7,7 @@ class Profile(db.Model):
     organization_id = Column(Integer, primary_key=True)
     user_id = Column(Integer, primary_key=True)
     role = Column(String, nullable=True, default=None)
+    client_code = Column(String, nullable=True, default=None)
     enable = Column(Integer, nullable=True, default=None)
     created_at = Column(String, nullable=True, default=None)
     updated_at = Column(String, nullable=True, default=None)

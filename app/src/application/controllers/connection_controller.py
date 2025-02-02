@@ -9,7 +9,7 @@ class ConnectionController(ConnectionControllerInterface):
         return CreateConnectionInputDto(user_name= connection_data.get("user_name"),
                                         user_email= connection_data.get("user_email"),
                                         user_cpf= connection_data.get("user_cpf"),
-                                        user_client_id= connection_data.get("user_client_id"),
+                                        user_client_code= connection_data.get("user_client_code"),
                                         user_enable= connection_data.get("user_enable"),
                                         user_groups= connection_data.get("user_groups"))
 
