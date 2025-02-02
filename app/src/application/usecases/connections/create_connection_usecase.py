@@ -33,13 +33,12 @@ class CreateConnectionUsecase(UseCaseInterface):
     def execute(self, input_dto: InputDto)->OutputDto:
         try:
             user_dto = map_input_dto_to_user_dto(input_dto)
-            db_user = self._user_repository.create(user=user_dto)
+            db_user = self._user_repository.create(user=user_dto, is_minimal_user=True)
             user_dto = UserDto(id=db_user.id,
                                name=db_user.name,
                                email=db_user.email,
                                cpf=db_user.cpf,
-                               password=db_user.password,
-                               birthday=db_user.birthday)
+                               password=db_user.password)
             user = user_client(self._minimal_user_factory, user_dto)
             db_profile = self._conn_repository.create(user_id=user.id, role="trader", organization_id=1, enable= input_dto.user_enable)
             return OutputDto(conn_id=db_profile.id, status= "Profile criado com sucesso!")

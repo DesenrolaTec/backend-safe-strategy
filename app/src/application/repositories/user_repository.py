@@ -12,8 +12,8 @@ class UserRepository(UserRepositoryInterface):
         self._minimal_user_factory = MinimalUserFactory()
         self._full_user_factory = FullUserFactory()
 
-    def create(self, user: UserDto) -> User:
-        if user.cpf == "":            
+    def create(self, user: UserDto, is_minimal_user: bool = False) -> User:
+        if is_minimal_user:            
             user = user_client(self._minimal_user_factory, user)
         else:
             user = user_client(self._full_user_factory, user)
