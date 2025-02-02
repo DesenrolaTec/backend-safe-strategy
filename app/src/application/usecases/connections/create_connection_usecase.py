@@ -31,14 +31,17 @@ class CreateConnectionUsecase(UseCaseInterface):
         self._minimal_user_factory = MinimalUserFactory()
 
     def execute(self, input_dto: InputDto)->OutputDto:
-        user_dto = self.map_input_dto_to_user_dto(input_dto)
-        db_user = self._user_repository.create(user=user_dto)
-        user_dto = UserDto(id=db_user.id,
-                           name=db_user.name,
-                           email=db_user.email,
-                           cpf=db_user.cpf,
-                           password=db_user.password,
-                           birthday=db_user.birthday)
-        user = user_client(self._minimal_user_factory, user_dto)
-        db_profile = self._conn_repository.create(user_id=user.id, role="trader", organization_id=1, enable= input_dto.user_enable)
-        return OutputDto(conn_id=db_profile.id, status= 201)
+        try:
+            user_dto = self.map_input_dto_to_user_dto(input_dto)
+            db_user = self._user_repository.create(user=user_dto)
+            user_dto = UserDto(id=db_user.id,
+                               name=db_user.name,
+                               email=db_user.email,
+                               cpf=db_user.cpf,
+                               password=db_user.password,
+                               birthday=db_user.birthday)
+            user = user_client(self._minimal_user_factory, user_dto)
+            db_profile = self._conn_repository.create(user_id=user.id, role="trader", organization_id=1, enable= input_dto.user_enable)
+            return OutputDto(conn_id=db_profile.id, status= "Profile criado com sucesso!")
+        except Exception as e:
+            return OutputDto(conn_id=000, status=f"Erro ao criar profilçe: {e}")
