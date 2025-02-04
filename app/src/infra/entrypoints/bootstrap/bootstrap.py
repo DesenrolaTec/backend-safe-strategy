@@ -40,5 +40,5 @@ class Bootstrap:
         conn_usecase = CreateConnectionUsecase(conn_repository, user_repository, groups_has_users)
         self.connection_controller = ConnectionController(conn_usecase)
 
-        get_groups_usecase = GetGroupsUsecase(groups_repository=groups_repository)
+        get_groups_usecase = GetGroupsUsecase(repository=groups_repository)
         self.groups_controller = GroupsController(get_groups_usecase=get_groups_usecase)

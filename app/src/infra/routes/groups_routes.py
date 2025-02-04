@@ -1,3 +1,4 @@
+import json
 from app.src.application.repositories.oauth_repository import require_oauth
 from authlib.integrations.flask_oauth2 import current_token
 from flask import Flask, jsonify
@@ -21,7 +22,7 @@ class GroupsRoutes:
                      user_cpf: str):
         output_dto = self._controller.get_groups(user_cpf = user_cpf)
         if output_dto.groups:
-            return jsonify(output_dto.groups), 200
+            return jsonify({'groups': output_dto.groups}), 201
         return jsonify({'error': f'{output_dto.message}'}), 404
 
     def register_routes(self, app: Flask) -> None:

@@ -19,7 +19,7 @@ class GetGroupsUsecase(UseCaseInterface):
             responses = []
             groups = self.repository.get_groups_by_organization(organization_id=1) #TODO: Ajustar usecase para buscar organização do usuario.
             for group in groups:
-                responses.append(group.__dict__)
+                responses.append(group.name)
             return OutputDto(status=200,
                              message="Grupos extraidos com sucesso!",
                              groups=responses)

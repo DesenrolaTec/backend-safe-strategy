@@ -8,5 +8,5 @@ class GroupsController(GroupsControllerInterface):
 
     def get_groups(self, user_cpf: str):
         output_dto: OutputDto = self.get_groups_usecase.execute(user_cpf = user_cpf)
-        return output_dto.__dict__
+        return output_dto
 
