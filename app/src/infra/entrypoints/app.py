@@ -3,6 +3,7 @@ from app.src.application.config.config import Config
 from app.src.infra.routes.user_routes import UserRoutes
 from app.src.infra.routes.oauth_routes import OauthRoutes
 from app.src.infra.routes.connection_routes import ConnectionRoutes
+from app.src.infra.routes.groups_routes import GroupsRoutes
 from app.src.infra.adapters.sql_alchemy_adapter import db
 from app.src.application.repositories.oauth_repository import config_oauth
 from app.src.infra.entrypoints.bootstrap.bootstrap import Bootstrap
@@ -31,6 +32,7 @@ class App:
         OauthRoutes(app=self.app)
         UserRoutes(app=self.app, user_controller=self.__bootstrap.user_controller)
         ConnectionRoutes(app=self.app, conn_controller=self.__bootstrap.connection_controller)
+        GroupsRoutes(app=self.app, groups_controller=self.__bootstrap.groups_controller)
     
     def run(self):
         app = self.app
