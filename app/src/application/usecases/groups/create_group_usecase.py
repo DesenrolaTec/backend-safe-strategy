@@ -29,5 +29,5 @@ class CreateGroupUsecase(UseCaseInterface):
                                                         users_id=user_id)
             return {"Sucesso ao criar grupo", 200}
         except Exception as e:
-            return {f"{e}", 500}
+            raise RuntimeError(f"{e}")
 

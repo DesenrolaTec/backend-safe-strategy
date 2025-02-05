@@ -35,7 +35,7 @@ class GroupsRepository(IgroupsRepository):
 
     def create_group(self, group_name: str, organization_id: int) -> None:
         try:
-            groups_model = GroupsModel(group_name = group_name,
+            groups_model = GroupsModel(name = group_name,
                                        organization_id = organization_id)
             self.__session.add(groups_model)
             self.__session.commit()
