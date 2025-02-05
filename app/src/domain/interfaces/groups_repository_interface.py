@@ -5,3 +5,7 @@ class IgroupsRepository(ABC):
     @abstractmethod
     def get_groups_by_organization(self, organization_id: int)->list[GroupsDto]:
         raise NotImplementedError
+
+    @abstractmethod
+    def create_group(self, group_name: str, organization_id: int) -> None:
+        raise NotImplementedError

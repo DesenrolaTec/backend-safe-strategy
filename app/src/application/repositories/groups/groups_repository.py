@@ -25,4 +25,23 @@ class GroupsRepository(IgroupsRepository):
         except Exception as e:
             raise RuntimeError(f"Erro ao recuperar grupos.: {e}")
 
+    def get_group_by_name(self, group_name: str) -> GroupsDto:
+        try:
+            group = self.__session.query(GroupsModel).filter_by(name=group_name)
+            group_dto = map_groups_dto(group)
+            return group_dto
+        except Exception as e:
+            raise RuntimeError(f"Erro ao recuperar grupo pelo nome.: {e}")
+
+    def create_group(self, group_name: str, organization_id: int) -> None:
+        try:
+            groups_model = GroupsModel(group_name = group_name,
+                                       organization_id = organization_id)
+            self.__session.add(groups_model)
+            self.__session.commit()
+        except Exception as e:
+            self.__session.rollback()
+            raise RuntimeError(f"Erro ao criar o grupo {e}")
+
+
 

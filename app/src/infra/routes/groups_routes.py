@@ -1,7 +1,8 @@
 import json
+from werkzeug.exceptions import BadRequest
 from app.src.application.repositories.oauth_repository import require_oauth
 from authlib.integrations.flask_oauth2 import current_token
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from app.src.domain.interfaces.groups_controller_interface import GroupsControllerInterface
 
 
@@ -10,13 +11,16 @@ class GroupsRoutes:
         self._controller = groups_controller
         self.register_routes(app)
 
-    """def __create_group(self) -> jsonify:
+    def __create_group(self,
+                       user_cpf: str) -> jsonify:
         try:
-            pass
+            data = request.get_json()
+            response = self._controller.create_group(user_cpf=user_cpf, data = data)
+            return response
         except BadRequest as e:
             return jsonify({'error': str(e)}), 400
         except Exception as e:
-            return jsonify({'error': f'Erro ao criar usuário: {e}'}), 500"""
+            return jsonify({'error': f'Erro ao criar o grupo: {e}'}), 500
 
     def __get_groups(self,
                      user_cpf: str):
@@ -26,10 +30,12 @@ class GroupsRoutes:
         return jsonify({'error': f'{output_dto.message}'}), 404
 
     def register_routes(self, app: Flask) -> None:
-        """@app.route('/groups', methods=['POST'])
+        @app.route('/groups', methods=['POST'])
         @require_oauth('profile')
         def create_group():
-            return self._create_user()"""
+            user = current_token.user
+            user_cpf = user.cpf
+            return self.__create_group(user_cpf = user_cpf)
 
         @app.route('/groups', methods=['GET'])
         @require_oauth('profile')
