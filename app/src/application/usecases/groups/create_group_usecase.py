@@ -27,7 +27,7 @@ class CreateGroupUsecase(UseCaseInterface):
                 user_id = self.users_repository.get_by_cpf(user_cpf = cpf).id
                 self.groups_has_users_repository.insert(group_name=group_name,
                                                         users_id=user_id)
-            return {"Sucesso ao criar grupo", 200}
+            return {"message": "Sucesso ao criar grupo", "status": 200}
         except Exception as e:
-            return {f"{e}", 500}
+            return {"message": f"{e}","status": 500}
 

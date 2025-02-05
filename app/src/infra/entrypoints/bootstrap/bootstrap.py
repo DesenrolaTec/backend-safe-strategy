@@ -8,6 +8,7 @@ from app.src.application.usecases.user.update_user import UpdateUserUsecase
 from app.src.application.usecases.user.delete_user import DeleteUserUsecase
 from app.src.application.usecases.connections.create_connection_usecase import CreateConnectionUsecase
 from app.src.application.usecases.groups.get_groups_usecase import GetGroupsUsecase
+from app.src.application.usecases.groups.create_group_usecase import CreateGroupUsecase
 
 from app.src.application.repositories.user_repository import UserRepository
 from app.src.application.repositories.groups.groups_repository import GroupsRepository
@@ -41,4 +42,8 @@ class Bootstrap:
         self.connection_controller = ConnectionController(conn_usecase)
 
         get_groups_usecase = GetGroupsUsecase(repository=groups_repository)
-        self.groups_controller = GroupsController(get_groups_usecase=get_groups_usecase)
+        create_group_usecase = CreateGroupUsecase(groups_has_users_repository=groups_has_users,
+                                                  groups_repository=groups_repository,
+                                                  users_repository=user_repository)
+        self.groups_controller = GroupsController(get_groups_usecase=get_groups_usecase, 
+                                                  create_group_usecase=create_group_usecase)

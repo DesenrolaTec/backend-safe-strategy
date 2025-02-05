@@ -16,7 +16,7 @@ class GroupsRoutes:
         try:
             data = request.get_json()
             response = self._controller.create_group(user_cpf=user_cpf, data = data)
-            return response
+            return json.dumps(response)
         except BadRequest as e:
             return jsonify({'error': str(e)}), 400
         except Exception as e:
