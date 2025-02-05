@@ -8,6 +8,10 @@ class UserRepositoryInterface(ABC):
         raise NotImplementedError("O método 'create' precisa ser implementado.")
 
     @abstractmethod
+    def get_by_id(self, user_id: int) -> UserModel:
+        raise NotImplementedError
+
+    @abstractmethod
     def get_by_cpf(self) -> UserModel:
         """Método para ler dados do banco de dados"""
         raise NotImplementedError("O método 'get_by_id' precisa ser implementado.")

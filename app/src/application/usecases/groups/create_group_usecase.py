@@ -18,17 +18,16 @@ class CreateGroupUsecase(UseCaseInterface):
         try:
             organization_id = 1
             group_name = data.get("group_name")
-            group_users_cpf = data.get("group_users_cpf")
+            group_users_id = data.get("group_users_id")
 
             self.groups_repository.create_group(group_name=group_name,
                                                 organization_id=organization_id)
 
             group_id = self.groups_repository.get_group_by_name(group_name=group_name).id
 
-            for cpf in group_users_cpf:
-                user_id = self.users_repository.get_by_cpf(user_cpf = cpf).id
+            for id in group_users_id:
                 self.groups_has_users_repository.insert(groups_id=group_id,
-                                                        users_id=user_id)
+                                                        users_id=id)
             return {"message": "Sucesso ao criar grupo", "status": 200}
         except Exception as e:
             raise RuntimeError(f"{e}")
