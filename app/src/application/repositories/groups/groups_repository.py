@@ -27,7 +27,7 @@ class GroupsRepository(IgroupsRepository):
 
     def get_group_by_name(self, group_name: str) -> GroupsDto:
         try:
-            group = self.__session.query(GroupsModel).filter_by(name=group_name)
+            group = self.__session.query(GroupsModel).filter_by(name=group_name).first()
             group_dto = map_groups_dto(group)
             return group_dto
         except Exception as e:

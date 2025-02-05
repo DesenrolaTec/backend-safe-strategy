@@ -9,3 +9,7 @@ class IgroupsRepository(ABC):
     @abstractmethod
     def create_group(self, group_name: str, organization_id: int) -> None:
         raise NotImplementedError
+    
+    @abstractmethod
+    def get_group_by_name(self, group_name: str) -> GroupsDto:
+        raise NotImplementedError

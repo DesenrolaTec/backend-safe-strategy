@@ -23,9 +23,11 @@ class CreateGroupUsecase(UseCaseInterface):
             self.groups_repository.create_group(group_name=group_name,
                                                 organization_id=organization_id)
 
+            group_id = self.groups_repository.get_group_by_name(group_name=group_name).id
+
             for cpf in group_users_cpf:
                 user_id = self.users_repository.get_by_cpf(user_cpf = cpf).id
-                self.groups_has_users_repository.insert(group_name=group_name,
+                self.groups_has_users_repository.insert(groups_id=group_id,
                                                         users_id=user_id)
             return {"message": "Sucesso ao criar grupo", "status": 200}
         except Exception as e:
