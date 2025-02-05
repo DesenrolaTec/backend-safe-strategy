@@ -29,5 +29,5 @@ class CreateGroupUsecase(UseCaseInterface):
                                                         users_id=user_id)
             return {"message": "Sucesso ao criar grupo", "status": 200}
         except Exception as e:
-            return {"message": f"{e}","status": 500}
+            raise RuntimeError(f"{e}")
 
