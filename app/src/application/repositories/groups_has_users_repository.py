@@ -18,5 +18,16 @@ class GroupsHasUsersRepository(GroupsHasUsersInterface):
         except Exception as e:
             self.__session.rollback()
             raise RuntimeError(f"Erro ao inserir groups has users: {e}")
+        
+    def get_groups_by_id(self, group_id: int)->list[GroupsHasUsersModel]:
+        try:
+            users_id = []
+            groups = self.__session.query(GroupsHasUsersModel).filter_by(groups_id=group_id)
+            for group in groups:
+                users_id.append(group.users_id)
+            return users_id
+        except Exception as e:
+            self.__session.rollback()
+            raise RuntimeError(f"Erro ao recuperar groups has users pelo group_id: {e}")
 
 
