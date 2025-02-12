@@ -12,8 +12,8 @@ class UserRepository(UserRepositoryInterface):
         self._minimal_user_factory = MinimalUserFactory()
         self._full_user_factory = FullUserFactory()
 
-    def create(self, user: UserDto) -> User:
-        if user.cpf == "":            
+    def create(self, user: UserDto, is_minimal_user: bool = False) -> User:
+        if is_minimal_user:            
             user = user_client(self._minimal_user_factory, user)
         else:
             user = user_client(self._full_user_factory, user)
@@ -28,8 +28,8 @@ class UserRepository(UserRepositoryInterface):
         try:
             self.__session.add(user_model)
             self.__session.commit()
-            user = self.get_by_email(user.email)
-            return user
+            db_user = self.get_by_cpf(user_model.cpf)
+            return db_user
         except Exception as e:
             self.__session.rollback()
             raise Exception(f"Erro ao criar usuário: {str(e)}")

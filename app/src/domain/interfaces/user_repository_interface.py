@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 class UserRepositoryInterface(ABC):
     @abstractmethod
-    def create(self) -> None:
+    def create(self, is_minimal_user: bool = False) -> None:
         """Método para inserir dados no banco de dados"""
         raise NotImplementedError("O método 'create' precisa ser implementado.")
 
