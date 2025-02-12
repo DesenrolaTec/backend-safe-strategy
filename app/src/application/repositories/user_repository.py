@@ -33,8 +33,14 @@ class UserRepository(UserRepositoryInterface):
         except Exception as e:
             self.__session.rollback()
             raise Exception(f"Erro ao criar usuário: {str(e)}")
+        
+    def get_by_id(self, user_id: int) -> UserModel:
+        db_user = self.__session.query(UserModel).filter_by(id=user_id).first()
+        if not db_user:
+            return None
+        return db_user
 
-    def get_by_cpf(self, user_cpf: str) -> User:
+    def get_by_cpf(self, user_cpf: str) -> UserModel:
         db_user = self.__session.query(UserModel).filter_by(cpf=user_cpf).first()
         if not db_user:
             return None
