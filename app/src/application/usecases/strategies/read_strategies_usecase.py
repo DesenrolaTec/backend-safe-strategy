@@ -10,7 +10,7 @@ class ReadStrategiesUsecase(UseCaseInterface):
     def execute(self):
         try:
             response = []
-            strategies = self._repository.get_all_strategies()
+            strategies = self._repository.get_all()
             for strategy in strategies:
                 response.append(
                     {

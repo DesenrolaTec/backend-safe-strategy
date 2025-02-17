@@ -7,7 +7,7 @@ class StrategiesController(StrategiesControllerInterface):
                  create_strategies_usecase: UseCaseInterface,
                  read_strategies_usecase: UseCaseInterface)->None:
         self.create_strategies_usecase = create_strategies_usecase
-        self.read_strategies = read_strategies_usecase
+        self.read_strategies_usecase = read_strategies_usecase
 
     def create_strategies(self, data: dict):
         try:
@@ -20,7 +20,7 @@ class StrategiesController(StrategiesControllerInterface):
 
     def read_strategies(self):
         try:
-            response: dict = self.read_strategies.execute()
+            response: dict = self.read_strategies_usecase.execute()
             return response
         except Exception as e:
             raise RuntimeError(f"{e}")
