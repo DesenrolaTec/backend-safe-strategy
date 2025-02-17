@@ -7,3 +7,7 @@ class StrategiesRepositoryInterface(ABC):
                name: str,
                content: str):
         raise NotImplementedError
+
+    @abstractmethod
+    def get_all(self):
+        raise NotImplementedError

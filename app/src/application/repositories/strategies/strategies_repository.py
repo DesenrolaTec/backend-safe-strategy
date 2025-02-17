@@ -22,3 +22,12 @@ class StrategiesRepository(StrategiesRepositoryInterface):
         except Exception as e:
             self.__session.rollback()
             raise RuntimeError (f"Erro ao criar connection: {e}")
+
+    def get_all(self):
+        try:
+            strategies = self.__session.query(StrategiesModel).filter_by(organization_id=1)
+            if not strategies:
+                return None
+            return strategies
+        except Exception as e:
+            raise RuntimeError(e)
