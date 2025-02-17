@@ -18,10 +18,24 @@ class StrategiesRoutes:
         except BadRequest as e:
             return jsonify({'error': str(e)}), 400
         except Exception as e:
-            return jsonify({'error': f'Erro ao criar usuário: {e}'}), 500
+            return jsonify({'error': f'Erro ao criar estrategia: {e}'}), 500
+
+    def _read_strategies(self) -> jsonify:
+        try:
+            response = self._controller.read_strategies()
+            return jsonify(response), 201
+        except BadRequest as e:
+            return jsonify({'error': str(e)}), 400
+        except Exception as e:
+            return jsonify({'error': f'Erro ao ler estrategias: {e}'}), 500
 
     def register_routes(self, app: Flask) -> None:
         @app.route('/strategies', methods=['POST'])
         @require_oauth('profile')
         def create_strategies():
             return self._create_strategies()
+
+        @app.route('/strategies', methods=['GET'])
+        @require_oauth('profile')
+        def read_strategies():
+            return self._read_strategies()

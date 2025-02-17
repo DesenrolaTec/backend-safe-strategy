@@ -3,7 +3,8 @@ from app.src.application.controllers.user_controller import UserController
 from app.src.application.controllers.connection_controller import ConnectionController
 from app.src.application.controllers.groups_controller import GroupsController
 from app.src.application.repositories.strategies.strategies_repository import StrategiesRepository
-from app.src.application.usecases.strategies.strategies_usecase import CreateStrategiesUsecase
+from app.src.application.usecases.strategies.create_strategies_usecase import CreateStrategiesUsecase
+from app.src.application.usecases.strategies.read_strategies_usecase import ReadStrategiesUsecase
 
 from app.src.application.usecases.user.create_user import CreateUserUsecase
 from app.src.application.usecases.user.get_user import ReadUserUsecase
@@ -55,4 +56,6 @@ class Bootstrap:
                                                   create_group_usecase=create_group_usecase)
 
         create_strategys_usecase = CreateStrategiesUsecase(strategies_repository=strategies_repository)
-        self.strategies_controller = StrategiesController(create_strategies_usecase=create_strategys_usecase)
+        read_strategies = ReadStrategiesUsecase(strategies_repository=strategies_repository)
+        self.strategies_controller = StrategiesController(create_strategies_usecase=create_strategys_usecase,
+                                                          read_strategies_usecase=read_strategies)
