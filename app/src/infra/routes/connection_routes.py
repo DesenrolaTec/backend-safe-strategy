@@ -29,8 +29,22 @@ class ConnectionRoutes:
         except Exception as e:
             return jsonify({'error': 'Erro ao criar conexão.'}), 500.
 
+    def _read_connection(self):
+        try:
+            response = self._controller.read_connections()
+            return jsonify(response), 200
+        except BadRequest as e:
+            return jsonify({'error': str(e)}), 400
+        except Exception as e:
+            return jsonify({'error': 'Erro ao criar conexão.'}), 500.
+
     def register_routes(self, app: Flask) -> None:
         @app.route('/connections', methods=['POST'])
         @require_oauth('profile')
         def create_connection():
             return self._create_connection()
+
+        @app.route('/connections', methods=['GET'])
+        @require_oauth('profile')
+        def read_connection():
+            return self._read_connection()
