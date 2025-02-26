@@ -9,6 +9,7 @@ from dataclasses import dataclass
 @dataclass
 class Connection:
     status: int
+    profile_id: int
     user_id: int
     user_name: str
     groups: list
@@ -24,6 +25,7 @@ class ReadConnectionsUsecase(UseCaseInterface):
             response = [
                 Connection(
                     status = result.profile_status,
+                    profile_id = result.profile_id,
                     user_id = result.user_id,
                     user_name = result.user_name,
                     groups = result.group_names.split(',')

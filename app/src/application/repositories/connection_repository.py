@@ -35,12 +35,13 @@ class ConnectionRepository(ConnectionRepositoryInterface):
             results = self.__session.query(
                 UserModel.id.label('user_id'),
                 UserModel.name.label('user_name'),
+                Profile.id.label('profile_id'),  # Incluindo o id do perfil
                 Profile.enable.label('profile_status'),
                 func.group_concat(GroupsModel.name).label('group_names')  # Usando GROUP_CONCAT para concatenar os nomes dos grupos
             ).join(Profile, UserModel.id == Profile.user_id) \
             .join(GroupsHasUsersModel, UserModel.id == GroupsHasUsersModel.users_id) \
             .join(GroupsModel, GroupsHasUsersModel.groups_id == GroupsModel.id) \
-            .group_by(UserModel.id, Profile.enable) \
+            .group_by(UserModel.id, Profile.id, Profile.enable) \
             .all()
             if not results:
                 return None
