@@ -15,14 +15,8 @@ def Connection() -> None:
 
 class ReadConnectionsUsecase(UseCaseInterface):
     def __init__(self,
-                 conn_repository: ConnectionRepositoryInterface,
-                 user_repository: UserRepositoryInterface,
-                 groups_has_users_repository: GroupsHasUsersInterface,
-                 groups_repository: IgroupsRepository):
+                 conn_repository: ConnectionRepositoryInterface):
         self.conn_repository = conn_repository
-        self.user_repository = user_repository
-        self.groups_has_users_repository = groups_has_users_repository
-        self.groups_repository = groups_repository
 
     def execute(self):
         try:

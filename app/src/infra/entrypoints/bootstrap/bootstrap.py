@@ -3,6 +3,7 @@ from app.src.application.controllers.user_controller import UserController
 from app.src.application.controllers.connection_controller import ConnectionController
 from app.src.application.controllers.groups_controller import GroupsController
 from app.src.application.repositories.strategies.strategies_repository import StrategiesRepository
+from app.src.application.usecases.connections.read_connections_usecase import ReadConnectionsUsecase
 from app.src.application.usecases.strategies.create_strategies_usecase import CreateStrategiesUsecase
 from app.src.application.usecases.strategies.read_strategies_usecase import ReadStrategiesUsecase
 
@@ -43,8 +44,10 @@ class Bootstrap:
         delete_user = DeleteUserUsecase(user_repository)
         self.user_controller = UserController(create_user=create_user, get_user=read_user, update_user=update_user, delete_user=delete_user)
 
-        conn_usecase = CreateConnectionUsecase(conn_repository, user_repository, groups_has_users)
-        self.connection_controller = ConnectionController(conn_usecase)
+        create_conn_usecase = CreateConnectionUsecase(conn_repository, user_repository, groups_has_users)
+        read_conn_usecase = ReadConnectionsUsecase(conn_repository=conn_repository)
+        self.connection_controller = ConnectionController(create_connection=create_conn_usecase,
+                                                          read_connections=read_conn_usecase)
 
         get_groups_usecase = GetGroupsUsecase(group_has_user_repository=groups_has_users,
                                               groups_repository=groups_repository,
