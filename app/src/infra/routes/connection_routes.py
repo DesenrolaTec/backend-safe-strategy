@@ -62,7 +62,7 @@ class ConnectionRoutes:
         def read_connection():
             return self._read_connection()
 
-        @app.route('/connections', methods=['DELETE'])
+        @app.route('/connections/<string:conn_id>', methods=['DELETE'])
         @require_oauth('profile')
         def delete_connection(conn_id: int):
             return self._delete_connection(conn_id = conn_id)

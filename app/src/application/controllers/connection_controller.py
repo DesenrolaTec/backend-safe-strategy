@@ -35,9 +35,9 @@ class ConnectionController(ConnectionControllerInterface):
         except Exception as e:
             raise e
 
-    def delete_connection(self):
+    def delete_connection(self, conn_id: int):
         try:
-            self._delete_connections.execute()
+            self._delete_connections.execute(conn_id=conn_id)
             return None
         except Exception as e:
             raise e
