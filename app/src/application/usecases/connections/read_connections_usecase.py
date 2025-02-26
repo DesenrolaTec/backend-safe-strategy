@@ -7,7 +7,7 @@ from app.src.domain.interfaces.user_repository_interface import UserRepositoryIn
 from dataclasses import dataclass
 
 @dataclass
-def Connection() -> None:
+class Connection:
     status: int
     user_id: int
     user_name: str
@@ -20,16 +20,16 @@ class ReadConnectionsUsecase(UseCaseInterface):
 
     def execute(self):
         try:
-            results: list[Profile] = self.conn_repository.get_all_connections()
+            results = self.conn_repository.get_all_connections()
             response = [
                 Connection(
-                    status = result.user_name,
+                    status = result.profile_status,
                     user_id = result.user_id,
                     user_name = result.user_name,
-                    groups = result.group_name
+                    groups = result.group_names.split(',')
                 )
                 for result in results
             ]
             return response
         except Exception as e:
-            return e
+            raise e

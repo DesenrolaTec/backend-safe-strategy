@@ -1,3 +1,4 @@
+import json
 from flask import Flask, request, jsonify
 from werkzeug.exceptions import BadRequest
 from app.src.application.repositories.oauth_repository import require_oauth
@@ -27,16 +28,18 @@ class ConnectionRoutes:
         except BadRequest as e:
             return jsonify({'error': str(e)}), 400
         except Exception as e:
-            return jsonify({'error': 'Erro ao criar conexão.'}), 500.
+            return jsonify({'error': 'Erro ao criar conexão.'}), 500
 
     def _read_connection(self):
         try:
             response = self._controller.read_connections()
+            if not response:
+                return jsonify(""), 404
             return jsonify(response), 200
         except BadRequest as e:
             return jsonify({'error': str(e)}), 400
         except Exception as e:
-            return jsonify({'error': 'Erro ao criar conexão.'}), 500.
+            return jsonify({'error': f'Erro ao criar conexão: {str(e)}'}), 500
 
     def register_routes(self, app: Flask) -> None:
         @app.route('/connections', methods=['POST'])
