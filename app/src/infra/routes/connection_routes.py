@@ -5,7 +5,9 @@ from app.src.application.repositories.oauth_repository import require_oauth
 from app.src.domain.interfaces.connection_controller_interface import ConnectionControllerInterface
 
 class ConnectionRoutes:
-    def __init__(self, app: Flask, conn_controller: ConnectionControllerInterface) -> None:
+    def __init__(self, 
+                 app: Flask, 
+                 conn_controller: ConnectionControllerInterface) -> None:
         self._controller = conn_controller
         self.register_routes(app)
         
@@ -55,9 +57,10 @@ class ConnectionRoutes:
                            conn_id: int):
         try:
             data = request.get_json()
-            self._controller.create_connection(data)
+            cpf = data.get("user_cpf")
             self._controller.delete_connection(conn_id = conn_id)
-            return jsonify("Conexão deletada com sucesso"), 200
+            self._controller.create_connection(data)
+            return jsonify("Conexão atualizada com sucesso"), 200
         except BadRequest as e:
             return jsonify({'error': str(e)}), 400
         except Exception as e:
@@ -79,7 +82,7 @@ class ConnectionRoutes:
         def delete_connection(conn_id: int):
             return self._delete_connection(conn_id = conn_id)
 
-        @app.route('/connections/<string:conn_id>', methods=['DELETE'])
+        @app.route('/connections/<string:conn_id>', methods=['PATCH'])
         @require_oauth('profile')
         def update_connection(conn_id: int):
             return self._update_connection(conn_id=conn_id)
