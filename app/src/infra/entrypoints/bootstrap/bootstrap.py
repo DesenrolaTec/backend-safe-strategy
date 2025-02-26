@@ -62,7 +62,7 @@ class Bootstrap:
         delete_groups_usecase = DeleteGroupUsecase(groups_repository=groups_repository)
         self.groups_controller = GroupsController(get_groups_usecase=get_groups_usecase, 
                                                   create_group_usecase=create_group_usecase,
-                                                  delete_groups_usecase=delete_groups_usecase)
+                                                  delete_group_usecase=delete_groups_usecase)
 
         create_strategys_usecase = CreateStrategiesUsecase(strategies_repository=strategies_repository)
         read_strategies = ReadStrategiesUsecase(strategies_repository=strategies_repository)
