@@ -51,6 +51,18 @@ class ConnectionRoutes:
         except Exception as e:
             return jsonify({'error': f'Erro ao criar conexão: {str(e)}'}), 500
 
+    def _update_connection(self,
+                           conn_id: int):
+        try:
+            data = request.get_json()
+            self._controller.create_connection(data)
+            self._controller.delete_connection(conn_id = conn_id)
+            return jsonify("Conexão deletada com sucesso"), 200
+        except BadRequest as e:
+            return jsonify({'error': str(e)}), 400
+        except Exception as e:
+            return jsonify({'error': f'Erro ao criar conexão: {str(e)}'}), 500
+
     def register_routes(self, app: Flask) -> None:
         @app.route('/connections', methods=['POST'])
         @require_oauth('profile')
@@ -66,3 +78,8 @@ class ConnectionRoutes:
         @require_oauth('profile')
         def delete_connection(conn_id: int):
             return self._delete_connection(conn_id = conn_id)
+
+        @app.route('/connections/<string:conn_id>', methods=['DELETE'])
+        @require_oauth('profile')
+        def update_connection(conn_id: int):
+            return self._update_connection(conn_id=conn_id)
