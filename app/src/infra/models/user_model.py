@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import relationship
 from app.src.infra.adapters.sql_alchemy_adapter import db
 
 class UserModel(db.Model):

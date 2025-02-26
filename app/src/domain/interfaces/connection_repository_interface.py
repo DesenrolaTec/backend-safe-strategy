@@ -15,6 +15,10 @@ class ConnectionRepositoryInterface(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def delete(self,):
+    def delete(self, conn_id):
+        raise NotImplementedError
+
+    @abstractmethod
+    def get_all_connections(self):
         raise NotImplementedError
 
