@@ -1,3 +1,4 @@
+from app.src.application.usecases.connections.delete_connections_usecase import DeleteConnectionsUsecase
 from app.src.domain.interfaces.connection_controller_interface import ConnectionControllerInterface
 from app.src.application.usecases.connections.create_connection_usecase import CreateConnectionUsecase, InputDto as CreateConnectionInputDto
 from app.src.application.usecases.connections.read_connections_usecase import ReadConnectionsUsecase
@@ -5,9 +6,11 @@ from app.src.application.usecases.connections.read_connections_usecase import Re
 class ConnectionController(ConnectionControllerInterface):
     def __init__(self,
                  create_connection: CreateConnectionUsecase,
-                 read_connections: ReadConnectionsUsecase)->None:
+                 read_connections: ReadConnectionsUsecase,
+                 delete_connections: DeleteConnectionsUsecase)->None:
         self._create_connection = create_connection
         self._read_connections = read_connections
+        self._delete_connections = delete_connections
 
     def _map_connection_data_create(self, connection_data: dict)->any:
         return CreateConnectionInputDto(user_name= connection_data.get("user_name"),
@@ -29,5 +32,12 @@ class ConnectionController(ConnectionControllerInterface):
             for result in results:
                 response.append(result.__dict__)
             return response
+        except Exception as e:
+            raise e
+
+    def delete_connection(self):
+        try:
+            self._delete_connections.execute()
+            return None
         except Exception as e:
             raise e
