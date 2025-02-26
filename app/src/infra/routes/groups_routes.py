@@ -29,6 +29,14 @@ class GroupsRoutes:
             return jsonify({'groups': output_dto.groups}), 201
         return jsonify({'error': f'{output_dto.message}'}), 404
 
+    def __delete_groups(self,
+                        group_id: int):
+        try:
+            self._controller.delete_group(group_id=group_id)
+            return jsonify("Grupo deletado com sucesso!"), 200
+        except Exception as e:
+            return jsonify({'error': str(e)}), 404
+
     def register_routes(self, app: Flask) -> None:
         @app.route('/groups', methods=['POST'])
         @require_oauth('profile')
@@ -43,3 +51,8 @@ class GroupsRoutes:
             user = current_token.user
             user_cpf = user.cpf
             return self.__get_groups(user_cpf = user_cpf)
+
+        @app.route('/groups/<group_id>', methods=['DELETE'])
+        @require_oauth('profile')
+        def delete_groups(group_id):
+            return self.__delete_groups(group_id=group_id)

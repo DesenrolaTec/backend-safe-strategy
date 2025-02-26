@@ -5,6 +5,7 @@ from app.src.application.controllers.groups_controller import GroupsController
 from app.src.application.repositories.strategies.strategies_repository import StrategiesRepository
 from app.src.application.usecases.connections.delete_connections_usecase import DeleteConnectionsUsecase
 from app.src.application.usecases.connections.read_connections_usecase import ReadConnectionsUsecase
+from app.src.application.usecases.groups.delete_group_usecase import DeleteGroupUsecase
 from app.src.application.usecases.strategies.create_strategies_usecase import CreateStrategiesUsecase
 from app.src.application.usecases.strategies.read_strategies_usecase import ReadStrategiesUsecase
 
@@ -58,8 +59,10 @@ class Bootstrap:
         create_group_usecase = CreateGroupUsecase(groups_has_users_repository=groups_has_users,
                                                   groups_repository=groups_repository,
                                                   users_repository=user_repository)
+        delete_groups_usecase = DeleteGroupUsecase(groups_repository=groups_repository)
         self.groups_controller = GroupsController(get_groups_usecase=get_groups_usecase, 
-                                                  create_group_usecase=create_group_usecase)
+                                                  create_group_usecase=create_group_usecase,
+                                                  delete_groups_usecase=delete_groups_usecase)
 
         create_strategys_usecase = CreateStrategiesUsecase(strategies_repository=strategies_repository)
         read_strategies = ReadStrategiesUsecase(strategies_repository=strategies_repository)

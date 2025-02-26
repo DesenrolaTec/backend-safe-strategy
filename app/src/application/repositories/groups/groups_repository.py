@@ -43,5 +43,15 @@ class GroupsRepository(IgroupsRepository):
             self.__session.rollback()
             raise RuntimeError(f"Erro ao criar o grupo {e}")
 
+    def delete_group(self, group_id: int):
+        try:
+            group_to_delete = self.__session.query(GroupsModel).filter(GroupsModel.id == group_id).first()
+
+            if group_to_delete:
+                self.__session.delete(group_to_delete)
+                self.__session.commit()
+            return None
+        except Exception as e:
+            raise e
 
 
