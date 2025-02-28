@@ -54,4 +54,15 @@ class GroupsRepository(IgroupsRepository):
         except Exception as e:
             raise e
 
+    def update_group_name(self,
+                          group_id: int,
+                          group_name: str):
+        try:
+            group = self.__session.query(GroupsModel).filter_by(id=group_id).first()
+            if group:
+                group.name = group_name
 
+            self.__session.commit()
+        except Exception as e:
+            self.__session.rollback()
+            raise RuntimeError(str(e))

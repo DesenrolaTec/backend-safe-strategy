@@ -37,6 +37,16 @@ class GroupsRoutes:
         except Exception as e:
             return jsonify({'error': str(e)}), 404
 
+    def __update_group(self):
+        try:
+            data = request.get_json()
+            response = self._controller.update_group(data = data)
+            return jsonify({'sucesso': response.get("message")}), 200
+        except BadRequest as e:
+            return jsonify({'error': str(e)}), 400
+        except Exception as e:
+            return jsonify({'error': f'Erro ao criar o grupo: {e}'}), 500
+
     def register_routes(self, app: Flask) -> None:
         @app.route('/groups', methods=['POST'])
         @require_oauth('profile')
@@ -56,3 +66,8 @@ class GroupsRoutes:
         @require_oauth('profile')
         def delete_groups(group_id):
             return self.__delete_groups(group_id=group_id)
+
+        @app.route('/groups', methods=['PATCH'])
+        @require_oauth('profile')
+        def update_group():
+            return self.__update_group()

@@ -12,3 +12,7 @@ class GroupsControllerInterface(ABC):
     @abstractmethod
     def delete_group(self, group_id: int):
         raise NotImplementedError
+
+    @abstractmethod
+    def update_group(self, data: dict):
+        raise NotImplementedError
