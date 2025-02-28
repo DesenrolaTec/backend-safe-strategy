@@ -17,3 +17,7 @@ class IgroupsRepository(ABC):
     @abstractmethod
     def delete_group(self, group_id: int):
         raise NotImplementedError
+
+    @abstractmethod
+    def update_group_name(self, group_id, group_name):
+        raise NotImplementedError

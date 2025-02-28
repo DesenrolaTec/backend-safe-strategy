@@ -1,4 +1,5 @@
 from app.src.application.usecases.groups.delete_group_usecase import DeleteGroupUsecase
+from app.src.application.usecases.groups.update_group_usecase import UpdateGroupUseCase
 from app.src.domain.interfaces.usecase_interface import UseCaseInterface
 from app.src.domain.interfaces.groups_controller_interface import GroupsControllerInterface
 from app.src.application.usecases.groups.get_groups_usecase import OutputDto
@@ -7,10 +8,12 @@ class GroupsController(GroupsControllerInterface):
     def __init__(self,
                  get_groups_usecase: UseCaseInterface,
                  create_group_usecase: UseCaseInterface,
-                 delete_group_usecase: DeleteGroupUsecase)->None:
+                 delete_group_usecase: DeleteGroupUsecase,
+                 update_group_usecase: UpdateGroupUseCase)->None:
         self.get_groups_usecase = get_groups_usecase
         self.create_group_usecase = create_group_usecase
         self.delete_group_usecase = delete_group_usecase
+        self.update_group_usecase = update_group_usecase
 
     def get_groups(self, user_cpf: str):
         output_dto: OutputDto = self.get_groups_usecase.execute(user_cpf = user_cpf)
@@ -25,5 +28,11 @@ class GroupsController(GroupsControllerInterface):
         try:
             self.delete_group_usecase.execute(group_id=group_id)
             return None
+        except Exception as e:
+            raise e
+
+    def update_group(self, data: dict):
+        try:
+            self.update_group_usecase.execute(data = data)
         except Exception as e:
             raise e
