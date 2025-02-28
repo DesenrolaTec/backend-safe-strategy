@@ -11,3 +11,7 @@ class StrategiesRepositoryInterface(ABC):
     @abstractmethod
     def get_all(self):
         raise NotImplementedError
+
+    @abstractmethod
+    def delete(self):
+        raise NotImplementedError
