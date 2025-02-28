@@ -21,9 +21,12 @@ class ConnectionController(ConnectionControllerInterface):
                                         user_groups_ids= connection_data.get("user_groups_ids"))
 
     def create_connection(self, conn_data: dict):
-        conn_dto = self._map_connection_data_create(conn_data)
-        output_dto = self._create_connection.execute(conn_dto)
-        return output_dto.__dict__
+        try:
+            conn_dto = self._map_connection_data_create(conn_data)
+            output_dto = self._create_connection.execute(conn_dto)
+            return output_dto.__dict__
+        except Exception as e:
+            raise e
 
     def read_connections(self) -> list:
         try:

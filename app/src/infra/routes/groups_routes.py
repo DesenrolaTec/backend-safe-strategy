@@ -45,7 +45,7 @@ class GroupsRoutes:
         except BadRequest as e:
             return jsonify({'error': str(e)}), 400
         except Exception as e:
-            return jsonify({'error': f'Erro ao criar o grupo: {e}'}), 500
+            return jsonify({'error': f'Erro ao ATUALIZAR o grupo: {e}'}), 500
 
     def register_routes(self, app: Flask) -> None:
         @app.route('/groups', methods=['POST'])
