@@ -40,8 +40,8 @@ class GroupsRoutes:
     def __update_group(self):
         try:
             data = request.get_json()
-            response = self._controller.update_group(data = data)
-            return jsonify({'sucesso': response.get("message")}), 200
+            self._controller.update_group(data = data)
+            return jsonify({'sucesso': "Grupos atualizados com sucesso!"}), 200
         except BadRequest as e:
             return jsonify({'error': str(e)}), 400
         except Exception as e:
