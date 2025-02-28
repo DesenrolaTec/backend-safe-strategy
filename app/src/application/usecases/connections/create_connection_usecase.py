@@ -52,4 +52,4 @@ class CreateConnectionUsecase(UseCaseInterface):
                 self._groups_has_users_repository.insert(groups_id=group, users_id=db_user.id)
             return OutputDto(conn_id=db_profile.id, status= "Profile criado com sucesso!")
         except Exception as e:
-            return OutputDto(conn_id=000, status=f"Erro ao criar profilçe: {e}")
+            raise e
