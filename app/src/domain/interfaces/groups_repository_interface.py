@@ -13,3 +13,7 @@ class IgroupsRepository(ABC):
     @abstractmethod
     def get_group_by_name(self, group_name: str) -> GroupsDto:
         raise NotImplementedError
+
+    @abstractmethod
+    def delete_group(self, group_id: int):
+        raise NotImplementedError

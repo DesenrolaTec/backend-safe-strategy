@@ -1,5 +1,9 @@
 from sqlalchemy.orm import Session
+from sqlalchemy import func
+from app.src.infra.models.groups_has_users_model import GroupsHasUsersModel
+from app.src.infra.models.groups_model import GroupsModel
 from app.src.infra.models.profiles_model import Profile
+from app.src.infra.models.user_model import UserModel
 from app.src.domain.interfaces.connection_repository_interface import ConnectionRepositoryInterface
 
 class ConnectionRepository(ConnectionRepositoryInterface):
@@ -26,8 +30,36 @@ class ConnectionRepository(ConnectionRepositoryInterface):
         profile = Profile(user_id=profile.user_id, organization_id=profile.organization_id, role=profile.role, enable=True)
         return profile
 
+    def get_all_connections(self):
+        try:
+            results = self.__session.query(
+                UserModel.id.label('user_id'),
+                UserModel.name.label('user_name'),
+                Profile.id.label('profile_id'),  # Incluindo o id do perfil
+                Profile.enable.label('profile_status'),
+                func.group_concat(GroupsModel.name).label('group_names')  # Usando GROUP_CONCAT para concatenar os nomes dos grupos
+            ).join(Profile, UserModel.id == Profile.user_id) \
+            .join(GroupsHasUsersModel, UserModel.id == GroupsHasUsersModel.users_id) \
+            .join(GroupsModel, GroupsHasUsersModel.groups_id == GroupsModel.id) \
+            .group_by(UserModel.id, Profile.id, Profile.enable) \
+            .all()
+            if not results:
+                return None
+            return results
+        except Exception as e:
+            raise e
+
+
     def update(self,):
         pass
 
-    def delete(self,):
-        pass
+    def delete(self, conn_id: int):
+        try:
+            profile_to_delete = self.__session.query(Profile).filter(Profile.id == conn_id).first()
+
+            if profile_to_delete:
+                self.__session.delete(profile_to_delete)
+                self.__session.commit()
+            return None
+        except Exception as e:
+            raise e
