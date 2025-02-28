@@ -11,3 +11,7 @@ class GroupsHasUsersInterface(ABC):
     @abstractmethod
     def get_groups_by_id(self, group_id: int)->list[GroupsHasUsersModel]:
         raise NotImplementedError
+
+    @abstractmethod
+    def delete_user(self, user_id):
+        raise NotImplementedError
