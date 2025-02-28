@@ -29,6 +29,15 @@ class StrategiesRoutes:
         except Exception as e:
             return jsonify({'error': f'Erro ao ler estrategias: {e}'}), 500
 
+    def _delete_strategies(self, id):
+        try:
+            self._controller.delete_strategies(id = id)
+            return jsonify("Estrategia deletada com sucesso!"), 201
+        except BadRequest as e:
+            return jsonify({'error': str(e)}), 400
+        except Exception as e:
+            return jsonify({'error': f'Erro ao ler estrategias: {e}'}), 500
+
     def register_routes(self, app: Flask) -> None:
         @app.route('/strategies', methods=['POST'])
         @require_oauth('profile')
@@ -39,3 +48,8 @@ class StrategiesRoutes:
         @require_oauth('profile')
         def read_strategies():
             return self._read_strategies()
+
+        @app.route('/strategies/<id>', methods=['DELETE'])
+        @require_oauth('profile')
+        def delete_strategies(id: int):
+            return self._delete_strategies(id = id)
