@@ -30,7 +30,7 @@ class StrategiesController(StrategiesControllerInterface):
 
     def delete_strategies(self, id: int):
         try:
-            self.delete_strategies_usecase(id = id)
+            self.delete_strategies_usecase.execute(id = id)
             return None
         except Exception as e:
             raise e
