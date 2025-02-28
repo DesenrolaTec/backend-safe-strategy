@@ -31,3 +31,13 @@ class StrategiesRepository(StrategiesRepositoryInterface):
             return strategies
         except Exception as e:
             raise RuntimeError(e)
+
+    def delete(self, id: int):
+        try:
+            strategy = self.__session.query(StrategiesModel).filter_by(id = id).first()
+            if strategy:
+                self.__session.delete(strategy)
+                self.__session.commit()
+            return None
+        except Exception as e:
+            raise e
