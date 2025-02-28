@@ -23,9 +23,9 @@ class UpdateGroupUseCase:
             #Recuperar usuarios do grupo
             groups = self.gp_has_users_repository.get_groups_by_id(group_id=group_id)
             old_users = []
-            for group in groups:
+            for user_id in groups:
                 old_users.append(
-                    group.users_id
+                    user_id
                 )
 
             users_to_add = list(set(new_users) - set(old_users))
