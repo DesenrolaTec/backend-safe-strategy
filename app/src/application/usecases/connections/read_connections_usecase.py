@@ -9,6 +9,7 @@ from dataclasses import dataclass
 @dataclass
 class Connection:
     status: int
+    client_code: str
     profile_id: int
     user_id: int
     user_name: str
@@ -25,6 +26,7 @@ class ReadConnectionsUsecase(UseCaseInterface):
             response = [
                 Connection(
                     status = result.profile_status,
+                    client_code = result.client_code,
                     profile_id = result.profile_id,
                     user_id = result.user_id,
                     user_name = result.user_name,
