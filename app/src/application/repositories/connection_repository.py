@@ -42,15 +42,11 @@ class ConnectionRepository(ConnectionRepositoryInterface):
                         Profile.client_code.label('client_code'),
                         func.group_concat(GroupsModel.id).label('group_ids'),
                         func.group_concat(GroupsModel.name).label('group_names')
-                    ).join(
-                        Profile, UserModel.id == Profile.user_id
-                    ).join(
-                        GroupsHasUsersModel, UserModel.id == GroupsHasUsersModel.users_id
-                    ).join(
-                        GroupsModel, GroupsHasUsersModel.groups_id == GroupsModel.id
-                    ).group_by(
-                        UserModel.id, Profile.id, Profile.enable
-                    ).all()
+                    ).join(Profile, UserModel.id == Profile.user_id) \
+                    .outerjoin(GroupsHasUsersModel, UserModel.id == GroupsHasUsersModel.users_id) \
+                    .outerjoin(GroupsModel, GroupsHasUsersModel.groups_id == GroupsModel.id) \
+                    .group_by(UserModel.id, Profile.id, Profile.enable) \
+                    .all()
             if not results:
                 return None
             return results
