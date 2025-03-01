@@ -30,8 +30,7 @@ class ConnectionRepository(ConnectionRepositoryInterface):
         profile = Profile(user_id=profile.user_id, organization_id=profile.organization_id, role=profile.role, enable=True)
         return profile
 
-    def get_all_connections(self,
-                            request_user_id: int):
+    def get_all_connections(self):
         try:
             results  = self.__session.query(
                         UserModel.id.label('user_id'),
@@ -49,8 +48,6 @@ class ConnectionRepository(ConnectionRepositoryInterface):
                         GroupsHasUsersModel, UserModel.id == GroupsHasUsersModel.users_id
                     ).join(
                         GroupsModel, GroupsHasUsersModel.groups_id == GroupsModel.id
-                    ).filter(
-                        Profile.user_id != request_user_id
                     ).group_by(
                         UserModel.id, Profile.id, Profile.enable
                     ).all()
@@ -64,11 +61,13 @@ class ConnectionRepository(ConnectionRepositoryInterface):
     def update(self,):
         pass
 
-    def delete(self, conn_id: int):
+    def delete(self, conn_id: int, user_id: int):
         try:
             profile_to_delete = self.__session.query(Profile).filter(Profile.id == conn_id).first()
 
             if profile_to_delete:
+                if profile_to_delete.user_id == user_id:
+                    raise RuntimeError("Você não pode deletar seu propio usuário.")
                 self.__session.delete(profile_to_delete)
                 self.__session.commit()
             return None
