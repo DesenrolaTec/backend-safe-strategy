@@ -50,7 +50,7 @@ class ConnectionRepository(ConnectionRepositoryInterface):
                     ).join(
                         GroupsModel, GroupsHasUsersModel.groups_id == GroupsModel.id
                     ).filter(
-                        UserModel.id != request_user_id
+                        Profile.user_id != request_user_id
                     ).group_by(
                         UserModel.id, Profile.id, Profile.enable
                     ).all()
