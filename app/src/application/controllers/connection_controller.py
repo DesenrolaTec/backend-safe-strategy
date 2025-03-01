@@ -28,19 +28,19 @@ class ConnectionController(ConnectionControllerInterface):
         except Exception as e:
             raise e
 
-    def read_connections(self, request_user_id: int) -> list:
+    def read_connections(self) -> list:
         try:
             response = []
-            results = self._read_connections.execute(request_user_id=request_user_id)
+            results = self._read_connections.execute()
             for result in results:
                 response.append(result.__dict__)
             return response
         except Exception as e:
             raise e
 
-    def delete_connection(self, conn_id: int):
+    def delete_connection(self, conn_id: int, user_id: int):
         try:
-            self._delete_connections.execute(conn_id=conn_id)
+            self._delete_connections.execute(conn_id=conn_id, user_id = user_id)
             return None
         except Exception as e:
             raise e
