@@ -13,6 +13,8 @@ class Connection:
     profile_id: int
     user_id: int
     user_name: str
+    user_email: str
+    user_cpf: str
     groups: list
 
 class ReadConnectionsUsecase(UseCaseInterface):
@@ -30,6 +32,8 @@ class ReadConnectionsUsecase(UseCaseInterface):
                     profile_id = result.profile_id,
                     user_id = result.user_id,
                     user_name = result.user_name,
+                    user_email = result.user_email,
+                    user_cpf = result.user_cpf,
                     groups = result.group_names.split(',')
                 )
                 for result in results
