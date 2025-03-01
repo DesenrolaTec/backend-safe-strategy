@@ -10,6 +10,7 @@ from app.src.application.usecases.groups.update_group_usecase import UpdateGroup
 from app.src.application.usecases.strategies.create_strategies_usecase import CreateStrategiesUsecase
 from app.src.application.usecases.strategies.delete_strategy_usecase import DeleteStrategyUseCase
 from app.src.application.usecases.strategies.read_strategies_usecase import ReadStrategiesUsecase
+from app.src.application.usecases.strategies.update_strategys_usecase import UpdateStrategysUseCase
 
 from app.src.application.usecases.user.create_user import CreateUserUsecase
 from app.src.application.usecases.user.get_user import ReadUserUsecase
@@ -72,6 +73,8 @@ class Bootstrap:
         create_strategys_usecase = CreateStrategiesUsecase(strategies_repository=strategies_repository)
         read_strategies = ReadStrategiesUsecase(strategies_repository=strategies_repository)
         delete_strategy = DeleteStrategyUseCase(strategies_repository=strategies_repository)
+        update_strategy = UpdateStrategysUseCase(strategies_repository=strategies_repository)
         self.strategies_controller = StrategiesController(create_strategies_usecase=create_strategys_usecase,
                                                           read_strategies_usecase=read_strategies,
-                                                          delete_strategies_usecase=delete_strategy)
+                                                          delete_strategies_usecase=delete_strategy,
+                                                          update_strategies=update_strategy)
