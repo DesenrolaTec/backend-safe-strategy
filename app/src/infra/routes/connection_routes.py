@@ -84,7 +84,7 @@ class ConnectionRoutes:
             id = user.id
             return self._delete_connection(conn_id = conn_id, user_id = id)
 
-        @app.route('/connections/<string:conn_id>', methods=['PATCH'])
+        @app.route('/connections', methods=['PATCH'])
         @require_oauth('profile')
         def update_connection():
             return self._update_connection()
