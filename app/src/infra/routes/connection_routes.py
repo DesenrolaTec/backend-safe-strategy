@@ -1,4 +1,6 @@
 import json
+
+from authlib.integrations.flask_oauth2 import current_token
 from flask import Flask, request, jsonify
 from werkzeug.exceptions import BadRequest
 from app.src.application.repositories.oauth_repository import require_oauth
@@ -32,9 +34,9 @@ class ConnectionRoutes:
         except Exception as e:
             return jsonify({'error': 'Erro ao criar conexão.'}), 500
 
-    def _read_connection(self):
+    def _read_connection(self, request_user_id: int):
         try:
-            response = self._controller.read_connections()
+            response = self._controller.read_connections(request_user_id = request_user_id)
             if not response:
                 return jsonify(""), 404
             return jsonify(response), 200
@@ -75,7 +77,9 @@ class ConnectionRoutes:
         @app.route('/connections', methods=['GET'])
         @require_oauth('profile')
         def read_connection():
-            return self._read_connection()
+            user = current_token.user
+            id = user.id
+            return self._read_connection(request_user_id=id)
 
         @app.route('/connections/<string:conn_id>', methods=['DELETE'])
         @require_oauth('profile')

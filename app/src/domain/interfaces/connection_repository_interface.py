@@ -19,6 +19,6 @@ class ConnectionRepositoryInterface(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def get_all_connections(self):
+    def get_all_connections(self, request_user_id: int):
         raise NotImplementedError
 
