@@ -3,16 +3,16 @@ from app.src.domain.interfaces.usecase_interface import UseCaseInterface
 from app.src.domain.interfaces.user_repository_interface import UserRepositoryInterface
 from app.src.domain.interfaces.connection_repository_interface import ConnectionRepositoryInterface
 from app.src.domain.interfaces.groups_has_users_repository_interface import GroupsHasUsersInterface
-from app.src.domain.factorys.user_factory import user_client, UserDto, MinimalUserFactory
+from app.src.domain.factorys.user_factory import user_client, MinimalUserFactory
 
 @dataclass
-class InputDto:
+class UserDto:
     user_name: str
     user_email: str
     user_cpf: str
-    user_client_code: str
+    client_code: str
     user_enable: int
-    user_groups_ids: list[int]
+    user_group_ids: list[int]
 
 @dataclass
 class OutputDto:
@@ -40,7 +40,7 @@ class UpdateConnectionUsecase(UseCaseInterface):
     def execute(self, data: dict)->OutputDto:
         try:
             user_dto = map_input_dto_to_user_dto(data)
-            user_id = self._user_repository.update_conn(user=user_dto)
+            user_id = self._user_repository.update_conn(user_dto)
 
             db_profile = self._conn_repository.update(user_dto, user_id)
 
@@ -52,10 +52,10 @@ class UpdateConnectionUsecase(UseCaseInterface):
             groups_to_remove = list(set(old_groups) - set(new_groups))
 
             for group in groups_to_remove:
-                self.gp_has_users_repository.delete_user_by_group(user_id=user_id, group_id=group)
+                self._groups_has_users_repository.delete_user_by_group(user_id=user_id, group_id=group)
 
             for group in groups_to_add:
-                self.gp_has_users_repository.insert(groups_id=group, users_id=user_id)
+                self._groups_has_users_repository.insert(groups_id=group, users_id=user_id)
 
 
             return "Conexão atualizada."

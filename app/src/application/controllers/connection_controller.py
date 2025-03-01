@@ -50,7 +50,7 @@ class ConnectionController(ConnectionControllerInterface):
 
     def update_connection(self, conn_data: dict):
         try:
-            output_dto = self._update_connection.execute(conn_data)
-            return output_dto.__dict__
+            res = self._update_connection.execute(conn_data)
+            return res
         except Exception as e:
             raise e

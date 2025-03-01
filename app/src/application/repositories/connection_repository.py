@@ -65,10 +65,6 @@ class ConnectionRepository(ConnectionRepositoryInterface):
         except Exception as e:
             raise e
 
-
-    def update(self,):
-        pass
-
     def delete(self, conn_id: int, user_id: int):
         try:
             profile_to_delete = self.__session.query(Profile).filter(Profile.id == conn_id).first()
