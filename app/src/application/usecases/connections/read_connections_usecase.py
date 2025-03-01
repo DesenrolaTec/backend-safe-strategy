@@ -25,19 +25,30 @@ class ReadConnectionsUsecase(UseCaseInterface):
     def execute(self):
         try:
             results = self.conn_repository.get_all_connections()
-            response = [
-                Connection(
-                    status = result.profile_status,
-                    client_code = result.client_code,
-                    profile_id = result.profile_id,
-                    user_id = result.user_id,
-                    user_name = result.user_name,
-                    user_email = result.user_email,
-                    user_cpf = result.user_cpf,
-                    groups = result.group_names.split(',')
+            response = []
+            for result in results:
+                group_ids = result.group_ids.split(',')
+                group_names = result.group_names.split(',')
+                groups = []
+                for index, group in enumerate(group_names):
+                    groups.append(
+                        {
+                            "id": group_ids[index],
+                            "name": group
+                        }
+                    )
+                response.append(
+                    Connection(
+                        status=result.profile_status,
+                        client_code=result.client_code,
+                        profile_id=result.profile_id,
+                        user_id=result.user_id,
+                        user_name=result.user_name,
+                        user_email=result.user_email,
+                        user_cpf=result.user_cpf,
+                        groups=groups
+                    )
                 )
-                for result in results
-            ]
             return response
         except Exception as e:
             raise e
