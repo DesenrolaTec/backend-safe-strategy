@@ -30,23 +30,30 @@ class ConnectionRepository(ConnectionRepositoryInterface):
         profile = Profile(user_id=profile.user_id, organization_id=profile.organization_id, role=profile.role, enable=True)
         return profile
 
-    def get_all_connections(self):
+    def get_all_connections(self,
+                            request_user_id: int):
         try:
-            results = self.__session.query(
-                UserModel.id.label('user_id'),
-                UserModel.name.label('user_name'),
-                UserModel.email.label('user_email'),
-                UserModel.cpf.label('user_cpf'),
-                Profile.id.label('profile_id'),  # Incluindo o id do perfil
-                Profile.enable.label('profile_status'),
-                Profile.client_code.label('client_code'),
-                func.group_concat(GroupsModel.id).label('group_ids'),
-                func.group_concat(GroupsModel.name).label('group_names')  # Usando GROUP_CONCAT para concatenar os nomes dos grupos
-            ).join(Profile, UserModel.id == Profile.user_id) \
-            .join(GroupsHasUsersModel, UserModel.id == GroupsHasUsersModel.users_id) \
-            .join(GroupsModel, GroupsHasUsersModel.groups_id == GroupsModel.id) \
-            .group_by(UserModel.id, Profile.id, Profile.enable) \
-            .all()
+            results  = self.__session.query(
+                        UserModel.id.label('user_id'),
+                        UserModel.name.label('user_name'),
+                        UserModel.email.label('user_email'),
+                        UserModel.cpf.label('user_cpf'),
+                        Profile.id.label('profile_id'),
+                        Profile.enable.label('profile_status'),
+                        Profile.client_code.label('client_code'),
+                        func.group_concat(GroupsModel.id).label('group_ids'),
+                        func.group_concat(GroupsModel.name).label('group_names')
+                    ).join(
+                        Profile, UserModel.id == Profile.user_id
+                    ).join(
+                        GroupsHasUsersModel, UserModel.id == GroupsHasUsersModel.users_id
+                    ).join(
+                        GroupsModel, GroupsHasUsersModel.groups_id == GroupsModel.id
+                    ).filter(
+                        UserModel.id != request_user_id
+                    ).group_by(
+                        UserModel.id, Profile.id, Profile.enable
+                    ).all()
             if not results:
                 return None
             return results
