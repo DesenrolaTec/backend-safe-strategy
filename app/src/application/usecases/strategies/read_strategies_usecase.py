@@ -15,7 +15,8 @@ class ReadStrategiesUsecase(UseCaseInterface):
                 response.append(
                     {
                         "id": strategy.id,
-                        "name": strategy.name
+                        "name": strategy.name,
+                        "content": strategy.content
                     }
                 )
             return response
