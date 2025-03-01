@@ -22,21 +22,23 @@ class ReadConnectionsUsecase(UseCaseInterface):
                  conn_repository: ConnectionRepositoryInterface):
         self.conn_repository = conn_repository
 
-    def execute(self, request_user_id: int):
+    def execute(self):
         try:
-            results = self.conn_repository.get_all_connections(request_user_id=request_user_id)
+            results = self.conn_repository.get_all_connections()
             response = []
             for result in results:
-                group_ids = result.group_ids.split(',')
-                group_names = result.group_names.split(',')
                 groups = []
-                for index, group in enumerate(group_names):
-                    groups.append(
-                        {
-                            "id": group_ids[index],
-                            "name": group
-                        }
-                    )
+                if result.group_ids:
+                    group_ids = result.group_ids.split(',')
+                    group_names = result.group_names.split(',')
+                
+                    for index, group in enumerate(group_names):
+                        groups.append(
+                            {
+                                "id": group_ids[index],
+                                "name": group
+                            }
+                        )
                 response.append(
                     Connection(
                         status=result.profile_status,

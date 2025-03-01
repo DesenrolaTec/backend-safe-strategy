@@ -23,6 +23,18 @@ class ConnectionRepository(ConnectionRepositoryInterface):
             self.__session.rollback()
             raise RuntimeError (f"Erro ao criar connection: {e}")
 
+    def update(self, user_dto, id):
+        try:
+            db_profile = self.__session.query(Profile).filter_by(user_id=id).first()
+            db_profile.client_code = user_dto.client_code
+            db_profile.enable = user_dto.user_enable
+
+            self.__session.commit()
+        except Exception as e:
+            self.__session.rollback()
+            raise e
+
+
     def get_connection_by_user_id(self, user_id: int):
         profile = self.__session.query(Profile).filter_by(user_id=user_id).first()
         if not profile:
@@ -30,8 +42,7 @@ class ConnectionRepository(ConnectionRepositoryInterface):
         profile = Profile(user_id=profile.user_id, organization_id=profile.organization_id, role=profile.role, enable=True)
         return profile
 
-    def get_all_connections(self,
-                            request_user_id: int):
+    def get_all_connections(self):
         try:
             results  = self.__session.query(
                         UserModel.id.label('user_id'),
@@ -43,32 +54,24 @@ class ConnectionRepository(ConnectionRepositoryInterface):
                         Profile.client_code.label('client_code'),
                         func.group_concat(GroupsModel.id).label('group_ids'),
                         func.group_concat(GroupsModel.name).label('group_names')
-                    ).join(
-                        Profile, UserModel.id == Profile.user_id
-                    ).join(
-                        GroupsHasUsersModel, UserModel.id == GroupsHasUsersModel.users_id
-                    ).join(
-                        GroupsModel, GroupsHasUsersModel.groups_id == GroupsModel.id
-                    ).filter(
-                        Profile.user_id != request_user_id
-                    ).group_by(
-                        UserModel.id, Profile.id, Profile.enable
-                    ).all()
+                    ).join(Profile, UserModel.id == Profile.user_id) \
+                    .outerjoin(GroupsHasUsersModel, UserModel.id == GroupsHasUsersModel.users_id) \
+                    .outerjoin(GroupsModel, GroupsHasUsersModel.groups_id == GroupsModel.id) \
+                    .group_by(UserModel.id, Profile.id, Profile.enable) \
+                    .all()
             if not results:
                 return None
             return results
         except Exception as e:
             raise e
 
-
-    def update(self,):
-        pass
-
-    def delete(self, conn_id: int):
+    def delete(self, conn_id: int, user_id: int):
         try:
             profile_to_delete = self.__session.query(Profile).filter(Profile.id == conn_id).first()
 
             if profile_to_delete:
+                if profile_to_delete.user_id == user_id:
+                    raise RuntimeError("Você não pode deletar seu propio usuário.")
                 self.__session.delete(profile_to_delete)
                 self.__session.commit()
             return None

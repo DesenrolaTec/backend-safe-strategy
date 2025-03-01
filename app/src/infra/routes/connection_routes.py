@@ -34,9 +34,9 @@ class ConnectionRoutes:
         except Exception as e:
             return jsonify({'error': 'Erro ao criar conexão.'}), 500
 
-    def _read_connection(self, request_user_id: int):
+    def _read_connection(self):
         try:
-            response = self._controller.read_connections(request_user_id = request_user_id)
+            response = self._controller.read_connections()
             if not response:
                 return jsonify(""), 404
             return jsonify(response), 200
@@ -46,22 +46,20 @@ class ConnectionRoutes:
             return jsonify({'error': f'Erro ao criar conexão: {str(e)}'}), 500
 
     def _delete_connection(self,
-                           conn_id: int):
+                           conn_id: int,
+                           user_id: int):
         try:
-            self._controller.delete_connection(conn_id = conn_id)
+            self._controller.delete_connection(conn_id = conn_id, user_id = user_id)
             return jsonify("Conexão deletada com sucesso"), 200
         except BadRequest as e:
             return jsonify({'error': str(e)}), 400
         except Exception as e:
             return jsonify({'error': f'Erro ao criar conexão: {str(e)}'}), 500
 
-    def _update_connection(self,
-                           conn_id: int):
+    def _update_connection(self):
         try:
             data = request.get_json()
-            cpf = data.get("user_cpf")
-            self._controller.delete_connection(conn_id = conn_id)
-            self._controller.create_connection(data)
+            self._controller.update_connection(data)
             return jsonify("Conexão atualizada com sucesso"), 200
         except BadRequest as e:
             return jsonify({'error': str(e)}), 400
@@ -77,16 +75,16 @@ class ConnectionRoutes:
         @app.route('/connections', methods=['GET'])
         @require_oauth('profile')
         def read_connection():
-            user = current_token.user
-            id = user.id
-            return self._read_connection(request_user_id=id)
+            return self._read_connection()
 
         @app.route('/connections/<string:conn_id>', methods=['DELETE'])
         @require_oauth('profile')
         def delete_connection(conn_id: int):
-            return self._delete_connection(conn_id = conn_id)
+            user = current_token.user
+            id = user.id
+            return self._delete_connection(conn_id = conn_id, user_id = id)
 
-        @app.route('/connections/<string:conn_id>', methods=['PATCH'])
+        @app.route('/connections', methods=['PATCH'])
         @require_oauth('profile')
-        def update_connection(conn_id: int):
-            return self._update_connection(conn_id=conn_id)
+        def update_connection():
+            return self._update_connection()

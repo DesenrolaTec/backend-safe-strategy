@@ -7,9 +7,9 @@ class DeleteConnectionsUsecase(UseCaseInterface):
                  conn_repository: ConnectionRepositoryInterface):
         self.conn_repository = conn_repository
 
-    def execute(self, conn_id: int):
+    def execute(self, conn_id: int, user_id: int):
         try:
-            self.conn_repository.delete(conn_id=conn_id)
+            self.conn_repository.delete(conn_id=conn_id, user_id = user_id)
             return None
         except Exception as e:
             raise e
