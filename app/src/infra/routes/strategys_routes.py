@@ -41,8 +41,8 @@ class StrategiesRoutes:
     def _update_strategies(self, id: int) -> jsonify:
         try:
             data = request.get_json()
-            response = self._controller.update_strategies(id, data)
-            return jsonify(response), 201
+            self._controller.update_strategies(id, data)
+            return jsonify("Estrategia atualizada com sucesso!"), 201
         except BadRequest as e:
             return jsonify({'error': str(e)}), 400
         except Exception as e:

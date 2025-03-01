@@ -13,7 +13,7 @@ class StrategiesController(StrategiesControllerInterface):
         self.create_strategies_usecase = create_strategies_usecase
         self.read_strategies_usecase = read_strategies_usecase
         self.delete_strategies_usecase = delete_strategies_usecase
-        self.update_strategies = update_strategies
+        self.update_strategies_usecase = update_strategies
 
     def create_strategies(self, data: dict):
         try:
@@ -40,6 +40,6 @@ class StrategiesController(StrategiesControllerInterface):
 
     def update_strategies(self, id:int, data: dict):
         try:
-            self.update_strategies.execute(id = id, data = data)
+            self.update_strategies_usecase.execute(id = id, data = data)
         except Exception as e:
             raise e
