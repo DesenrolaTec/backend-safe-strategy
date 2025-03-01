@@ -8,3 +8,7 @@ class StrategiesControllerInterface(ABC):
     @abstractmethod
     def delete_strategies(self, id: int):
         raise NotImplementedError
+
+    @abstractmethod
+    def update_strategies(self, id: int, data: dict):
+        raise NotImplementedError
