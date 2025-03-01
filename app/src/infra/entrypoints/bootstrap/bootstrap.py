@@ -43,7 +43,7 @@ class Bootstrap:
         groups_has_users = GroupsHasUsersRepository(session=session)
         strategies_repository = StrategiesRepository(session=session)
 
-        create_user = CreateUserUsecase(user_repository)
+        create_user = CreateUserUsecase(user_repository, profile_repository=conn_repository)
         read_user = ReadUserUsecase(user_repository, conn_repository, organization_repository=org_repo)
         update_user = UpdateUserUsecase(user_repository)
         delete_user = DeleteUserUsecase(user_repository)
