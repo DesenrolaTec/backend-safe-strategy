@@ -35,9 +35,12 @@ class ConnectionRepository(ConnectionRepositoryInterface):
             results = self.__session.query(
                 UserModel.id.label('user_id'),
                 UserModel.name.label('user_name'),
+                UserModel.email.label('user_email'),
+                UserModel.cpf.label('user_cpf'),
                 Profile.id.label('profile_id'),  # Incluindo o id do perfil
                 Profile.enable.label('profile_status'),
                 Profile.client_code.label('client_code'),
+                func.group_concat(GroupsModel.id).label('group_ids'),
                 func.group_concat(GroupsModel.name).label('group_names')  # Usando GROUP_CONCAT para concatenar os nomes dos grupos
             ).join(Profile, UserModel.id == Profile.user_id) \
             .join(GroupsHasUsersModel, UserModel.id == GroupsHasUsersModel.users_id) \

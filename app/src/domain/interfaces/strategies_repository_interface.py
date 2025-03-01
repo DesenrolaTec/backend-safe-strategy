@@ -15,3 +15,7 @@ class StrategiesRepositoryInterface(ABC):
     @abstractmethod
     def delete(self):
         raise NotImplementedError
+
+    @abstractmethod
+    def update(self,id:int, name: str, content: str):
+        raise NotImplementedError

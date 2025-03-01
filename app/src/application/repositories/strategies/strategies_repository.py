@@ -41,3 +41,18 @@ class StrategiesRepository(StrategiesRepositoryInterface):
             return None
         except Exception as e:
             raise e
+
+    def update(self, id:int, name: str, content: dict):
+        try:
+            strategy = self.__session.query(StrategiesModel).filter_by(id=id).first()
+
+            if strategy:
+                strategy.name = name
+                strategy.content = content
+
+                self.__session.commit()
+
+            return None
+        except Exception as e:
+            self.__session.rollback()
+            raise e
