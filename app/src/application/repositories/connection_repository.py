@@ -23,6 +23,18 @@ class ConnectionRepository(ConnectionRepositoryInterface):
             self.__session.rollback()
             raise RuntimeError (f"Erro ao criar connection: {e}")
 
+    def update(self, user_dto, id):
+        try:
+            db_profile = self.__session.query(Profile).filter_by(user_id=id).first()
+            db_profile.client_code = user_dto.client_code
+            db_profile.enable = user_dto.user_enable
+
+            self.__session.commit()
+        except Exception as e:
+            self.__session.rollback()
+            raise e
+
+
     def get_connection_by_user_id(self, user_id: int):
         profile = self.__session.query(Profile).filter_by(user_id=user_id).first()
         if not profile:

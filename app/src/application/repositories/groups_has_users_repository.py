@@ -30,9 +30,34 @@ class GroupsHasUsersRepository(GroupsHasUsersInterface):
             self.__session.rollback()
             raise RuntimeError(f"Erro ao recuperar groups has users pelo group_id: {e}")
 
+    def get_groups_by_user_id(self, user_id: int)->list[GroupsHasUsersModel]:
+        try:
+            groups_ids = []
+            groups = self.__session.query(GroupsHasUsersModel).filter_by(users_id=user_id)
+            for group in groups:
+                groups_ids.append(group.groups_id)
+            return groups_ids
+        except Exception as e:
+            self.__session.rollback()
+            raise RuntimeError(f"Erro ao recuperar groups has users pelo group_id: {e}")
+
     def delete_user(self, user_id: int):
         try:
             users = self.__session.query(GroupsHasUsersModel).filter_by(users_id=user_id).first()
+
+            if users:
+                self.__session.delete(users)
+                self.__session.commit()
+
+        except Exception as e:
+            self.__session.rollback()
+            raise RuntimeError("Erro ao deletar usuarios")
+
+    def delete_user_by_group(self, user_id: int, group_id: int):
+        try:
+            users = self.__session.query(GroupsHasUsersModel).filter(
+                GroupsHasUsersModel.users_id == user_id,
+                GroupsHasUsersModel.groups_id == group_id).first()
 
             if users:
                 self.__session.delete(users)

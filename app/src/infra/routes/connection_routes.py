@@ -60,8 +60,7 @@ class ConnectionRoutes:
                            conn_id: int):
         try:
             data = request.get_json()
-            self._controller.delete_connection(conn_id = conn_id)
-            self._controller.create_connection(data)
+            self._controller.update_connection(data)
             return jsonify("Conexão atualizada com sucesso"), 200
         except BadRequest as e:
             return jsonify({'error': str(e)}), 400

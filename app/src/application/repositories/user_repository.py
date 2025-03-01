@@ -69,6 +69,20 @@ class UserRepository(UserRepositoryInterface):
                 return {'error': f'Error updating user: {str(e)}'}            
         return {'error': 'Usuario não encontrado.'}
 
+    def update_conn(self, user_dto: UserDto) -> int:
+        db_user = self.get_by_cpf(user_dto.user_cpf)
+        if db_user:
+            try:
+                db_user.name = user_dto.user_name
+                db_user.email = user_dto.user_email
+                db_user.cpf = user_dto.user_cpf
+                self.__session.commit()
+                return db_user.id
+            except Exception as e:
+                self.__session.rollback()
+                return {'error': f'Error updating user: {str(e)}'}
+        return {'error': 'Usuario não encontrado.'}
+
     def delete(self, user_cpf: str) -> str:
         user = self.__session.query(UserModel).filter_by(cpf=user_cpf).first()
         if user:
