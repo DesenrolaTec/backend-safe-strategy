@@ -69,8 +69,8 @@ class UserRepository(UserRepositoryInterface):
                 return {'error': f'Error updating user: {str(e)}'}            
         return {'error': 'Usuario não encontrado.'}
 
-    def update_conn(self, user_dto) -> int:
-        db_user = self.get_by_cpf(user_dto.user_cpf)
+    def update_conn(self, user_dto, user_id) -> int:
+        db_user = self.get_by_id(user_id)
         if db_user:
             try:
                 db_user.name = user_dto.user_name
@@ -85,6 +85,22 @@ class UserRepository(UserRepositoryInterface):
 
     def delete(self, user_cpf: str) -> str:
         user = self.__session.query(UserModel).filter_by(cpf=user_cpf).first()
+        if user:
+            try:
+                self.__session.query(OAuth2Token).filter_by(user_id=user.id).delete()
+                self.__session.commit()
+                self.__session.delete(user)
+                self.__session.commit()
+                user = user_client(self._minimal_user_factory, user)
+                return user
+            except Exception as e:
+                self.__session.rollback()  # Rollback em caso de erro
+                return f'Error deleting user: {str(e)}'
+        else:
+            return 'User not found.'
+
+    def delete_by_id(self, id: str) -> str:
+        user = self.__session.query(UserModel).filter_by(id=id).first()
         if user:
             try:
                 self.__session.query(OAuth2Token).filter_by(user_id=user.id).delete()

@@ -43,7 +43,7 @@ class GroupsHasUsersRepository(GroupsHasUsersInterface):
 
     def delete_user(self, user_id: int):
         try:
-            users = self.__session.query(GroupsHasUsersModel).filter_by(users_id=user_id).first()
+            users = self.__session.query(GroupsHasUsersModel).filter_by(users_id=user_id)
 
             if users:
                 self.__session.delete(users)
@@ -55,13 +55,11 @@ class GroupsHasUsersRepository(GroupsHasUsersInterface):
 
     def delete_user_by_group(self, user_id: int, group_id: int):
         try:
-            users = self.__session.query(GroupsHasUsersModel).filter(
+            self.__session.query(GroupsHasUsersModel).filter(
                 GroupsHasUsersModel.users_id == user_id,
-                GroupsHasUsersModel.groups_id == group_id).first()
+                GroupsHasUsersModel.groups_id == group_id).delete(synchronize_session=False)
 
-            if users:
-                self.__session.delete(users)
-                self.__session.commit()
+            self.__session.commit()
 
         except Exception as e:
             self.__session.rollback()

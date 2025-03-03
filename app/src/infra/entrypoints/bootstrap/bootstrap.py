@@ -52,7 +52,9 @@ class Bootstrap:
 
         create_conn_usecase = CreateConnectionUsecase(conn_repository, user_repository, groups_has_users)
         read_conn_usecase = ReadConnectionsUsecase(conn_repository=conn_repository)
-        delete_conn_usecase = DeleteConnectionsUsecase(conn_repository=conn_repository)
+        delete_conn_usecase = DeleteConnectionsUsecase(conn_repository=conn_repository,
+                                                       groups_has_users=groups_has_users,
+                                                       users_repository=user_repository)
         update_conn_usecase = UpdateConnectionUsecase(conn_repository=conn_repository,
                                                       user_repository=user_repository,
                                                       groups_has_users_repository=groups_has_users)

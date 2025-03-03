@@ -42,6 +42,13 @@ class ConnectionRepository(ConnectionRepositoryInterface):
         profile = Profile(user_id=profile.user_id, organization_id=profile.organization_id, role=profile.role, enable=True)
         return profile
 
+    def get_connection_by_id(self, id: int):
+        profile = self.__session.query(Profile).filter_by(id=id).first()
+        if not profile:
+            return None
+        profile = Profile(user_id=profile.user_id, organization_id=profile.organization_id, role=profile.role, enable=True)
+        return profile
+
     def get_all_connections(self):
         try:
             results  = self.__session.query(

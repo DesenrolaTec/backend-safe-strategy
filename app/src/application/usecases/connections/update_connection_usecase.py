@@ -37,10 +37,11 @@ class UpdateConnectionUsecase(UseCaseInterface):
         self._groups_has_users_repository = groups_has_users_repository
         self._minimal_user_factory = MinimalUserFactory()
 
-    def execute(self, data: dict)->OutputDto:
+    def execute(self, data: dict, profile_id: int)->OutputDto:
         try:
+            conn = self._conn_repository.get_connection_by_id(profile_id)
             user_dto = map_input_dto_to_user_dto(data)
-            user_id = self._user_repository.update_conn(user_dto)
+            user_id = self._user_repository.update_conn(user_dto, conn.user_id)
 
             db_profile = self._conn_repository.update(user_dto, user_id)
 

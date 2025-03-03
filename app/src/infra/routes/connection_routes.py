@@ -56,10 +56,10 @@ class ConnectionRoutes:
         except Exception as e:
             return jsonify({'error': f'Erro ao criar conexão: {str(e)}'}), 500
 
-    def _update_connection(self):
+    def _update_connection(self, profile_id: int):
         try:
             data = request.get_json()
-            self._controller.update_connection(data)
+            self._controller.update_connection(data, profile_id)
             return jsonify("Conexão atualizada com sucesso"), 200
         except BadRequest as e:
             return jsonify({'error': str(e)}), 400
@@ -84,7 +84,7 @@ class ConnectionRoutes:
             id = user.id
             return self._delete_connection(conn_id = conn_id, user_id = id)
 
-        @app.route('/connections', methods=['PATCH'])
+        @app.route('/connections/<int:profile_id>', methods=['PATCH'])
         @require_oauth('profile')
-        def update_connection():
-            return self._update_connection()
+        def update_connection(profile_id):
+            return self._update_connection(profile_id)

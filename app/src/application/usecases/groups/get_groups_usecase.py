@@ -25,27 +25,31 @@ class GetGroupsUsecase(UseCaseInterface):
             responses = []
             users = []
             groups = self.groups_repository.get_groups_by_organization(organization_id=1) #TODO: Ajustar usecase para buscar organização do usuario.
-            for group in groups:
-                group_id = group.id
-                users_ids = self.group_has_user.get_groups_by_id(group_id=group_id)
-                for id in users_ids:
-                    user = self.user_repository.get_by_id(user_id = id)
-                    user_name = user.name
-                    users.append(
-                        {"id": id,
-                         "name": user_name}
+            if groups:
+                for group in groups:
+                    group_id = group.id
+                    users_ids = self.group_has_user.get_groups_by_id(group_id=group_id)
+                    for id in users_ids:
+                        user = self.user_repository.get_by_id(user_id = id)
+                        user_name = user.name
+                        users.append(
+                            {"id": id,
+                             "name": user_name}
+                        )
+                    responses.append(
+                        {
+                            "id": group_id,
+                            "name": group.name,
+                            "users": users
+                        }
                     )
-                responses.append(
-                    {
-                        "id": group_id,
-                        "name": group.name,
-                        "users": users
-                    }
-                )
-                users = []
+                    users = []
+                return OutputDto(status=200,
+                                 message="Grupos extraidos com sucesso!",
+                                 groups=responses)
             return OutputDto(status=200,
                              message="Grupos extraidos com sucesso!",
-                             groups=responses)
+                             groups=[])
         except Exception as e:
             return OutputDto(status=500,
                              message=f"Erro ao recuperar grupos: {e}")
