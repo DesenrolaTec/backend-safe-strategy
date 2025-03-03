@@ -10,5 +10,5 @@ class GroupsHasUsersModel(db.Model):
     updated_at = Column(String, nullable=True, default=None)
 
     __table_args__ = (
-        UniqueConstraint('group_id', 'users_id', name='uq_group_user'),
+        UniqueConstraint('groups_id', 'users_id', name='uq_group_user'),
     )
