@@ -98,3 +98,19 @@ class UserRepository(UserRepositoryInterface):
                 return f'Error deleting user: {str(e)}'
         else:
             return 'User not found.'
+
+    def delete_by_id(self, id: str) -> str:
+        user = self.__session.query(UserModel).filter_by(id=id).first()
+        if user:
+            try:
+                self.__session.query(OAuth2Token).filter_by(user_id=user.id).delete()
+                self.__session.commit()
+                self.__session.delete(user)
+                self.__session.commit()
+                user = user_client(self._minimal_user_factory, user)
+                return user
+            except Exception as e:
+                self.__session.rollback()  # Rollback em caso de erro
+                return f'Error deleting user: {str(e)}'
+        else:
+            return 'User not found.'
