@@ -32,7 +32,7 @@ class UpdateGroupUseCase:
             users_to_remove = list(set(old_users) - set(new_users))
 
             for user_id in users_to_remove:
-                self.gp_has_users_repository.delete_user(user_id=user_id)
+                self.gp_has_users_repository.delete_user_by_group(user_id = user_id, group_id = group_id)
 
             for user_id in users_to_add:
                 self.gp_has_users_repository.insert(groups_id=group_id, users_id=user_id)
