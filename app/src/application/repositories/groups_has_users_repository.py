@@ -43,7 +43,7 @@ class GroupsHasUsersRepository(GroupsHasUsersInterface):
 
     def delete_user(self, user_id: int):
         try:
-            users = self.__session.query(GroupsHasUsersModel).filter_by(users_id=user_id).first()
+            users = self.__session.query(GroupsHasUsersModel).filter_by(users_id=user_id)
 
             if users:
                 self.__session.delete(users)
