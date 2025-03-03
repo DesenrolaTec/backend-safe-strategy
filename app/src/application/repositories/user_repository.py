@@ -69,8 +69,8 @@ class UserRepository(UserRepositoryInterface):
                 return {'error': f'Error updating user: {str(e)}'}            
         return {'error': 'Usuario não encontrado.'}
 
-    def update_conn(self, user_dto) -> int:
-        db_user = self.get_by_cpf(user_dto.user_cpf)
+    def update_conn(self, user_dto, user_id) -> int:
+        db_user = self.get_by_id(user_id)
         if db_user:
             try:
                 db_user.name = user_dto.user_name

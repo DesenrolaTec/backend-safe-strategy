@@ -48,9 +48,9 @@ class ConnectionController(ConnectionControllerInterface):
         except Exception as e:
             raise e
 
-    def update_connection(self, conn_data: dict):
+    def update_connection(self, conn_data: dict, profile_id: int):
         try:
-            res = self._update_connection.execute(conn_data)
+            res = self._update_connection.execute(conn_data, profile_id)
             return res
         except Exception as e:
             raise e
