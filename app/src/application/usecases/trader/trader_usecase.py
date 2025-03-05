@@ -47,7 +47,7 @@ class TraderUsecase(UseCaseInterface):
                 act = self.activations_repository.read_id(activation_id=id)
                 activations.append(
                     ActivationDto(
-                        id=act.id,
+                        activation_id=act.id,
                         organization_id = act.organization_id,
                         strategy_id = act.strategy_id,
                         start_at = act.start_at,
