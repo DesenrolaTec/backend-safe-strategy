@@ -9,7 +9,7 @@ class ActivationsRepository(ActivationsRepositoryInterface):
 
     def read_id(self, activation_id: int):
         try:
-            activations = self.__session.query(ActivationsModel).filter_by(id=activation_id)
+            activations = self.__session.query(ActivationsModel).filter_by(id=activation_id).first()
             if activations:
                 return activations
             return None
