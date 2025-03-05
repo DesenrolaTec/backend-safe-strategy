@@ -15,5 +15,6 @@ class TraderController(TraderControllerInterface):
                 response.append(
                     act.__dict__
                 )
+            return response
         except Exception as e:
             raise RuntimeError(f"{e}")
