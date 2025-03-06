@@ -16,3 +16,12 @@ class ActivationsRepository(ActivationsRepositoryInterface):
         except Exception as e:
             self.__session.rollback()
             raise RuntimeError (f"Erro ao criar connection: {e}")
+
+    def read_all(self):
+        try:
+            activations = self.__session.query(ActivationsModel).all()
+            if activations:
+                return activations
+            return None
+        except Exception as e:
+            raise e

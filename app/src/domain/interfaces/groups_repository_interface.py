@@ -21,3 +21,7 @@ class IgroupsRepository(ABC):
     @abstractmethod
     def update_group_name(self, group_id, group_name):
         raise NotImplementedError
+
+    @abstractmethod
+    def get_group_by_id(self, group_id: str):
+        raise NotImplementedError

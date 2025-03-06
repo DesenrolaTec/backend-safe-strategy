@@ -5,7 +5,7 @@ from app.src.application.controllers.connection_controller import ConnectionCont
 from app.src.application.controllers.groups_controller import GroupsController
 from app.src.application.repositories.activations.activations_repository import ActivationsRepository
 from app.src.application.repositories.activations_has_groups.activations_has_groups_repository import \
-    ActivationsHasGroupsRepository
+    ActivationsHasGroupsRepositoryInterface
 from app.src.application.repositories.strategies.strategies_repository import StrategiesRepository
 from app.src.application.usecases.connections.delete_connections_usecase import DeleteConnectionsUsecase
 from app.src.application.usecases.connections.read_connections_usecase import ReadConnectionsUsecase
@@ -49,7 +49,7 @@ class Bootstrap:
         groups_has_users = GroupsHasUsersRepository(session=session)
         strategies_repository = StrategiesRepository(session=session)
         activations_repository = ActivationsRepository(session=session)
-        activations_has_groups = ActivationsHasGroupsRepository(session=session)
+        activations_has_groups = ActivationsHasGroupsRepositoryInterface(session=session)
 
         create_user = CreateUserUsecase(user_repository, profile_repository=conn_repository)
         read_user = ReadUserUsecase(user_repository, conn_repository, organization_repository=org_repo)

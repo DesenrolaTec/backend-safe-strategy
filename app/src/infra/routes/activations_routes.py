@@ -1,0 +1,31 @@
+import json
+from authlib.integrations.flask_oauth2 import current_token
+from flask import Flask, request, jsonify
+from werkzeug.exceptions import BadRequest
+from app.src.application.repositories.oauth_repository import require_oauth
+from app.src.domain.interfaces.activations_controller_interface import ActivationsControllerInterface
+
+
+class ActivationsRoutes:
+    def __init__(self,
+                 app: Flask,
+                 conn_controller: ActivationsControllerInterface) -> None:
+        self._controller = conn_controller
+        self.register_routes(app)
+
+    def _read_activations(self):
+        try:
+            response = self._controller.read_activations()
+            if not response:
+                return jsonify(""), 404
+            return jsonify(response), 200
+        except BadRequest as e:
+            return jsonify({'error': str(e)}), 400
+        except Exception as e:
+            return jsonify({'error': f'Erro ao criar conexão: {str(e)}'}), 500
+
+    def register_routes(self, app: Flask) -> None:
+        @app.route('/activations', methods=['GET'])
+        @require_oauth('profile')
+        def read_activations():
+            return self._read_activations()
