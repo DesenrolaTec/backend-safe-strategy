@@ -1,3 +1,4 @@
+from app.src.application.controllers.activations_controller import ActivationsController
 from app.src.application.controllers.strategies_controller import StrategiesController
 from app.src.application.controllers.trader_controller import TraderController
 from app.src.application.controllers.user_controller import UserController
@@ -7,6 +8,7 @@ from app.src.application.repositories.activations.activations_repository import 
 from app.src.application.repositories.activations_has_groups.activations_has_groups_repository import \
     ActivationsHasGroupsRepositoryInterface
 from app.src.application.repositories.strategies.strategies_repository import StrategiesRepository
+from app.src.application.usecases.activations.read_activations_usecase import ReadActivationsUsecase
 from app.src.application.usecases.connections.delete_connections_usecase import DeleteConnectionsUsecase
 from app.src.application.usecases.connections.read_connections_usecase import ReadConnectionsUsecase
 from app.src.application.usecases.connections.update_connection_usecase import UpdateConnectionUsecase
@@ -98,3 +100,10 @@ class Bootstrap:
                                        user_repository=user_repository,
                                        gp_has_users=groups_has_users)
         self.trader_controller = TraderController(trader_usecase=trader_usecase)
+
+
+        read_act_usecase = ReadActivationsUsecase(activations_repository=activations_repository,
+                                                  groups_repository=groups_repository,
+                                                  strategy_repository=strategies_repository,
+                                                  activation_has_groups_repository=activations_has_groups)
+        self.activations_controller = ActivationsController(read_activation_usecase=read_act_usecase)

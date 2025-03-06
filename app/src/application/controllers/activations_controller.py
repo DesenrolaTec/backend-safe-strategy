@@ -2,7 +2,7 @@ from app.src.application.usecases.activations.read_activations_usecase import Re
 from app.src.domain.interfaces.activations_controller_interface import ActivationsControllerInterface
 
 
-class ActivationController(ActivationsControllerInterface):
+class ActivationsController(ActivationsControllerInterface):
     def __init__(self,
                  read_activation_usecase: ReadActivationsUsecase):
         self.read_activation_usecase = read_activation_usecase
