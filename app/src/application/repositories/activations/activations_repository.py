@@ -54,7 +54,7 @@ class ActivationsRepository(ActivationsRepositoryInterface):
 
     def update(self, data: ActivationDto, activation_id):
         try:
-            activation_db = self.__session.query(ActivationsModel).filter_by(id=activation_id)
+            activation_db = self.__session.query(ActivationsModel).filter_by(id=activation_id).first()
 
             activation_db.organization_id = data.organization_id
             activation_db.strategy_id=data.strategy_id
