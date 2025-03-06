@@ -18,6 +18,7 @@ class ActivationDto:
     strategy_id: int
     strategy_name: str
     groups: list[GroupDto]
+    file_url: str
     start_at: str
     stop_at: str
 
