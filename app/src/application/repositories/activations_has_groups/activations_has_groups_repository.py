@@ -50,3 +50,14 @@ class ActivationsHasGroupsRepository(ActivationsHasGroupsRepositoryInterface):
         except Exception as e:
             self.__session.rollback()
             raise e
+
+    def delete_by_id(self, activation_id: int):
+        try:
+            self.__session.query(ActivationsHasGroupsModel).filter_by(activations_id=activation_id
+                                                                                    ).delete(synchronize_session=False)
+
+            self.__session.commit()
+            return None
+        except Exception as e:
+            self.__session.rollback()
+            raise e

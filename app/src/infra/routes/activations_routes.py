@@ -49,6 +49,18 @@ class ActivationsRoutes:
         except Exception as e:
             return jsonify({'error': f'Erro ao criar conexão: {str(e)}'}), 500
 
+    def _delete_activations(self, activation_id: int):
+        try:
+            data = request.get_json()
+            response = self._controller.delete_activations(data, activation_id)
+            if not response:
+                return jsonify([]), 404
+            return jsonify("Ativação deletada com sucesso!"), 200
+        except BadRequest as e:
+            return jsonify({'error': str(e)}), 400
+        except Exception as e:
+            return jsonify({'error': f'Erro ao criar conexão: {str(e)}'}), 500
+
     def register_routes(self, app: Flask) -> None:
         @app.route('/activations', methods=['GET'])
         @require_oauth('profile')
@@ -64,3 +76,8 @@ class ActivationsRoutes:
         @require_oauth('profile')
         def update_activations(activation_id):
             return self._update_activations(activation_id)
+
+        @app.route('/activations/<int:activation_id>', methods=['DELETE'])
+        @require_oauth('profile')
+        def update_activations(activation_id):
+            return self._delete_activations(activation_id)

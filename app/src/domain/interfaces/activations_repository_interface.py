@@ -17,3 +17,7 @@ class ActivationsRepositoryInterface(ABC):
     @abstractmethod
     def update(self, data, activation_id):
         raise NotImplementedError
+
+    @abstractmethod
+    def delete(self, activation_id: int):
+        raise NotImplementedError

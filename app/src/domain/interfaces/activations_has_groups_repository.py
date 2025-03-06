@@ -16,3 +16,7 @@ class ActivationsHasGroupsRepositoryInterface(ABC):
     @abstractmethod
     def delete(self, activation_id: int, group_id: int):
         raise NotImplementedError
+
+    @abstractmethod
+    def delete_by_id(self, activation_id: int):
+        raise NotImplementedError

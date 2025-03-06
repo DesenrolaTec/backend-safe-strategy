@@ -68,3 +68,12 @@ class ActivationsRepository(ActivationsRepositoryInterface):
         except Exception as e:
             self.__session.rollback()
             raise e
+
+    def delete(self, activation_id: int):
+        try:
+            activation_db = self.__session.query(ActivationsModel).filter_by(id=activation_id).first()
+            self.__session.delete(activation_db)
+            self.__session.commit()
+        except Exception as e:
+            self.__session.rollback()
+            raise e
