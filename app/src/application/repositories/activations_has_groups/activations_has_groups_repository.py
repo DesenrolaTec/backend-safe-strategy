@@ -41,11 +41,10 @@ class ActivationsHasGroupsRepository(ActivationsHasGroupsRepositoryInterface):
     def delete(self, activation_id: int, group_id: int):
         try:
             activations = self.__session.query(ActivationsHasGroupsModel).filter(
-                (ActivationsHasGroupsModel.activations_id==activation_id) &
+                (ActivationsHasGroupsModel.activations_id == activation_id) &
                 (ActivationsHasGroupsModel.groups_id == group_id)
-            ).all()
+            ).delete(synchronize_session=False)
 
-            self.__session.delete(activations)
             self.__session.commit()
             return None
         except Exception as e:
