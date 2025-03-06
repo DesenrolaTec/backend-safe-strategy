@@ -60,12 +60,12 @@ class ReadActivationsUsecase(UseCaseInterface):
                         ).__dict__
                     )
 
-                strategy_name = self.strategy_repository.get_by_id(id=strategy_id)
+                strategy = self.strategy_repository.get_by_id(id=strategy_id)
 
                 responses.append(
                     ActivationDto(
                         strategy_id=strategy_id,
-                        strategy_name=strategy_name,
+                        strategy_name=strategy.name,
                         groups=groups_dto,
                         start_at=start_at,
                         stop_at=stop_at,
