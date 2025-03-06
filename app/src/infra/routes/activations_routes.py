@@ -51,7 +51,7 @@ class ActivationsRoutes:
 
     def _delete_activations(self, activation_id: int):
         try:
-            response = self._controller.delete_activations(data, activation_id)
+            response = self._controller.delete_activations(activation_id)
             if not response:
                 return jsonify([]), 404
             return jsonify("Ativação deletada com sucesso!"), 200
