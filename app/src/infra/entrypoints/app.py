@@ -1,5 +1,6 @@
 from flask import Flask
 from app.src.application.config.config import Config
+from app.src.infra.routes.files_routes import FilesRoutes
 from app.src.infra.routes.strategys_routes import StrategiesRoutes
 from app.src.infra.routes.user_routes import UserRoutes
 from app.src.infra.routes.oauth_routes import OauthRoutes
@@ -35,6 +36,7 @@ class App:
         ConnectionRoutes(app=self.app, conn_controller=self.__bootstrap.connection_controller)
         GroupsRoutes(app=self.app, groups_controller=self.__bootstrap.groups_controller)
         StrategiesRoutes(app=self.app, strategies_controller=self.__bootstrap.strategies_controller)
+        FilesRoutes(app=self.app, files_controller=self.__bootstrap.files_controller)
     
     def run(self):
         app = self.app

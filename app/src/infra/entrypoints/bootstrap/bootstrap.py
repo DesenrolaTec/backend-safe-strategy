@@ -1,3 +1,4 @@
+from app.src.application.controllers.files_controller import FilesController
 from app.src.application.controllers.strategies_controller import StrategiesController
 from app.src.application.controllers.user_controller import UserController
 from app.src.application.controllers.connection_controller import ConnectionController
@@ -6,6 +7,7 @@ from app.src.application.repositories.strategies.strategies_repository import St
 from app.src.application.usecases.connections.delete_connections_usecase import DeleteConnectionsUsecase
 from app.src.application.usecases.connections.read_connections_usecase import ReadConnectionsUsecase
 from app.src.application.usecases.connections.update_connection_usecase import UpdateConnectionUsecase
+from app.src.application.usecases.files.create_file_usecase import CreateFileUsecase
 from app.src.application.usecases.groups.delete_group_usecase import DeleteGroupUsecase
 from app.src.application.usecases.groups.update_group_usecase import UpdateGroupUseCase
 from app.src.application.usecases.strategies.create_strategies_usecase import CreateStrategiesUsecase
@@ -27,6 +29,7 @@ from app.src.application.repositories.connection_repository import ConnectionRep
 from app.src.application.repositories.organizations_repository import OrganizationRepository
 from app.src.application.repositories.groups_has_users_repository import GroupsHasUsersRepository
 
+from app.src.infra.adapters.files_adapter import FilesAdapter
 from app.src.infra.adapters.sql_alchemy_adapter import db
 
 
@@ -85,3 +88,10 @@ class Bootstrap:
                                                           read_strategies_usecase=read_strategies,
                                                           delete_strategies_usecase=delete_strategy,
                                                           update_strategies=update_strategy)
+
+        create_file_usecase = CreateFileUsecase()
+        self.files_controller = FilesController(
+            create_file_usecase=create_file_usecase
+        )
+        
+        
