@@ -1,8 +1,17 @@
+from app.src.application.controllers.activations_controller import ActivationsController
 from app.src.application.controllers.strategies_controller import StrategiesController
+from app.src.application.controllers.trader_controller import TraderController
 from app.src.application.controllers.user_controller import UserController
 from app.src.application.controllers.connection_controller import ConnectionController
 from app.src.application.controllers.groups_controller import GroupsController
+from app.src.application.repositories.activations.activations_repository import ActivationsRepository
+from app.src.application.repositories.activations_has_groups.activations_has_groups_repository import \
+    ActivationsHasGroupsRepositoryInterface, ActivationsHasGroupsRepository
 from app.src.application.repositories.strategies.strategies_repository import StrategiesRepository
+from app.src.application.usecases.activations.create_activation_usecase import CreateActivationUseCase
+from app.src.application.usecases.activations.delete_activations_usecase import DeleteActivationsUsecase
+from app.src.application.usecases.activations.read_activations_usecase import ReadActivationsUsecase
+from app.src.application.usecases.activations.update_activations_usecase import UpdateActivationsUsecase
 from app.src.application.usecases.connections.delete_connections_usecase import DeleteConnectionsUsecase
 from app.src.application.usecases.connections.read_connections_usecase import ReadConnectionsUsecase
 from app.src.application.usecases.connections.update_connection_usecase import UpdateConnectionUsecase
@@ -12,6 +21,7 @@ from app.src.application.usecases.strategies.create_strategies_usecase import Cr
 from app.src.application.usecases.strategies.delete_strategy_usecase import DeleteStrategyUseCase
 from app.src.application.usecases.strategies.read_strategies_usecase import ReadStrategiesUsecase
 from app.src.application.usecases.strategies.update_strategys_usecase import UpdateStrategysUseCase
+from app.src.application.usecases.trader.trader_usecase import TraderUsecase
 
 from app.src.application.usecases.user.create_user import CreateUserUsecase
 from app.src.application.usecases.user.get_user import ReadUserUsecase
@@ -43,6 +53,8 @@ class Bootstrap:
         groups_repository = GroupsRepository(session=session)
         groups_has_users = GroupsHasUsersRepository(session=session)
         strategies_repository = StrategiesRepository(session=session)
+        activations_repository = ActivationsRepository(session=session)
+        activations_has_groups = ActivationsHasGroupsRepository(session=session)
 
         create_user = CreateUserUsecase(user_repository, profile_repository=conn_repository)
         read_user = ReadUserUsecase(user_repository, conn_repository, organization_repository=org_repo)
@@ -85,3 +97,25 @@ class Bootstrap:
                                                           read_strategies_usecase=read_strategies,
                                                           delete_strategies_usecase=delete_strategy,
                                                           update_strategies=update_strategy)
+
+        trader_usecase = TraderUsecase(activations_repository=activations_repository,
+                                       activations_has_groups_repository=activations_has_groups,
+                                       user_repository=user_repository,
+                                       gp_has_users=groups_has_users)
+        self.trader_controller = TraderController(trader_usecase=trader_usecase)
+
+
+        read_act_usecase = ReadActivationsUsecase(activations_repository=activations_repository,
+                                                  groups_repository=groups_repository,
+                                                  strategy_repository=strategies_repository,
+                                                  activation_has_groups_repository=activations_has_groups)
+        create_act_usecase = CreateActivationUseCase(activations_repository=activations_repository,
+                                                     activations_has_groups=activations_has_groups)
+        update_act_usecase = UpdateActivationsUsecase(activations_repository=activations_repository,
+                                                      activations_has_groups=activations_has_groups)
+        delete_act_usecase = DeleteActivationsUsecase(activations_repository=activations_repository,
+                                                      activations_has_groups=activations_has_groups)
+        self.activations_controller = ActivationsController(read_activation_usecase=read_act_usecase,
+                                                            create_activation_usecase=create_act_usecase,
+                                                            update_activations_usecase=update_act_usecase,
+                                                            delete_activations_usecase=delete_act_usecase)

@@ -1,25 +1,23 @@
 from abc import ABC, abstractmethod
 
-class StrategiesRepositoryInterface(ABC):
+
+class ActivationsRepositoryInterface(ABC):
     @abstractmethod
-    def create(self,
-               organization_id: int,
-               name: str,
-               content: str):
+    def read_id(self, activation_id: int):
         raise NotImplementedError
 
     @abstractmethod
-    def get_all(self):
+    def read_all(self):
         raise NotImplementedError
 
     @abstractmethod
-    def delete(self):
+    def create(self, data):
         raise NotImplementedError
 
     @abstractmethod
-    def update(self,id:int, name: str, content: str):
+    def update(self, data, activation_id):
         raise NotImplementedError
 
     @abstractmethod
-    def get_by_id(self, id: int) -> list:
+    def delete(self, activation_id: int):
         raise NotImplementedError
