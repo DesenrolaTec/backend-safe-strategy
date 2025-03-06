@@ -12,8 +12,8 @@ class DeleteActivationsUsecase(UseCaseInterface):
 
     def execute(self, activation_id: int):
         try:
-            self.activations_repository.delete(activation_id=activation_id)
             self.activations_has_groups.delete_by_id(activation_id=activation_id)
+            self.activations_repository.delete(activation_id=activation_id)
             return True
         except Exception as e:
             raise e
