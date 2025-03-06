@@ -55,12 +55,12 @@ class ActivationsRoutes:
         def read_activations():
             return self._read_activations()
 
-        @app.route('/activations/<int:activation_id>', methods=['POST'])
+        @app.route('/activations', methods=['POST'])
         @require_oauth('profile')
-        def create_activations(activation_id):
-            return self._create_activations(activation_id)
+        def create_activations():
+            return self._create_activations()
 
-        @app.route('/activations', methods=['PATCH'])
+        @app.route('/activations/<int:activation_id>', methods=['PATCH'])
         @require_oauth('profile')
-        def update_activations():
-            return self._update_activations()
+        def update_activations(activation_id):
+            return self._update_activations(activation_id)
