@@ -79,5 +79,5 @@ class ActivationsRoutes:
 
         @app.route('/activations/<int:activation_id>', methods=['DELETE'])
         @require_oauth('profile')
-        def update_activations(activation_id):
+        def delete_activations(activation_id):
             return self._delete_activations(activation_id)
