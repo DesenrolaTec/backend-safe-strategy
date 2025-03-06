@@ -9,3 +9,7 @@ class ActivationsRepositoryInterface(ABC):
     @abstractmethod
     def read_all(self):
         raise NotImplementedError
+
+    @abstractmethod
+    def create(self, data):
+        raise NotImplementedError

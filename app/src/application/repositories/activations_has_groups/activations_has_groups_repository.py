@@ -24,3 +24,16 @@ class ActivationsHasGroupsRepository(ActivationsHasGroupsRepositoryInterface):
             return None
         except Exception as e:
             raise e
+
+    def insert(self, activation_id: int, group_id: int):
+        try:
+            act_h_g = ActivationsHasGroupsModel(
+                activations_id=activation_id,
+                groups_id=group_id
+            )
+            self.__session.add(act_h_g)
+            self.__session.commit()
+            return None
+        except Exception as e:
+            self.__session.rollback()
+            raise e
