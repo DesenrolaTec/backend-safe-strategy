@@ -1,3 +1,4 @@
+import os
 from dataclasses import dataclass
 
 from app.src.application.repositories.activations.activations_repository import ActivationsRepository
@@ -46,7 +47,7 @@ class ReadActivationsUsecase(UseCaseInterface):
                 strategy_id = act.strategy_id
                 start_at = act.start_at
                 stop_at = act.stop_at
-                file_url = act.file_url
+                file_url = f"{os.getenv('DOWLOAD_ENDPOINT_URL')}{act.file_url}"
 
                 groups_dto = []
                 groups = self.activation_has_groups_repository.read_activations_by_id(id=activation_id)
