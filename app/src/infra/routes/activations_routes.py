@@ -51,7 +51,6 @@ class ActivationsRoutes:
 
     def _delete_activations(self, activation_id: int):
         try:
-            data = request.get_json()
             response = self._controller.delete_activations(data, activation_id)
             if not response:
                 return jsonify([]), 404
