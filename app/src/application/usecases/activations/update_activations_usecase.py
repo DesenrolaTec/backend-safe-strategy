@@ -33,13 +33,14 @@ class UpdateActivationsUsecase(UseCaseInterface):
                     gp.groups_id
                 )
 
-            groups = data.get("groups")
+            groups = data.get("groups", None)
 
             new_acts = []
-            for group in groups:
-                new_acts.append(
-                    group.get("group_id")
-                )
+            if groups:
+                for group in groups:
+                    new_acts.append(
+                        group.get("group_id")
+                    )
 
             acts_to_add = list(set(new_acts) - set(old_acts))
             acts_to_remove = list(set(old_acts) - set(new_acts))
