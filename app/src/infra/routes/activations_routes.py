@@ -31,7 +31,7 @@ class ActivationsRoutes:
             response = self._controller.create_activations(data)
             if not response:
                 return jsonify(""), 404
-            return jsonify(response), 200
+            return jsonify("Ativação feita com sucesso!"), 200
         except BadRequest as e:
             return jsonify({'error': str(e)}), 400
         except Exception as e:
