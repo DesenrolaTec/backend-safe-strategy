@@ -10,6 +10,7 @@ from app.src.application.repositories.activations_has_groups.activations_has_gro
 from app.src.application.repositories.strategies.strategies_repository import StrategiesRepository
 from app.src.application.usecases.activations.create_activation_usecase import CreateActivationUseCase
 from app.src.application.usecases.activations.read_activations_usecase import ReadActivationsUsecase
+from app.src.application.usecases.activations.update_activations_usecase import UpdateActivationsUsecase
 from app.src.application.usecases.connections.delete_connections_usecase import DeleteConnectionsUsecase
 from app.src.application.usecases.connections.read_connections_usecase import ReadConnectionsUsecase
 from app.src.application.usecases.connections.update_connection_usecase import UpdateConnectionUsecase
@@ -109,5 +110,8 @@ class Bootstrap:
                                                   activation_has_groups_repository=activations_has_groups)
         create_act_usecase = CreateActivationUseCase(activations_repository=activations_repository,
                                                      activations_has_groups=activations_has_groups)
+        update_act_usecase = UpdateActivationsUsecase(activations_repository=activations_repository,
+                                                      activations_has_groups=activations_has_groups)
         self.activations_controller = ActivationsController(read_activation_usecase=read_act_usecase,
-                                                            create_activation_usecase=create_act_usecase)
+                                                            create_activation_usecase=create_act_usecase,
+                                                            update_activations_usecase=update_act_usecase)

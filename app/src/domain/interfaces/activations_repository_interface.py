@@ -13,3 +13,7 @@ class ActivationsRepositoryInterface(ABC):
     @abstractmethod
     def create(self, data):
         raise NotImplementedError
+
+    @abstractmethod
+    def update(self, data, activation_id):
+        raise NotImplementedError

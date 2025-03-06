@@ -12,3 +12,7 @@ class ActivationsHasGroupsRepositoryInterface(ABC):
     @abstractmethod
     def insert(self, activation_id: int, group_id: int):
         raise NotImplementedError
+
+    @abstractmethod
+    def delete(self, activation_id: int, group_id: int):
+        raise NotImplementedError

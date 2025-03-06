@@ -51,3 +51,20 @@ class ActivationsRepository(ActivationsRepositoryInterface):
         except Exception as e:
             self.__session.rollback()
             raise e
+
+    def update(self, data: ActivationDto, activation_id):
+        try:
+            activation_db = self.__session.query(ActivationsModel).filter_by(id=activation_id)
+
+            activation_db.organization_id = data.organization_id
+            activation_db.strategy_id=data.strategy_id
+            activation_db.start_at=data.start_at
+            activation_db.stop_at=data.stop_at
+            activation_db.file_url=data.file_url
+
+            self.__session.commit()
+
+            return None
+        except Exception as e:
+            self.__session.rollback()
+            raise e

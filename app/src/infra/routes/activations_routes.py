@@ -37,13 +37,30 @@ class ActivationsRoutes:
         except Exception as e:
             return jsonify({'error': f'Erro ao criar conexão: {str(e)}'}), 500
 
+    def _update_activations(self, activation_id: int):
+        try:
+            data = request.get_json()
+            response = self._controller.update_activations(data, activation_id)
+            if not response:
+                return jsonify([]), 404
+            return jsonify("Ativação atualizada com sucesso!"), 200
+        except BadRequest as e:
+            return jsonify({'error': str(e)}), 400
+        except Exception as e:
+            return jsonify({'error': f'Erro ao criar conexão: {str(e)}'}), 500
+
     def register_routes(self, app: Flask) -> None:
         @app.route('/activations', methods=['GET'])
         @require_oauth('profile')
         def read_activations():
             return self._read_activations()
 
-        @app.route('/activations', methods=['POST'])
+        @app.route('/activations/<int:activation_id>', methods=['POST'])
         @require_oauth('profile')
-        def create_activations():
-            return self._create_activations()
+        def create_activations(activation_id):
+            return self._create_activations(activation_id)
+
+        @app.route('/activations', methods=['PATCH'])
+        @require_oauth('profile')
+        def update_activations():
+            return self._update_activations()
