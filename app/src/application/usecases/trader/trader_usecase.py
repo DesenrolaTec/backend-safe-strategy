@@ -1,4 +1,6 @@
-from app.src.domain.interfaces.activations_has_groups_repository import ActivationsHasGroupsRepository
+import os
+
+from app.src.domain.interfaces.activations_has_groups_repository import ActivationsHasGroupsRepositoryInterface
 from app.src.domain.interfaces.activations_repository_interface import ActivationsRepositoryInterface
 from app.src.domain.interfaces.groups_has_users_repository_interface import GroupsHasUsersInterface
 from app.src.domain.interfaces.usecase_interface import UseCaseInterface
@@ -18,7 +20,7 @@ class ActivationDto:
 class TraderUsecase(UseCaseInterface):
     def __init__(self,
                  activations_repository: ActivationsRepositoryInterface,
-                 activations_has_groups_repository: ActivationsHasGroupsRepository,
+                 activations_has_groups_repository: ActivationsHasGroupsRepositoryInterface,
                  user_repository: UserRepositoryInterface,
                  gp_has_users: GroupsHasUsersInterface):
         self.activations_repository = activations_repository
@@ -52,7 +54,7 @@ class TraderUsecase(UseCaseInterface):
                         strategy_id = act.strategy_id,
                         start_at = act.start_at,
                         stop_at = act.stop_at,
-                        file_url = act.file_url
+                        file_url = f"{os.getenv('DOWLOAD_ENDPOINT_URL')}{act.file_url}"
                     )
                 )
 

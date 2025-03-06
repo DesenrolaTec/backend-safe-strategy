@@ -56,3 +56,12 @@ class StrategiesRepository(StrategiesRepositoryInterface):
         except Exception as e:
             self.__session.rollback()
             raise e
+
+    def get_by_id(self, id: int) -> list:
+        try:
+            strategies = self.__session.query(StrategiesModel).filter_by(id=id).first()
+            if not strategies:
+                return None
+            return strategies
+        except Exception as e:
+            raise RuntimeError(e)

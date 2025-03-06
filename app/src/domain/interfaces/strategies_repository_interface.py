@@ -19,3 +19,7 @@ class StrategiesRepositoryInterface(ABC):
     @abstractmethod
     def update(self,id:int, name: str, content: str):
         raise NotImplementedError
+
+    @abstractmethod
+    def get_by_id(self, id: int) -> list:
+        raise NotImplementedError

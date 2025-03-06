@@ -14,7 +14,8 @@ class ConnectionRepository(ConnectionRepositoryInterface):
         try:
             profile = Profile(user_id=user_id,
                               organization_id=organization_id,
-                              role=role, enable=enable,
+                              role=role,
+                              enable=enable,
                               client_code=client_code)
             self.__session.add(profile)
             self.__session.commit()
