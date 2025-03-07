@@ -1,6 +1,7 @@
 from flask import Flask
 from app.src.application.config.config import Config
 from app.src.infra.routes.activations_routes import ActivationsRoutes
+from app.src.infra.routes.files_routes import FilesRoutes
 from app.src.infra.routes.strategys_routes import StrategiesRoutes
 from app.src.infra.routes.trader_routes import TraderRoutes
 from app.src.infra.routes.user_routes import UserRoutes
@@ -37,6 +38,7 @@ class App:
         ConnectionRoutes(app=self.app, conn_controller=self.__bootstrap.connection_controller)
         GroupsRoutes(app=self.app, groups_controller=self.__bootstrap.groups_controller)
         StrategiesRoutes(app=self.app, strategies_controller=self.__bootstrap.strategies_controller)
+        FilesRoutes(app=self.app, files_controller=self.__bootstrap.files_controller)
         TraderRoutes(app=self.app, traders_controller=self.__bootstrap.trader_controller)
         ActivationsRoutes(app=self.app, conn_controller=self.__bootstrap.activations_controller)
     
