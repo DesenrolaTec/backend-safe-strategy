@@ -16,8 +16,10 @@ class GroupDto:
 
 @dataclass
 class ActivationDto:
+    activation_id: int
     strategy_id: int
     strategy_name: str
+    strategy_content: str
     groups: list[GroupDto]
     file_url: str
     start_at: str
@@ -65,8 +67,10 @@ class ReadActivationsUsecase(UseCaseInterface):
 
                 responses.append(
                     ActivationDto(
+                        activation_id=activation_id,
                         strategy_id=strategy_id,
                         strategy_name=strategy.name,
+                        strategy_content=strategy.content,
                         groups=groups_dto,
                         start_at=start_at,
                         stop_at=stop_at,
