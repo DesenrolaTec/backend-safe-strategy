@@ -18,11 +18,11 @@ class CreateFileUsecase(UseCaseInterface):
         if file_adapter.get_extension() not in ['.txt', '.stg']:
             raise Exception('Invalid file extension')
         
-        abs_base_path = '/var/www/backend/static/'
+        abs_base_path = '/var/www/backend/'
         
         
         
-        sub_path = 'uploads/'
+        sub_path = 'static/uploads/'
         
         new_file_name = f'{uuid.uuid4().hex}{file_adapter.get_extension()}'
         new_base_path = f'{abs_base_path}{sub_path}'
