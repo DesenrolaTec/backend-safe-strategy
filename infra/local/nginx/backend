@@ -2,9 +2,8 @@ upstream backend {
     server unix:/var/www/backend/gunicorn.socket fail_timeout=0;
 }
 
-server {
-
-    client_max_body_size 4G;
+server {    
+    client_max_body_size 20M;
     server_name api-local.safestrategy.com.br; # managed by Certbot
 
     keepalive_timeout 5;
