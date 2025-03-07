@@ -98,11 +98,12 @@ class Bootstrap:
         update_strategy = UpdateStrategysUseCase(strategies_repository=strategies_repository)
         self.strategies_controller = StrategiesController(create_strategies_usecase=create_strategys_usecase,
                                                           read_strategies_usecase=read_strategies,
+                                                          delete_strategies_usecase=delete_strategy,
+                                                          update_strategies=update_strategy)
         create_file_usecase = CreateFileUsecase()
         self.files_controller = FilesController(
             create_file_usecase=create_file_usecase
-        )                                                  delete_strategies_usecase=delete_strategy,
-                                                          update_strategies=update_strategy)
+        )
 
         trader_usecase = TraderUsecase(activations_repository=activations_repository,
                                        activations_has_groups_repository=activations_has_groups,
