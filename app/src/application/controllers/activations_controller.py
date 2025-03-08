@@ -20,10 +20,11 @@ class ActivationsController(ActivationsControllerInterface):
         try:
             responses = []
             results = self.read_activation_usecase.execute()
-            for result in results:
-                responses.append(
-                    result.__dict__
-                )
+            if results:
+                for result in results:
+                    responses.append(
+                        result.__dict__
+                    )
             return responses
         except Exception as e:
             raise e
