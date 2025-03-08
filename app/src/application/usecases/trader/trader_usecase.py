@@ -59,7 +59,7 @@ class TraderUsecase(UseCaseInterface):
                         start_at = act.start_at,
                         stop_at = act.stop_at,
                         client_code=conn.client_code,
-                        file_url = f"{os.getenv('DOWLOAD_ENDPOINT_URL')}{act.file_url}"
+                        file_url = f"https://app.safestrategy.com.br{act.file_url}"
                     )
                 )
 
