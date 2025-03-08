@@ -1,7 +1,7 @@
 import os
-
 from app.src.domain.interfaces.activations_has_groups_repository import ActivationsHasGroupsRepositoryInterface
 from app.src.domain.interfaces.activations_repository_interface import ActivationsRepositoryInterface
+from app.src.domain.interfaces.connection_repository_interface import ConnectionRepositoryInterface
 from app.src.domain.interfaces.groups_has_users_repository_interface import GroupsHasUsersInterface
 from app.src.domain.interfaces.usecase_interface import UseCaseInterface
 from app.src.domain.interfaces.user_repository_interface import UserRepositoryInterface
@@ -14,6 +14,7 @@ class ActivationDto:
     strategy_id: int
     start_at: str
     stop_at: str
+    client_code: str
     file_url: str
 
 
@@ -22,16 +23,19 @@ class TraderUsecase(UseCaseInterface):
                  activations_repository: ActivationsRepositoryInterface,
                  activations_has_groups_repository: ActivationsHasGroupsRepositoryInterface,
                  user_repository: UserRepositoryInterface,
-                 gp_has_users: GroupsHasUsersInterface):
+                 gp_has_users: GroupsHasUsersInterface,
+                 conn_repository: ConnectionRepositoryInterface):
         self.activations_repository = activations_repository
         self.activations_has_groups_repository = activations_has_groups_repository
         self.user_repository = user_repository
         self.gp_has_users = gp_has_users
+        self.conn_repository = conn_repository
 
     def execute(self, user_cpf):
         try:
             user = self.user_repository.get_by_cpf(user_cpf)
             user_id = user.id
+            conn = self.conn_repository.get_connection_by_user_id(user_id=user_id)
 
             user_groups = self.gp_has_users.get_groups_by_user_id(user_id)
 
@@ -54,6 +58,7 @@ class TraderUsecase(UseCaseInterface):
                         strategy_id = act.strategy_id,
                         start_at = act.start_at,
                         stop_at = act.stop_at,
+                        client_code=conn.client_code,
                         file_url = f"{os.getenv('DOWLOAD_ENDPOINT_URL')}{act.file_url}"
                     )
                 )
