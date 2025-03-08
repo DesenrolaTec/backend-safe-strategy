@@ -8,7 +8,7 @@ class ActivationsHasGroupsRepository(ActivationsHasGroupsRepositoryInterface):
 
     def read_activations_by_group(self, groups_id: int) -> list:
         try:
-            activations = self.__session.query(ActivationsHasGroupsModel).filter_by(groups_id=groups_id)
+            activations = self.__session.query(ActivationsHasGroupsModel).filter_by(groups_id=groups_id).all()
             if activations:
                 return activations
             return None
