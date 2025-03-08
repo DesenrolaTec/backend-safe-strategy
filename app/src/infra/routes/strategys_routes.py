@@ -23,7 +23,9 @@ class StrategiesRoutes:
     def _read_strategies(self) -> jsonify:
         try:
             response = self._controller.read_strategies()
-            return jsonify(response), 201
+            if not response:
+                return jsonify([]), 200
+            return jsonify(response), 200
         except BadRequest as e:
             return jsonify({'error': str(e)}), 400
         except Exception as e:

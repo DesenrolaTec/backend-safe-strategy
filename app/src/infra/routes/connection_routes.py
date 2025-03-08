@@ -38,7 +38,7 @@ class ConnectionRoutes:
         try:
             response = self._controller.read_connections()
             if not response:
-                return jsonify(""), 404
+                return jsonify([]), 200
             return jsonify(response), 200
         except BadRequest as e:
             return jsonify({'error': str(e)}), 400
