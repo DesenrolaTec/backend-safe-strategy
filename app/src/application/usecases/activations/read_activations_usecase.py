@@ -47,8 +47,8 @@ class ReadActivationsUsecase(UseCaseInterface):
             for act in activations:
                 activation_id = act.id
                 strategy_id = act.strategy_id
-                start_at = act.start_at
-                stop_at = act.stop_at
+                start_at = act.start_at.strftime('%Y-%m-%d %H:%M:%S')
+                stop_at = act.stop_at.strftime('%Y-%m-%d %H:%M:%S')
                 file_url = f"{os.getenv('DOWLOAD_ENDPOINT_URL')}{act.file_url}"
 
                 groups_dto = []
