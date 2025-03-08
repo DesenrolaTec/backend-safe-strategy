@@ -64,6 +64,10 @@ class UserRoutes:
             user = self._controller.get_user(user_cpf=user_cpf)
             if user.get("password") != data['old_password']:
                 return jsonify({'error': 'Senha antiga incorreta.'}), 400
+            data["name"] = user.get("name")
+            data["email"] = user.get("email")
+            data["cpf"] = user.get("cpf")
+            data["birthday"] = user.get("birthday")
             result = self._controller.update_user(user_data=data)
             if result:
                 return jsonify({'message': 'Usuário atualizado com sucesso.'}), 200
