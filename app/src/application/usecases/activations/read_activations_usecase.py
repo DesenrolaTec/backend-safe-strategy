@@ -43,8 +43,8 @@ class ReadActivationsUsecase(UseCaseInterface):
             if not activations:
                 return None
 
+            responses = []
             for act in activations:
-                responses = []
                 activation_id = act.id
                 strategy_id = act.strategy_id
                 start_at = act.start_at
