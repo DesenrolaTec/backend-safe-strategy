@@ -43,8 +43,8 @@ class ReadActivationsUsecase(UseCaseInterface):
             if not activations:
                 return None
 
+            responses = []
             for act in activations:
-                responses = []
                 activation_id = act.id
                 strategy_id = act.strategy_id
                 start_at = act.start_at
@@ -53,15 +53,17 @@ class ReadActivationsUsecase(UseCaseInterface):
 
                 groups_dto = []
                 groups = self.activation_has_groups_repository.read_activations_by_id(id=activation_id)
-                for group in groups:
-                    group_id = group.groups_id
-                    group_model = self.groups_repository.get_group_by_id(group_id=group_id)
-                    groups_dto.append(
-                        GroupDto(
-                            group_id=group_id,
-                            group_name=group_model.name
-                        ).__dict__
-                    )
+
+                if groups:
+                    for group in groups:
+                        group_id = group.groups_id
+                        group_model = self.groups_repository.get_group_by_id(group_id=group_id)
+                        groups_dto.append(
+                            GroupDto(
+                                group_id=group_id,
+                                group_name=group_model.name
+                            ).__dict__
+                        )
 
                 strategy = self.strategy_repository.get_by_id(id=strategy_id)
 
