@@ -18,6 +18,7 @@ class OutputDto:
     user: User
     organization: str
     role: str
+    user_enable: bool
     status: str
 
 class ReadUserUsecase(UseCaseInterface):
@@ -45,6 +46,6 @@ class ReadUserUsecase(UseCaseInterface):
             user = user_client(self._minimal_user_factory, user_dto)
             profile = self.__conn_repository.get_connection_by_user_id(user_id=user.id)
             organization = self.__org_repository.get_organization_by_organization_id(org_id=1)
-            return OutputDto(user = user, organization=organization.name, role=profile.role, status = "Success")
+            return OutputDto(user = user, organization=organization.name, role=profile.role, status = "Success", user_enable=profile.enable)
         except Exception as e:
             return OutputDto(user_id = 0, status = str(e))
