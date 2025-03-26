@@ -18,7 +18,7 @@ class OutputDto:
     user: User
     organization: str
     role: str
-    user_enable: bool
+    user_enable: int
     status: str
 
 class ReadUserUsecase(UseCaseInterface):

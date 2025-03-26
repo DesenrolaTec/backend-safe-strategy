@@ -40,14 +40,14 @@ class ConnectionRepository(ConnectionRepositoryInterface):
         profile = self.__session.query(Profile).filter_by(user_id=user_id).first()
         if not profile:
             return None
-        profile = Profile(user_id=profile.user_id, organization_id=profile.organization_id, role=profile.role, enable=True, client_code = profile.client_code)
+        profile = Profile(user_id=profile.user_id, organization_id=profile.organization_id, role=profile.role, enable=profile.enable, client_code = profile.client_code)
         return profile
 
     def get_connection_by_id(self, id: int):
         profile = self.__session.query(Profile).filter_by(id=id).first()
         if not profile:
             return None
-        profile = Profile(user_id=profile.user_id, organization_id=profile.organization_id, role=profile.role, enable=True, client_code = profile.client_code)
+        profile = Profile(user_id=profile.user_id, organization_id=profile.organization_id, role=profile.role, enable=profile.enable, client_code = profile.client_code)
         return profile
 
     def get_all_connections(self):
