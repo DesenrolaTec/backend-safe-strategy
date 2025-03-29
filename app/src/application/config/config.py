@@ -27,6 +27,7 @@ class Config:
             self.OAUTHLIB_INSECURE_TRANSPORT = False
             self.APP_HOST = os.getenv('APP_HOST')
             self.APP_PORT = os.getenv('APP_PORT')
+            self.DOWLOAD_ENDPOINT_URL = os.getenv("DOWLOAD_ENDPOINT_URL")
             self.FLASK_DEBUG_MODE = True
             self._initialized = True
 

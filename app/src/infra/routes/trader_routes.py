@@ -16,7 +16,7 @@ class TraderRoutes:
     def _me_activations(self, user_cpf) -> jsonify:
         try:
             response = self._controller.get_user_activations(user_cpf)
-            return jsonify(response), 201
+            return jsonify(response), 200
         except BadRequest as e:
             return jsonify({'error': str(e)}), 400
         except Exception as e:

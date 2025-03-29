@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, DateTime
 from app.src.infra.adapters.sql_alchemy_adapter import db
 
 class ActivationsModel(db.Model):
@@ -6,6 +6,6 @@ class ActivationsModel(db.Model):
     id= Column(Integer, primary_key=True, nullable=False)
     organization_id = Column(Integer, nullable=False)
     strategy_id = Column(Integer, nullable=False)
-    start_at = Column(String, nullable=True, default=None)
-    stop_at = Column(String, nullable=True, default=None)
+    start_at = Column(DateTime, nullable=True, default=None)
+    stop_at = Column(DateTime, nullable=True, default=None)
     file_url = Column(String, nullable=True, default=None)

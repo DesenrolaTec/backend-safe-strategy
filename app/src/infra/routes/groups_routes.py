@@ -26,9 +26,8 @@ class GroupsRoutes:
                      user_cpf: str):
         output_dto = self._controller.get_groups(user_cpf = user_cpf)
         if output_dto.groups:
-            return jsonify({'groups': output_dto.groups}), 201
-        return jsonify({'error': f'{output_dto.message}'}), 404
-
+            return jsonify({'groups': output_dto.groups}), 200
+        return jsonify({'groups': []}), 200
     def __delete_groups(self,
                         group_id: int):
         try:

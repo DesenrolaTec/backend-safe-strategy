@@ -108,7 +108,8 @@ class Bootstrap:
         trader_usecase = TraderUsecase(activations_repository=activations_repository,
                                        activations_has_groups_repository=activations_has_groups,
                                        user_repository=user_repository,
-                                       gp_has_users=groups_has_users)
+                                       gp_has_users=groups_has_users,
+                                       conn_repository=conn_repository)
         self.trader_controller = TraderController(trader_usecase=trader_usecase)
 
 
