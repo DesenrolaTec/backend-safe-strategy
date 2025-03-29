@@ -15,7 +15,7 @@ class CreateFileUsecase(UseCaseInterface):
         
     def execute(self, file_adapter: FilesAdapterInterface) -> OutputDto:
         
-        if file_adapter.get_extension() not in ['.txt', '.stg']:
+        if file_adapter.get_extension() not in ['.txt', '.stg','.psf']:
             raise Exception('Invalid file extension')
         
         abs_base_path = '/var/www/backend/'
